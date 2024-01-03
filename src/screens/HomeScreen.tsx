@@ -5,7 +5,7 @@ type Props = RootScreenProps<"HomeTab">;
 
 export default function HomeScreen({ navigation }: Props) {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="app-container">
       <Text style={styles.text}>HomeScreen</Text>
       <Button
         title="Create birthdaymessage"
