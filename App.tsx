@@ -4,7 +4,7 @@ import TabNavigator from "src/navigation/TabNavigator";
 
 export default function App() {
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider testID="safe-area-provider">
       <TabNavigator />
     </SafeAreaProvider>
   );
