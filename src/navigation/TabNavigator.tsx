@@ -10,6 +10,28 @@ import React from "react";
 const Tab = createBottomTabNavigator<RootTabsParamList>();
 
 export default function TabNavigator() {
+  // // Hårdkoda testanvändarens UID
+  // const firebaseapp = app;
+  // const testUserId = "SLEqB0RUaFNzw9BtNsG3MOU2M2f2";
+
+  // // Logga in testanvändaren med hårdkodat UID
+  // const signInTestUser = async () => {
+  //   try {
+  //     await auth().signInWithEmailAndPassword(
+  //       testUserId + "test@gmail.com",
+  //       "password123"
+  //     );
+  //     // Användaren är nu inloggad med det hårdkodade UID
+  //   } catch (error) {
+  //     console.error("Inloggningsfel:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   signInTestUser();
+  //   console.log();
+  // });
+
   return (
     <NavigationContainer>
       <Tab.Navigator
