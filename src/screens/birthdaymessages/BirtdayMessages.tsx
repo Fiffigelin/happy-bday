@@ -1,3 +1,4 @@
+import { fetchUsers } from "@/src/api/api";
 import { BirthdaysScreenProps } from "@/src/navigation/NavigationTypes";
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
@@ -16,6 +17,7 @@ export default function BirthdayMessages({ navigation }: Props) {
         title="Edit message"
         onPress={() => navigation.navigate("HandleMessage")}
       />
+      <Button title="API PRESS" onPress={() => fetchUsers()} />
     </View>
   );
 }
