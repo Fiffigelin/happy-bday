@@ -12,10 +12,10 @@ const USER_URL = `${API_URL}:3000/api/user`;
 export const USER_API = {
   GET: "/get",
   CREATE: "/create",
-  GET_USER: "/",
+  GET_USER: (id: string) => `/${id}`,
 };
 
-export async function fetchUsers() {
+export async function fetchUsers(): Promise<User[]> {
   try {
     const requestInfo = {
       method: "GET",
@@ -28,28 +28,41 @@ export async function fetchUsers() {
       throw new Error("Network response was not ok");
     }
 
-    const jsonData: User[] = await response.json();
-    console.log("Received data:", jsonData);
+    const jsonResponse = await response.json();
+    if (jsonResponse.data) {
+      return jsonResponse.data as User[];
+    }
+
+    return [];
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
   }
 }
 
-export async function fetchUserById(id: string) {
+export async function fetchUserById(id: string): Promise<User> {
   try {
     const requestInfo = {
       method: "GET",
       headers: headers,
     };
-    const response = await fetch(`${USER_URL}/${id}`, requestInfo);
+    const response = await fetch(
+      `${USER_URL}${USER_API.GET_USER(id)}`,
+      requestInfo
+    );
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
 
-    const jsonData: User = await response.json();
-    console.log("Received data:", jsonData);
+    const jsonResponse = await response.json();
+    console.log("Received data:", jsonResponse);
+
+    if (jsonResponse.data) {
+      return jsonResponse.data as User;
+    }
+
+    return jsonResponse;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
