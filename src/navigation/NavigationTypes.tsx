@@ -7,6 +7,7 @@ export type RootTabsParamList = {
   ContactsTab: ContactsStackParamList;
   BirthdaysTab: undefined;
   ProfileTab: undefined;
+  Test: undefined;
 };
 
 export type ContactsStackParamList = {
