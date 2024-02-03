@@ -6,7 +6,8 @@ import ProfileScreen from "@/src/screens/ProfileScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
-import Test from "../screens/Test";
+import Test from "../screens/test-screens/Test";
+import TestStackNavigator from "./TestNavigator";
 
 const Tab = createBottomTabNavigator<RootTabsParamList>();
 
@@ -45,7 +46,7 @@ export default function TabNavigator() {
           component={BirthdaysMessagesStackNavigator}
         />
         <Tab.Screen name="ProfileTab" component={ProfileScreen} />
-        <Tab.Screen name="Test" component={Test} />
+        <Tab.Screen name="TestTab" component={TestStackNavigator} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -1,3 +1,4 @@
+import { UserCredential } from "@/types";
 import { API_URL, headers } from "../api";
 
 export interface User {
@@ -108,12 +109,18 @@ const userData = {
   email: "app-test@gmail.com",
 };
 
-export async function createUser(): Promise<User> {
+export async function createUser(
+  createUser: UserCredential
+): Promise<UserCredential> {
   try {
+    const data = {
+      name: createUser.name,
+      uid: createUser.uid,
+    };
     const requestInfo = {
       method: "POST",
       headers: headers,
-      body: JSON.stringify(userData),
+      body: JSON.stringify(data),
     };
     const response = await fetch(`${USER_URL}${USER_API.CREATE}`, requestInfo);
 
@@ -122,8 +129,9 @@ export async function createUser(): Promise<User> {
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
-    return jsonResponse as User;
+    console.log("Recieved data:", jsonResponse);
+
+    return jsonResponse as UserCredential;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

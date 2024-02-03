@@ -1,9 +1,9 @@
+import { fetchImagesAPI } from "@/src/features/image/image.slice";
+import { useAppDispatch, useAppSelector } from "@/src/features/store";
+import SortImagesService from "@/src/services/sortImages.service";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Category, Image as Images } from "../api/image/image.api";
-import { fetchImagesAPI } from "../features/image/image.slice";
-import { useAppDispatch, useAppSelector } from "../features/store";
-import SortImagesService from "../services/sortImages.service";
+import { Category, Image as Images } from "../../api/image/image.api";
 
 export default function Test() {
   const [categoryPeople, setCategoryPeople] = useState<Images[] | undefined>();

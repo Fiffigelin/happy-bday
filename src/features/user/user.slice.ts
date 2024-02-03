@@ -1,3 +1,5 @@
+import { addUserToDB } from "@/src/api/auth/auth.api";
+import { UserCredential } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   User,
@@ -21,6 +23,26 @@ export const initialState: UserState = {
   status: "idle",
   error: undefined,
 };
+
+export const addUserAsync = createAsyncThunk<
+  void,
+  UserCredential,
+  { rejectValue: string }
+>("user/addUser", async (userCred, thunkAPI) => {
+  try {
+    const addedUser = await addUserToDB(userCred);
+
+    if (addedUser && addedUser.uid) {
+      console.log("UID in thunk: ", addedUser.uid);
+
+      await createUser(addedUser);
+    } else {
+      return thunkAPI.rejectWithValue("failed to add user");
+    }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
 
 export const fetchUsersAPI = createAsyncThunk<User[], void>(
   "user/fetchUsers",
@@ -59,20 +81,20 @@ export const updateUserAPI = createAsyncThunk<
   }
 });
 
-export const createUserAPI = createAsyncThunk<User, void>(
-  "user/create",
-  async (_, { rejectWithValue }) => {
-    try {
-      console.log("CREATE USER THUNK!");
-      const newUser = await createUser();
+// export const createUserAPI = createAsyncThunk<UserCredential, void>(
+//   "user/create",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       console.log("CREATE USER THUNK!");
+//       const newUser = await createUser();
 
-      console.log("USER IN THUNK: ", newUser.name, newUser.id);
-      return newUser;
-    } catch (error) {
-      return rejectWithValue(error || "Failed to create user");
-    }
-  }
-);
+//       console.log("USER IN THUNK: ", newUser.name, newUser.id);
+//       return newUser;
+//     } catch (error) {
+//       return rejectWithValue(error || "Failed to create user");
+//     }
+//   }
+// );
 
 export const deleteUserAPI = createAsyncThunk<{ id: string }, string>(
   "user/delete",
@@ -131,14 +153,20 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = "Something went wrong!";
       })
-      .addCase(createUserAPI.fulfilled, (state, action) => {
-        console.log("CREATED USER: ", action.payload.id);
-        state.status = "succeeded";
-        state.user = action.payload! || null;
-      })
-      .addCase(createUserAPI.rejected, (state, action) => {
-        state.status = "failed";
+      // .addCase(createUserAPI.fulfilled, (state, action) => {
+      //   console.log("CREATED USER: ", action.payload.id);
+      //   state.status = "succeeded";
+      //   state.user = action.payload! || null;
+      // })
+      // .addCase(createUserAPI.rejected, (state, action) => {
+      //   state.status = "failed";
+      //   state.error = "Something went wrong!";
+      // })
+      .addCase(addUserAsync.fulfilled, (state, action) => {
         state.error = "Something went wrong!";
+      })
+      .addCase(addUserAsync.rejected, (state, action) => {
+        state.error = "You already has a account on this application!";
       });
   },
 });

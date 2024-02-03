@@ -1,15 +1,24 @@
-// Import the functions you need from the SDKs you need
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
+import * as firebaseAuth from "firebase/auth";
+import { initializeAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB_dhpO0xiZanK-w_qbzYoSXzfLwbx1hU0",
-  authDomain: "happy-bday-2963f.firebaseapp.com",
-  projectId: "happy-bday-2963f",
-  storageBucket: "happy-bday-2963f.appspot.com",
-  messagingSenderId: "52257160185",
-  appId: "1:52257160185:web:bd70a001e55f41afc55b28",
-  measurementId: "G-27VGXXEMEW",
+  apiKey: "AIzaSyCXIY-KjKN_d97KdFJy0NZMSYbIrWNkjd8",
+  authDomain: "happy-bday-api.firebaseapp.com",
+  projectId: "happy-bday-api",
+  storageBucket: "happy-bday-api.appspot.com",
+  messagingSenderId: "928396313458",
+  appId: "1:928396313458:web:470d0e64063a8486a193eb",
+  measurementId: "G-FVPQZ186E1",
 };
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const reactNativePersistence = (firebaseAuth as any).getReactNativePersistence;
+const auth = initializeAuth(app, {
+  persistence: reactNativePersistence(ReactNativeAsyncStorage),
+});
+
+export { app, auth, db };

@@ -7,7 +7,7 @@ export type RootTabsParamList = {
   ContactsTab: ContactsStackParamList;
   BirthdaysTab: undefined;
   ProfileTab: undefined;
-  Test: undefined;
+  TestTab: TestStackParamList;
 };
 
 export type ContactsStackParamList = {
@@ -21,6 +21,12 @@ export type BirthdaysStackParamList = {
   HandleMessage: undefined;
 };
 
+export type TestStackParamList = {
+  Main: undefined;
+  Test: undefined;
+  Login: undefined;
+};
+
 // en generisk funktion där stack navigationen känner till tab navigationen
 export type ContactsScreenProps<T extends keyof ContactsStackParamList> =
   CompositeScreenProps<
@@ -31,6 +37,12 @@ export type ContactsScreenProps<T extends keyof ContactsStackParamList> =
 export type BirthdaysScreenProps<T extends keyof BirthdaysStackParamList> =
   CompositeScreenProps<
     NativeStackScreenProps<BirthdaysStackParamList, T>,
+    BottomTabScreenProps<RootTabsParamList>
+  >;
+
+export type TestScreenProps<T extends keyof TestStackParamList> =
+  CompositeScreenProps<
+    NativeStackScreenProps<TestStackParamList, T>,
     BottomTabScreenProps<RootTabsParamList>
   >;
 
