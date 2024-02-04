@@ -25,6 +25,7 @@ export type TestStackParamList = {
   Main: undefined;
   Test: undefined;
   Login: undefined;
+  CredUser: undefined;
 };
 
 // en generisk funktion där stack navigationen känner till tab navigationen
