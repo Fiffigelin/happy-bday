@@ -1,12 +1,5 @@
-import { UserCredential } from "@/types";
+import { User, UserCredential } from "@/types";
 import { API_URL, headers } from "../api";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  profileURL: string;
-}
 
 const USER_URL = `${API_URL}:3000/api/user`;
 
@@ -18,39 +11,39 @@ export const USER_API = {
   DELETE_USER: (id: string) => `/delete/${id}`,
 };
 
-export async function fetchUsers(): Promise<User[]> {
-  try {
-    const requestInfo = {
-      method: "GET",
-      headers: headers,
-    };
-    console.log("URI: ", USER_URL);
-    const response = await fetch(`${USER_URL}${USER_API.GET}`, requestInfo);
+// export async function fetchUsers(): Promise<User[]> {
+//   try {
+//     const requestInfo = {
+//       method: "GET",
+//       headers: headers,
+//     };
+//     console.log("URI: ", USER_URL);
+//     const response = await fetch(`${USER_URL}${USER_API.GET}`, requestInfo);
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+//     if (!response.ok) {
+//       throw new Error("Network response was not ok");
+//     }
 
-    const jsonResponse = await response.json();
-    if (jsonResponse.data) {
-      return jsonResponse.data as User[];
-    }
+//     const jsonResponse = await response.json();
+//     if (jsonResponse.data) {
+//       return jsonResponse.data as User[];
+//     }
 
-    return [];
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-}
+//     return [];
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     throw error;
+//   }
+// }
 
-export async function fetchUserById(id: string): Promise<User> {
+export async function fetchUserByUid(uid: string): Promise<User> {
   try {
     const requestInfo = {
       method: "GET",
       headers: headers,
     };
     const response = await fetch(
-      `${USER_URL}${USER_API.GET_USER(id)}`,
+      `${USER_URL}${USER_API.GET_USER(uid)}`,
       requestInfo
     );
 
@@ -103,12 +96,6 @@ export async function updateUser(id: string, updatedUser: User): Promise<User> {
   }
 }
 
-const userData = {
-  name: "Test från app",
-  profileURL: "",
-  email: "app-test@gmail.com",
-};
-
 export async function createUser(
   createUser: UserCredential
 ): Promise<UserCredential> {
@@ -130,7 +117,7 @@ export async function createUser(
 
     const jsonResponse = await response.json();
     console.log("Recieved data:", jsonResponse);
-
+    console.log("JSON RESPONSE USER: ", jsonResponse);
     return jsonResponse as UserCredential;
   } catch (error) {
     console.error("Error fetching data:", error);

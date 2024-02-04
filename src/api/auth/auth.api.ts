@@ -5,11 +5,11 @@ import {
 import "firebase/firestore";
 
 import { auth } from "@/firebase.config";
-import { UserCredential } from "@/types";
+import { LoginUser, UserCredential } from "@/types";
 
-export const addUserToDB = async (
+export async function createCredentialUser(
   userCred: UserCredential
-): Promise<UserCredential> => {
+): Promise<UserCredential> {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -23,18 +23,21 @@ export const addUserToDB = async (
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const signInWithAPI = async (email: string, password: string) => {
+export const signInCredentialUser = async (
+  loginUser: LoginUser
+): Promise<string> => {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
-      email,
-      password
+      loginUser.email,
+      loginUser.password
     );
-    return {
-      uid: userCredential.user.uid,
-    };
+
+    const uid = userCredential.user.uid;
+
+    return uid;
   } catch (error: any) {
     throw error;
   }

@@ -17,6 +17,10 @@ export default function Main({ navigation }: Props) {
           title="Go to Login"
           onPress={() => navigation.navigate("Login")}
         />
+        <Button
+          title="Go to CredUser"
+          onPress={() => navigation.navigate("CredUser")}
+        />
       </View>
     </View>
   );

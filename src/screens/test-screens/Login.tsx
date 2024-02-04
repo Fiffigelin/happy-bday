@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/src/features/store";
-import { addUserAsync } from "@/src/features/user/user.slice";
+import { registerNewUserAPI } from "@/src/features/user/user.slice";
 import { UserCredential } from "@/types";
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
@@ -22,7 +22,7 @@ export default function Login() {
       uid: "",
     };
 
-    await dispatch(addUserAsync(userCred));
+    await dispatch(registerNewUserAPI(userCred));
   };
 
   return (
