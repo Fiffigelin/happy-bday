@@ -8,8 +8,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { useAppSelector } from "../features/store";
-import MainPage from "../screens/UserAuth/MainPage";
 import TestStackNavigator from "./TestNavigator";
+import MainScreen from "../screens/UserAuth/MainScreen";
 
 const Tab = createBottomTabNavigator<RootTabsParamList>();
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -47,7 +47,7 @@ export default function TabNavigator() {
     <NavigationContainer>
       {!user ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Main" component={MainPage} />
+          <Stack.Screen name="Main" component={MainScreen} />
         </Stack.Navigator>
       ) : (
         <Tab.Navigator

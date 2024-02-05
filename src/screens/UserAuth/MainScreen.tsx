@@ -1,165 +1,173 @@
-import React, { useState } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
-import Animated, { useSharedValue } from "react-native-reanimated";
-import Svg, { Image } from "react-native-svg";
+import styles from "@/style";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  Keyboard,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import Svg, { ClipPath, Ellipse, Image } from "react-native-svg";
 
-export default function Main() {
-  //i.imgur.com/xuKn6N2.png
-  const imagePosition = useSharedValue(1);
-  const [isModalView, setModalView] = useState(false);
+export default function MainPage() {
+  const imageScale = useSharedValue(3);
   const { height, width } = Dimensions.get("window");
+  const [ismodalView, setModalView] = useState(false);
+  const imagePosition = useSharedValue(1);
+
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    const interpolation = interpolate(
+      imagePosition.value,
+      [0, 1],
+      [-height / imageScale.value, 0]
+    );
+    return {
+      transform: [
+        {
+          translateY: withTiming(interpolation, {
+            duration: imageScale.value === 1.25 ? 200 : 1000,
+          }),
+        },
+      ],
+    };
+  });
+
+  const buttonAnimatedStyle = useAnimatedStyle(() => {
+    const interpolation = interpolate(imagePosition.value, [0, 1], [250, 0]);
+    return {
+      opacity: withTiming(imagePosition.value, { duration: 500 }),
+      transform: [
+        { translateY: withTiming(interpolation, { duration: 1000 }) },
+      ],
+    };
+  });
+
+  const textInputAnimatedStyle = useAnimatedStyle(() => {
+    const interpolation = interpolate(imagePosition.value, [0, 0], [0, 0]);
+    return {
+      opacity: withTiming(imagePosition.value + 1, { duration: 500 }),
+      transform: [
+        { translateY: withTiming(interpolation, { duration: 1000 }) },
+      ],
+    };
+  });
+
+  const loginHandler = () => {
+    imagePosition.value = 0;
+    setModalView(true);
+  };
+
+  const registerHandler = () => {
+    imagePosition.value = 0;
+    setModalView(true);
+  };
+
+  const handleCloseBtn = () => {
+    imagePosition.value = 1;
+    setModalView(false);
+  };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        console.log("Tangentbordet visas!");
+        imageScale.value = 1.4;
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        console.log("Tangentbordet göms!");
+        imageScale.value = 3;
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Animated.View style={styles.absoluteFill}>
-        <Svg style={isModalView ? styles.svgModal : styles.svg} width={width}>
+    <View style={ismodalView ? styles.containerTwo : styles.container}>
+      <Animated.View style={[styles.cover, imageAnimatedStyle]}>
+        <Svg height={height} width={width}>
+          {ismodalView && (
+            <ClipPath id="clipPathId">
+              <Ellipse cx={width / 2} rx={height} ry={height}></Ellipse>
+            </ClipPath>
+          )}
           <Image
-            href={require("@/assets/login-no-background.png")}
+            href={require("../../../assets/login.png")}
             width={width}
-            height={height / 1.15}
+            height={height}
+            preserveAspectRatio="xMidYMid slice"
+            clipPath="url(#clipPathId)"
           />
         </Svg>
-        {/* <View style={styles.closeBtnContainer}>
-          <Text>X</Text>
-        </View> */}
-      </Animated.View>
-      <View
-        style={isModalView ? styles.modalContainer : styles.buttonContainer}
-      >
-        <View style={styles.buttonWhite}>
-          <Text style={styles.buttonTextBlack}>Login</Text>
-        </View>
-        <View style={styles.buttonGoogle}>
-          <Text style={styles.buttonTextWhite}>Sign in with Google</Text>
-        </View>
-
-        {/* <View style={styles.formInputContainer}>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={"black"}
-            style={styles.textInput}
-          />
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor={"black"}
-            style={styles.textInput}
-          />
-          <View style={styles.formButton}>
-            <Text style={styles.buttonTextWhite}>Log in</Text>
+        {ismodalView && (
+          <View style={styles.closeButtonContainer}>
+            <Text onPress={handleCloseBtn}>X</Text>
           </View>
-        </View> */}
+        )}
+      </Animated.View>
+      <View style={styles.buttonContainer}>
+        <Animated.View style={buttonAnimatedStyle}>
+          <Pressable style={styles.buttonWhite} onPress={loginHandler}>
+            <Text style={styles.buttonTextBlack}>Sign in</Text>
+          </Pressable>
+        </Animated.View>
+        <Animated.View style={buttonAnimatedStyle}>
+          <Pressable style={styles.buttonBlue} onPress={registerHandler}>
+            <Text style={styles.buttonTextWhite}>Sign in with Google</Text>
+          </Pressable>
+        </Animated.View>
+        {ismodalView && (
+          <View>
+            <Animated.View style={textInputAnimatedStyle}>
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor={"black"}
+                style={styles.textInput}
+              />
+              <TextInput
+                placeholder="Password"
+                placeholderTextColor={"black"}
+                style={styles.textInput}
+              />
+              <View style={styles.formButton}>
+                <Text style={styles.buttonTextWhite}>Login</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  margin: 20,
+                }}
+              >
+                <Text
+                  style={{ color: "black", fontWeight: "600", fontSize: 16 }}
+                >
+                  New user?
+                </Text>
+                <Text
+                  style={{ color: "#207dbd", fontWeight: "400", fontSize: 20 }}
+                >
+                  Register
+                </Text>
+              </View>
+            </Animated.View>
+          </View>
+        )}
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#E5C5BD",
-    justifyContent: "flex-end",
-  },
-  buttonWhite: {
-    backgroundColor: "#fff",
-    height: 55,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "#fff",
-  },
-  buttonGoogle: {
-    backgroundColor: "#325ECF",
-    height: 55,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "#325ECF",
-  },
-  buttonTextWhite: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "white",
-    letterSpacing: 0.5,
-  },
-  buttonTextBlack: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "black",
-    letterSpacing: 0.5,
-  },
-  buttonContainer: {
-    justifyContent: "center",
-    height: Dimensions.get("window").height / 3,
-  },
-  modalContainer: {
-    backgroundColor: "white",
-    justifyContent: "flex-end",
-    height: Dimensions.get("window").height / 2,
-  },
-  absoluteFill: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  absoluteFillWhite: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "white",
-  },
-  textInput: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.2)",
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderRadius: 10,
-    paddingLeft: 10,
-  },
-  formButton: {
-    backgroundColor: "#E5C5BD",
-    height: 55,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "#E5C5BD",
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  formInputContainer: {
-    marginBottom: 70,
-  },
-  closeBtnContainer: {
-    height: 40,
-    width: 40,
-    justifyContent: "center",
-    alignSelf: "center",
-    shadowColor: "#fff",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-    elevation: 1,
-    backgroundColor: "white",
-    borderRadius: 20,
-    alignItems: "center",
-  },
-  svgModal: {
-    height: Dimensions.get("window").height / 2,
-  },
-  svg: {
-    height: Dimensions.get("window").height,
-  },
-});
