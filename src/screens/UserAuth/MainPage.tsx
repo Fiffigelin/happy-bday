@@ -1,6 +1,13 @@
 import styles from "@/style";
-import React, { useState } from "react";
-import { Dimensions, Pressable, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  Keyboard,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -10,18 +17,24 @@ import Animated, {
 import Svg, { ClipPath, Ellipse, Image } from "react-native-svg";
 
 export default function MainPage() {
+  const imageScale = useSharedValue(3);
   const { height, width } = Dimensions.get("window");
   const [ismodalView, setModalView] = useState(false);
   const imagePosition = useSharedValue(1);
+
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
       imagePosition.value,
       [0, 1],
-      [-height / 3, 0]
+      [-height / imageScale.value, 0]
     );
     return {
       transform: [
-        { translateY: withTiming(interpolation, { duration: 1000 }) },
+        {
+          translateY: withTiming(interpolation, {
+            duration: imageScale.value === 1.25 ? 200 : 1000,
+          }),
+        },
       ],
     };
   });
@@ -61,6 +74,31 @@ export default function MainPage() {
     setModalView(false);
   };
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        console.log("Tangentbordet visas!");
+        imageScale.value = 1.4;
+        // imagePosition.value = 0.75; // Uppdatera skalfaktorn enligt dina önskemål
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        console.log("Tangentbordet göms!");
+        imageScale.value = 3;
+        // imagePosition.value = 1.0; // Återgå till ursprunglig skalfaktor
+      }
+    );
+
+    // Komponentrensrensning: Ta bort lyssnarna när komponenten avmonteras
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <View style={ismodalView ? styles.containerTwo : styles.container}>
       <Animated.View style={[styles.cover, imageAnimatedStyle]}>
@@ -99,7 +137,7 @@ export default function MainPage() {
           <View>
             <Animated.View style={textInputAnimatedStyle}>
               <TextInput
-                placeholder="Email"
+                placeholder="Hej Ariel! Jag är en app! :)"
                 placeholderTextColor={"black"}
                 style={styles.textInput}
               />
