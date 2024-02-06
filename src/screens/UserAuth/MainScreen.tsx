@@ -1,5 +1,7 @@
+import CustomInput from "@/src/components/customInput";
 import styles from "@/style";
 import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   Dimensions,
   Keyboard,
@@ -15,12 +17,21 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import Svg, { ClipPath, Ellipse, Image } from "react-native-svg";
+import RegisterModal from "./RegisterModal";
 
 export default function MainPage() {
-  const imageScale = useSharedValue(3);
+  const imageScale = useSharedValue(2.2);
   const { height, width } = Dimensions.get("window");
   const [ismodalView, setModalView] = useState(false);
   const imagePosition = useSharedValue(1);
+  const [modalVisible, setModalVisible] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+    getValues,
+  } = useForm();
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
@@ -32,7 +43,7 @@ export default function MainPage() {
       transform: [
         {
           translateY: withTiming(interpolation, {
-            duration: imageScale.value === 1.25 ? 200 : 1000,
+            duration: imageScale.value === 1.25 ? 400 : 1000,
           }),
         },
       ],
@@ -59,19 +70,26 @@ export default function MainPage() {
     };
   });
 
-  const loginHandler = () => {
+  const signinHandler = () => {
     imagePosition.value = 0;
     setModalView(true);
   };
 
   const registerHandler = () => {
-    imagePosition.value = 0;
-    setModalView(true);
+    setModalVisible(true);
+  };
+
+  const loginHandler = () => {
+    console.log("Nu har användaren loggat in");
   };
 
   const handleCloseBtn = () => {
     imagePosition.value = 1;
-    setModalView(false);
+    setModalView(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   useEffect(() => {
@@ -79,14 +97,14 @@ export default function MainPage() {
       "keyboardDidShow",
       () => {
         console.log("Tangentbordet visas!");
-        imageScale.value = 1.4;
+        imageScale.value = 1.25;
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         console.log("Tangentbordet göms!");
-        imageScale.value = 3;
+        imageScale.value = 2.1;
       }
     );
 
@@ -121,7 +139,7 @@ export default function MainPage() {
       </Animated.View>
       <View style={styles.buttonContainer}>
         <Animated.View style={buttonAnimatedStyle}>
-          <Pressable style={styles.buttonWhite} onPress={loginHandler}>
+          <Pressable style={styles.buttonWhite} onPress={signinHandler}>
             <Text style={styles.buttonTextBlack}>Sign in</Text>
           </Pressable>
         </Animated.View>
@@ -133,7 +151,72 @@ export default function MainPage() {
         {ismodalView && (
           <View>
             <Animated.View style={textInputAnimatedStyle}>
-              <TextInput
+              <Controller
+                rules={{ required: "Email is required" }}
+                control={control}
+                name="email"
+                render={({
+                  field: { value, onChange, onBlur },
+                  fieldState: { error },
+                }) => (
+                  <>
+                    <View>
+                      <TextInput
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder="Email"
+                        style={[
+                          styles.textInput,
+                          { borderColor: error ? "red" : "gray" },
+                        ]}
+                        secureTextEntry={false}
+                      />
+                    </View>
+                    {error && (
+                      <Text
+                        style={{
+                          color: "red",
+                          alignSelf: "stretch",
+                          justifyContent: "flex-start",
+                          marginHorizontal: 25,
+                        }}
+                      >
+                        {error.message || "Email required"}
+                      </Text>
+                    )}
+                  </>
+                )}
+              />
+              <CustomInput
+                control={control}
+                name="password"
+                rules={{
+                  required: "Password required",
+                  minLength: {
+                    value: 6,
+                    message: "Password needs to be a minimum of 6 characters",
+                  },
+                }}
+                placeholder="Password"
+                secureTextEntry={true}
+                errorMessage="Error"
+              />
+              <CustomInput
+                control={control}
+                name="password"
+                rules={{
+                  required: "Password required",
+                  minLength: {
+                    value: 6,
+                    message: "Password needs to be a minimum of 6 characters",
+                  },
+                }}
+                placeholder="Password"
+                secureTextEntry={true}
+                errorMessage="Error"
+              />
+              {/* <TextInput
                 placeholder="Email"
                 placeholderTextColor={"black"}
                 style={styles.textInput}
@@ -142,10 +225,13 @@ export default function MainPage() {
                 placeholder="Password"
                 placeholderTextColor={"black"}
                 style={styles.textInput}
-              />
-              <View style={styles.formButton}>
+              /> */}
+              <Pressable
+                style={styles.formButton}
+                onPress={handleSubmit(loginHandler)}
+              >
                 <Text style={styles.buttonTextWhite}>Login</Text>
-              </View>
+              </Pressable>
               <View
                 style={{
                   flexDirection: "row",
@@ -153,21 +239,30 @@ export default function MainPage() {
                   margin: 20,
                 }}
               >
-                <Text
-                  style={{ color: "black", fontWeight: "600", fontSize: 16 }}
-                >
-                  New user?
-                </Text>
-                <Text
-                  style={{ color: "#207dbd", fontWeight: "400", fontSize: 20 }}
-                >
-                  Register
-                </Text>
+                <View>
+                  <Text
+                    style={{ color: "black", fontWeight: "600", fontSize: 16 }}
+                  >
+                    New user?
+                  </Text>
+                </View>
+                <Pressable onPress={registerHandler}>
+                  <Text
+                    style={{
+                      color: "#207dbd",
+                      fontWeight: "400",
+                      fontSize: 20,
+                    }}
+                  >
+                    Register
+                  </Text>
+                </Pressable>
               </View>
             </Animated.View>
           </View>
         )}
       </View>
+      <RegisterModal visible={modalVisible} closeModal={closeModal} />
     </View>
   );
 }

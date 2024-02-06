@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#E5C5BD",
+    backgroundColor: "#f5ccab",
   },
   containerTwo: {
     flex: 1,
@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: "center",
-    height: height / 2,
+    height: height / 1.6,
     marginBottom: 20,
   },
   textInput: {
     height: 50,
     borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.2)",
+    // borderColor: "rgba(0, 0, 0, 0.2)",
     marginHorizontal: 20,
     marginVertical: 10,
     borderRadius: 15,
