@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: "center",
-    height: height / 1.6,
+    height: height / 1.95,
     marginBottom: 20,
   },
   textInput: {
