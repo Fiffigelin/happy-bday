@@ -54,7 +54,7 @@ const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
         closeModal();
       }, 2000);
     } else if (payload === "Firebase: Error (auth/email-already-in-use).") {
-      showToastHandler("Email is already in use");
+      showToastHandler("Email already in use");
     }
   };
 
