@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import {
   logOutUser,
   loginRegisteredUserAPI,
+  registerNewUserAPI,
   setActiveUser,
 } from "@/src/features/user/user.slice";
 import { AuthUser, LoginUser } from "@/types";

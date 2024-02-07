@@ -1,5 +1,9 @@
+import CloseCustomButton from "@/src/components/customCloseButton";
 import CustomInput from "@/src/components/customInput";
+import { useAppDispatch } from "@/src/features/store";
+import { loginRegisteredUserAPI } from "@/src/features/user/user.slice";
 import styles from "@/style";
+import { LoginUser } from "@/types";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Dimensions, Keyboard, Pressable, Text, View } from "react-native";
@@ -10,13 +14,15 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import Svg, { ClipPath, Ellipse, Image } from "react-native-svg";
+import RegisterModal from "./RegisterModal";
 
 export default function MainPage() {
   const imageScale = useSharedValue(2.7);
   const { height, width } = Dimensions.get("window");
-  const [ismodalView, setModalView] = useState(false);
+  const [isCurtainOpen, setCurtain] = useState(false);
   const imagePosition = useSharedValue(1);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
   const {
     control,
     handleSubmit,
@@ -64,20 +70,33 @@ export default function MainPage() {
 
   const signinHandler = () => {
     imagePosition.value = 0;
-    setModalView(true);
+    setCurtain(true);
   };
 
   const registerHandler = () => {
-    setModalVisible(true);
+    setModalOpen(true);
   };
 
-  const loginHandler = () => {
-    console.log("Nu har användaren loggat in");
+  const loginHandler = async (data: any) => {
+    // Här kan du genomföra e-postverifiering
+    console.log("Email:", data.email);
+    console.log("Password:", data.password);
+
+    const loginUser: LoginUser = {
+      email: data.email,
+      password: data.password,
+    };
+
+    dispatch(loginRegisteredUserAPI(loginUser));
   };
 
   const handleCloseBtn = () => {
     imagePosition.value = 1;
-    setModalView(false);
+    setCurtain(false);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   useEffect(() => {
@@ -104,10 +123,10 @@ export default function MainPage() {
 
   return (
     <>
-      <View style={ismodalView ? styles.containerTwo : styles.container}>
+      <View style={isCurtainOpen ? styles.containerTwo : styles.container}>
         <Animated.View style={[styles.cover, imageAnimatedStyle]}>
           <Svg height={height} width={width}>
-            {ismodalView && (
+            {isCurtainOpen && (
               <ClipPath id="clipPathId">
                 <Ellipse cx={width / 2} rx={height} ry={height}></Ellipse>
               </ClipPath>
@@ -120,11 +139,7 @@ export default function MainPage() {
               clipPath="url(#clipPathId)"
             />
           </Svg>
-          {ismodalView && (
-            <View style={styles.closeButtonContainer}>
-              <Text onPress={handleCloseBtn}>X</Text>
-            </View>
-          )}
+          {isCurtainOpen && <CloseCustomButton onPress={handleCloseBtn} />}
         </Animated.View>
         <View style={styles.buttonContainer}>
           <Animated.View style={buttonAnimatedStyle}>
@@ -137,7 +152,7 @@ export default function MainPage() {
               <Text style={styles.buttonTextWhite}>Sign in with Google</Text>
             </Pressable>
           </Animated.View>
-          {ismodalView && (
+          {isCurtainOpen && (
             <View>
               <Animated.View style={textInputAnimatedStyle}>
                 <CustomInput
@@ -149,10 +164,14 @@ export default function MainPage() {
                       value: 5,
                       message: "Email needs to be a minimum of 5 characters",
                     },
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email address",
+                    },
                   }}
                   placeholder="Email"
                   secureTextEntry={false}
-                  errorMessage="Error"
+                  errorMessage={errors.email?.message as string}
                 />
                 <CustomInput
                   control={control}
@@ -168,14 +187,6 @@ export default function MainPage() {
                   secureTextEntry={true}
                   errorMessage="Error"
                 />
-                {/* <CustomButton
-                  buttonColor="#d39e90"
-                  borderColor="#f2e2de"
-                  textColor="#fff"
-                  shadow={true}
-                  onPress={() => handleSubmit(loginHandler)}
-                  buttonText="Login"
-                /> */}
                 <Pressable
                   style={styles.formButton}
                   onPress={handleSubmit(loginHandler)}
@@ -217,6 +228,7 @@ export default function MainPage() {
           )}
         </View>
       </View>
+      <RegisterModal visible={isModalOpen} closeModal={closeModal} />
     </>
   );
 }

@@ -61,7 +61,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       style={
         shadow ? buttonStyle.buttonContainerShadow : buttonStyle.buttonContainer
       }
-      onPress={() => onPress}
+      onPress={onPress}
     >
       <Text style={buttonStyle.buttonText}>{buttonText}</Text>
     </Pressable>
