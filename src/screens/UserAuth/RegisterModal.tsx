@@ -1,6 +1,10 @@
 import CustomCloseButton from "@/src/components/customCloseButton";
 import CustomInput from "@/src/components/customInput";
-import React from "react";
+import CustomToast from "@/src/components/customToast";
+import { useAppDispatch } from "@/src/features/store";
+import { registerNewUserAPI } from "@/src/features/user/user.slice";
+import { UserCredential } from "@/types";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Dimensions,
@@ -17,16 +21,41 @@ interface RegisterModal {
 }
 const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
   const { height, width } = Dimensions.get("window");
-  const {
-    control,
-    handleSubmit,
-    register,
-    formState: { errors },
-    getValues,
-  } = useForm();
+  const { control, handleSubmit, watch } = useForm();
+  const EMAIL_REGEX =
+    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const pwd = watch("password");
+  const dispatch = useAppDispatch();
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setMessage] = useState<string>("");
 
-  const signinHandler = () => {
-    console.log("New user!");
+  const showToastHandler = (text: string) => {
+    setMessage(text);
+    setShowToast(true);
+  };
+
+  const closeToastHandler = () => {
+    setShowToast(false);
+  };
+
+  const signinHandler = async (data: any) => {
+    const userCred: UserCredential = {
+      email: data.email,
+      password: data.password,
+      name: data.name,
+      uid: "",
+    };
+
+    const result = await dispatch(registerNewUserAPI(userCred));
+    const payload = result?.payload;
+    if (payload === true) {
+      showToastHandler("Registration succeded");
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+    } else if (payload === "Firebase: Error (auth/email-already-in-use).") {
+      showToastHandler("Email is already in use");
+    }
   };
 
   return (
@@ -61,19 +90,23 @@ const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
                   value: 2,
                   message: "Name needs to be a minimum of 2 characters",
                 },
+                maxLength: {
+                  value: 20,
+                  message: "Name need to be a maximum of 20 characters",
+                },
               }}
               secureTextEntry={false}
               errorMessage="Error"
             />
             <CustomInput
               control={control}
-              name={"epost"}
-              placeholder="Epost"
+              name={"email"}
+              placeholder="Email"
               rules={{
-                required: "Epost required",
-                minLength: {
-                  value: 2,
-                  message: "Epost needs to be a minimum of 5 characters",
+                required: "Email required",
+                pattern: {
+                  value: EMAIL_REGEX,
+                  message: "Invalid email",
                 },
               }}
               secureTextEntry={false}
@@ -91,23 +124,23 @@ const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
                     "Password needs to be a minimum of 6 characters and contain a minimum of 3 letters and 3 numbers",
                 },
               }}
-              secureTextEntry={false}
+              secureTextEntry={true}
               errorMessage="Error"
             />
             <CustomInput
               control={control}
-              name={"confirmpassword"}
+              name={"confirm-password"}
               placeholder="Confirm password"
               rules={{
-                required: "Confirming password is necessary",
-                minLength: {
-                  value: 2,
-                  message: "Password is incorrect",
-                },
+                validate: (value: string) =>
+                  value === pwd || "Password do not match",
               }}
-              secureTextEntry={false}
+              secureTextEntry={true}
               errorMessage="Error"
             />
+            {showToast && (
+              <CustomToast message={toastMessage} onClose={closeToastHandler} />
+            )}
           </View>
           <View>
             <Pressable

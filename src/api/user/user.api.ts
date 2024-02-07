@@ -96,9 +96,7 @@ export async function updateUser(id: string, updatedUser: User): Promise<User> {
   }
 }
 
-export async function createUser(
-  createUser: UserCredential
-): Promise<UserCredential> {
+export async function createUser(createUser: UserCredential): Promise<boolean> {
   try {
     const data = {
       name: createUser.name,
@@ -116,9 +114,13 @@ export async function createUser(
     }
 
     const jsonResponse = await response.json();
-    console.log("Recieved data:", jsonResponse);
     console.log("JSON RESPONSE USER: ", jsonResponse);
-    return jsonResponse as UserCredential;
+    if (jsonResponse.status === "Success") {
+      return true;
+    } else {
+      throw false;
+    }
+    // return jsonResponse as UserCredential;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

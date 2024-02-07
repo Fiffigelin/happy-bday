@@ -28,23 +28,45 @@ export const initialState: UserState = {
   error: undefined,
 };
 
+// export const registerNewUserAPI = createAsyncThunk<
+//   string,
+//   UserCredential,
+//   { rejectValue: string }
+// >("user/addUser", async (userCred, thunkAPI) => {
+//   try {
+//     const addedUser = await createCredentialUser(userCred);
+
+//     if (addedUser && addedUser.uid) {
+//       console.log("UID in thunk: ", addedUser.uid);
+
+//       const result = await createUser(addedUser);
+//       if (result.uid) {
+//         return thunkAPI.fulfillWithValue("Register successfull!");
+//       }
+//     } else {
+//       return thunkAPI.rejectWithValue("failed to add user");
+//     }
+//   } catch (error: any) {
+//     return thunkAPI.rejectWithValue(error.message);
+//   }
+// });
+
 export const registerNewUserAPI = createAsyncThunk<
-  void,
+  boolean,
   UserCredential,
   { rejectValue: string }
->("user/addUser", async (userCred, thunkAPI) => {
+>("user/addUser", async (userCred) => {
   try {
     const addedUser = await createCredentialUser(userCred);
 
     if (addedUser && addedUser.uid) {
       console.log("UID in thunk: ", addedUser.uid);
 
-      await createUser(addedUser);
-    } else {
-      return thunkAPI.rejectWithValue("failed to add user");
+      const result = await createUser(addedUser);
+      return result;
     }
   } catch (error: any) {
-    return thunkAPI.rejectWithValue(error.message);
+    return error.message;
   }
 });
 
