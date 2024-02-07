@@ -28,6 +28,10 @@ export type TestStackParamList = {
   CredUser: undefined;
 };
 
+export type AuthStackParamList = {
+  Main: undefined;
+};
+
 // en generisk funktion där stack navigationen känner till tab navigationen
 export type ContactsScreenProps<T extends keyof ContactsStackParamList> =
   CompositeScreenProps<
