@@ -1,12 +1,7 @@
 import { auth } from "@/firebase.config";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
-import {
-  logOutUser,
-  loginRegisteredUserAPI,
-  registerNewUserAPI,
-  setActiveUser,
-} from "@/src/features/user/user.slice";
-import { AuthUser, LoginUser } from "@/types";
+import { logOutUser, setActiveUser } from "@/src/features/user/user.slice";
+import { AuthUser } from "@/types";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
@@ -54,19 +49,19 @@ export default function CredUser() {
       });
   }
 
-  async function handleLogin() {
-    const loginUser: LoginUser = {
-      email: "bobo@mail.com",
-      password: "bobo123",
-    };
+  // async function handleLogin() {
+  //   const loginUser: LoginUser = {
+  //     email: "bobo@mail.com",
+  //     password: "bobo123",
+  //   };
 
-    dispatch(loginRegisteredUserAPI(loginUser));
-  }
+  //   dispatch(loginRegisteredUserAPI(loginUser));
+  // }
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>CRED USER</Text>
-      <Button title="Login user" onPress={handleLogin} />
+      {/* <Button title="Login user" onPress={handleLogin} /> */}
       <Button title="Logout" onPress={handleLogOut} />
     </View>
   );

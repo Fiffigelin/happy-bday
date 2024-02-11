@@ -1,3 +1,4 @@
+// ---------------- USER ----------------
 export interface UserCredential {
   email: string;
   password: string;
@@ -20,4 +21,11 @@ export interface User {
 export interface AuthUser {
   uid: string;
   email: string;
+}
+
+// ---------------- CONTACT ----------------
+export interface CreateContact {
+  name: string;
+  birthday: Date;
+  userId: string;
 }

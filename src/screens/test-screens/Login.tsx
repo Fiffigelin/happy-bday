@@ -1,54 +1,110 @@
-import { useAppDispatch } from "@/src/features/store";
-import { registerNewUserAPI } from "@/src/features/user/user.slice";
-import { UserCredential } from "@/types";
-import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import CustomButton from "@/src/components/customButton";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const dispatch = useAppDispatch();
+  const [dateOfBirth, setDateOfBirth] = useState<string>("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [showPicker, setShowPicker] = useState<boolean>(false);
+  const { height } = Dimensions.get("window");
 
-  const handleLogin = async () => {
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Name:", name);
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker);
+  };
 
-    const userCred: UserCredential = {
-      email: email,
-      password: password,
-      name: name,
-      uid: "",
-    };
+  useEffect(() => {
+    console.log("DATE: ", date.toISOString());
+    if (Platform.OS === "android") {
+      setDateOfBirth(date.toDateString());
+      console.log("SET BIRTHDAY: ", date.toDateString());
+    }
+  }, [date]);
 
-    await dispatch(registerNewUserAPI(userCred));
+  const onChange = (event: any, selectedDate?: Date) => {
+    if (event.type === "set" && selectedDate) {
+      const currentDate = selectedDate;
+      setDate(currentDate);
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+      }
+    } else {
+      toggleDatePicker();
+    }
+  };
+
+  const confirmIOSDate = () => {
+    setDateOfBirth(date.toDateString());
+    toggleDatePicker();
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>LOGIN</Text>
-      <View style={styles.inputContainer}>
-        <Text>EMAIL:</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
-        <Text>PASSWORD:</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry={true}
-        />
-        <Text>NAME:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => setName(text)}
-        />
+      <Text style={styles.text}>CREATE CONTACT</Text>
+      <View>
+        <Text>Date Of Birth</Text>
+
+        {showPicker && (
+          <DateTimePicker
+            mode="date"
+            display="spinner"
+            value={date}
+            onChange={onChange}
+            style={styles.datePicker}
+            maximumDate={new Date()}
+            minimumDate={new Date("1900")}
+          />
+        )}
+        {showPicker && Platform.OS === "ios" && (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              width: "80%",
+              height: height / 1.95,
+              marginBottom: 20,
+            }}
+          >
+            <View style={{ width: "100%" }}>
+              <CustomButton
+                buttonColor="grey"
+                borderColor="grey"
+                shadow={false}
+                buttonText="Cancel"
+                textColor="white"
+                onPress={toggleDatePicker}
+              />
+              <CustomButton
+                buttonColor="blue"
+                borderColor="blue"
+                shadow={false}
+                buttonText="Save"
+                textColor="white"
+                onPress={confirmIOSDate}
+              />
+            </View>
+          </View>
+        )}
+        <Pressable onPress={toggleDatePicker}>
+          <TextInput
+            style={styles.input}
+            placeholder="Sat Aug 21 2004"
+            value={dateOfBirth}
+            onChangeText={setDateOfBirth}
+            placeholderTextColor="#11182744"
+            editable={false}
+            onPressIn={toggleDatePicker}
+          />
+        </Pressable>
       </View>
-      <Button title="Create userCred" onPress={handleLogin} />
     </View>
   );
 }
@@ -74,5 +130,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+  },
+  datePicker: {
+    height: 120,
+    marginTop: -10,
   },
 });
