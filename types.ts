@@ -24,8 +24,15 @@ export interface AuthUser {
 }
 
 // ---------------- CONTACT ----------------
-export interface CreateContact {
+export interface ContactCredential {
   name: string;
   birthday: Date;
   userId: string;
+}
+
+export interface Contact {
+  name: string;
+  birthday: Date;
+  id: string;
+  user_id: string;
 }

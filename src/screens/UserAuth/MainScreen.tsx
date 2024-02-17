@@ -78,7 +78,6 @@ export default function MainPage() {
   };
 
   const loginHandler = async (data: any) => {
-    // Här kan du genomföra e-postverifiering
     console.log("Email:", data.email);
     console.log("Password:", data.password);
 
