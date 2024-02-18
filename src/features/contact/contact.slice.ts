@@ -88,4 +88,3 @@ const contactSlice = createSlice({
 });
 
 export const contactReducer = contactSlice.reducer;
-// export { fetchUsers };

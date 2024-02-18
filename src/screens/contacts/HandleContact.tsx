@@ -25,7 +25,6 @@ export default function HandleContact() {
   const { height, width } = Dimensions.get("window");
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
-  const contacts = useAppSelector((state) => state.contact.contacts);
   const {
     control,
     handleSubmit,
@@ -53,10 +52,6 @@ export default function HandleContact() {
   };
 
   const addContactHandler = async (data: any) => {
-    console.log("Name:", data.name);
-    console.log("Birthday:", new Date(dateOfBirth));
-    console.log("UserId: ", user?.id);
-
     const addContact: ContactCredential = {
       name: data.name,
       birthday: new Date(dateOfBirth),
@@ -67,12 +62,10 @@ export default function HandleContact() {
   };
 
   useEffect(() => {
-    console.log("DATE: ", date.toISOString());
     if (Platform.OS === "android") {
       setDateOfBirth(date.toDateString());
-      console.log("SET BIRTHDAY: ", date.toDateString());
     }
-  }, [date, contacts]);
+  }, [date]);
 
   return (
     <View style={[contactStyles.container, { width: width }]}>
@@ -163,11 +156,6 @@ export default function HandleContact() {
           ></View>
         </KeyboardAwareScrollView>
       </View>
-      {/* <FlatList
-        data={contacts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
-      /> */}
     </View>
   );
 }
