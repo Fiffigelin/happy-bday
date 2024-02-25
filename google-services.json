@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928396313458",
+    "project_id": "happy-bday-api",
+    "storage_bucket": "happy-bday-api.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928396313458:android:1d77a573251caf0ea193eb",
+        "android_client_info": {
+          "package_name": "com.fiffigelin.happybday"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_M8RMQyYEtynm9D4VE5iXKPDxc25kIRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
