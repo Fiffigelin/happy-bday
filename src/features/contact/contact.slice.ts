@@ -10,6 +10,7 @@ interface ContactState {
   contacts: Contact[] | null;
   status: string;
   error: string | undefined;
+  addedContactSuccessful: boolean | undefined;
 }
 
 export const initialState: ContactState = {
@@ -17,6 +18,7 @@ export const initialState: ContactState = {
   contacts: [],
   status: "idle",
   error: undefined,
+  addedContactSuccessful: undefined,
 };
 
 export const createContactAPI = createAsyncThunk<
@@ -30,14 +32,17 @@ export const createContactAPI = createAsyncThunk<
 
     if (addedContact) {
       dispatch(fetchContactsAPI(contactCred.userId));
+      dispatch(contactSlice.actions.addedContactSuccessful(addedContact));
 
       console.log("Contact added");
       return addedContact;
     } else {
       console.log("Adding contact failed");
+      dispatch(contactSlice.actions.addedContactSuccessful(false));
       return addedContact;
     }
   } catch (error: any) {
+    dispatch(contactSlice.actions.addedContactSuccessful(false));
     return error.message;
   }
 });
@@ -57,7 +62,11 @@ export const fetchContactsAPI = createAsyncThunk<Contact[], string>(
 const contactSlice = createSlice({
   name: "contact",
   initialState,
-  reducers: {},
+  reducers: {
+    addedContactSuccessful: (state, action) => {
+      state.addedContactSuccessful = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchContactsAPI.pending, (state) => {

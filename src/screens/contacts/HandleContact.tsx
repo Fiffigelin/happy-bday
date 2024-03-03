@@ -2,6 +2,7 @@ import CustomButton from "@/src/components/customButton";
 import CustomInput from "@/src/components/customInput";
 import { createContactAPI } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
+import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import styles from "@/style";
 import { ContactCredential } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -18,7 +19,9 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function HandleContact() {
+type Props = ContactsScreenProps<"ContactStack">;
+
+export default function HandleContact({ navigation }: Props) {
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [showPicker, setShowPicker] = useState<boolean>(false);
@@ -58,7 +61,10 @@ export default function HandleContact() {
       userId: user?.id as string,
     };
 
-    dispatch(createContactAPI(addContact));
+    const hasQuerySucceded = await dispatch(createContactAPI(addContact));
+    if (hasQuerySucceded) {
+      navigation.navigate("ContactsHomeStack");
+    }
   };
 
   useEffect(() => {
