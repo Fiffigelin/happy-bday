@@ -1,4 +1,5 @@
 import { Contact } from "@/types";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -68,9 +69,11 @@ export default function ContactCard({
                   console.log("EDIT ", item.id, " + ", item.birthday);
                 }}
               >
-                <View>
-                  <Text>[ ]</Text>
-                </View>
+                <MaterialCommunityIcons
+                  name="account-edit"
+                  size={24}
+                  color="black"
+                />
               </Pressable>
               <Pressable
                 style={{ marginHorizontal: 8 }}
@@ -79,7 +82,11 @@ export default function ContactCard({
                 }}
               >
                 <View>
-                  <Text>X</Text>
+                  <MaterialIcons
+                    name="delete-forever"
+                    size={24}
+                    color="black"
+                  />
                 </View>
               </Pressable>
             </View>
