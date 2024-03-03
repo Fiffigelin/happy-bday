@@ -1,100 +1,57 @@
 import { Contact } from "@/types";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
-interface contactProps {
-  month: string;
-  index: number;
-  monthsWithData: string[];
-  contactsInMonth: Contact[] | undefined;
+interface ContactCardProps {
+  contact: Contact;
 }
-export default function ContactCard({
-  month,
-  index,
-  monthsWithData,
-  contactsInMonth,
-}: contactProps) {
+export default function ContactCard({ contact }: ContactCardProps) {
+  function onPressEdit(id: string) {
+    console.log("Edit contact id ", id);
+  }
+
+  function OnPressDelete(id: string) {
+    console.log("Delete contact id ", id);
+  }
+
   return (
     <View
-      key={`${month}_${index}`}
       style={{
-        marginHorizontal: 10,
-        marginBottom: index === monthsWithData.length - 1 ? 0 : 25,
+        backgroundColor: "white",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderRadius: 8,
+        margin: 6,
+        marginBottom: 25,
+        height: 55,
+        padding: 8,
+        flexDirection: "row",
       }}
     >
-      <Text
-        style={{
-          fontSize: 30,
-          marginHorizontal: 10,
-          fontWeight: "600",
-          color: "gray",
-        }}
-      >
-        {month.toString()}
-      </Text>
-      <FlatList
-        style={{ maxHeight: 300 }}
-        data={contactsInMonth}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              backgroundColor: "white",
-              alignItems: "center",
-              justifyContent: "space-between",
-              borderRadius: 8,
-              margin: 6,
-              marginBottom: 25,
-              height: 55,
-              padding: 8,
-              flexDirection: "row",
-            }}
-          >
-            <View style={{ minWidth: 180 }}>
-              <Text style={{ fontSize: 15, fontWeight: "600" }}>
-                {item.name}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={{ marginHorizontal: 10 }}>
-                {new Date(item.birthday).getDate()}
-              </Text>
-              <Text>{new Date(item.birthday).getFullYear()}</Text>
-            </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Pressable
-                style={{ marginHorizontal: 10 }}
-                onPress={() => {
-                  console.log("EDIT ", item.id, " + ", item.birthday);
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="account-edit"
-                  size={24}
-                  color="black"
-                />
-              </Pressable>
-              <Pressable
-                style={{ marginHorizontal: 8 }}
-                onPress={() => {
-                  console.log("DELETE: ", item.id);
-                }}
-              >
-                <View>
-                  <MaterialIcons
-                    name="delete-forever"
-                    size={24}
-                    color="black"
-                  />
-                </View>
-              </Pressable>
-            </View>
-          </View>
-        )}
-      />
+      <View style={{ minWidth: 180 }}>
+        <Text style={{ fontSize: 15, fontWeight: "600" }}>{contact.name}</Text>
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={{ marginHorizontal: 10 }}>
+          {new Date(contact.birthday).getDate()}
+        </Text>
+        <Text>{new Date(contact.birthday).getFullYear()}</Text>
+      </View>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Pressable
+          style={{ marginHorizontal: 10 }}
+          onPress={() => onPressEdit(contact.id)}
+        >
+          <MaterialCommunityIcons name="account-edit" size={24} color="black" />
+        </Pressable>
+        <Pressable
+          style={{ marginHorizontal: 8 }}
+          onPress={() => OnPressDelete(contact.id)}
+        >
+          <MaterialIcons name="delete-forever" size={24} color="black" />
+        </Pressable>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

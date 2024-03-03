@@ -5,7 +5,7 @@ import { fetchContactsAPI } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 type Props = ContactsScreenProps<"ContactsHomeStack">;
 
@@ -66,12 +66,30 @@ export default function ContactsHomeScreen({ navigation }: Props) {
     );
 
     return (
-      <ContactCard
-        month={month}
-        index={index}
-        monthsWithData={monthsWithData}
-        contactsInMonth={contactsInMonth}
-      />
+      <View
+        key={`${month}_${index}`}
+        style={{
+          marginHorizontal: 10,
+          marginBottom: index === monthsWithData.length - 1 ? 0 : 25,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 30,
+            marginHorizontal: 10,
+            fontWeight: "600",
+            color: "gray",
+          }}
+        >
+          {month.toString()}
+        </Text>
+        <FlatList
+          style={{ maxHeight: 250 }}
+          data={contactsInMonth}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ContactCard contact={item} />}
+        />
+      </View>
     );
   };
 
