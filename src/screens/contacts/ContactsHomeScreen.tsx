@@ -123,7 +123,7 @@ export default function ContactsHomeScreen({ navigation }: Props) {
           textColor="white"
           shadow={false}
           buttonText="Add contact"
-          onPress={() => navigation.navigate("ContactStack")}
+          onPress={() => navigation.navigate("AddEditContactStack")}
         />
       </View>
       <FlatList

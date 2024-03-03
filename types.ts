@@ -34,5 +34,5 @@ export interface Contact {
   name: string;
   birthday: Date;
   id: string;
-  user_id: string;
+  userId: string;
 }
