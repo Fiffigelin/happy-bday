@@ -1,6 +1,7 @@
 import ContactCard from "@/src/components/contactCard";
 import CustomButton from "@/src/components/customButton";
 import CustomToast from "@/src/components/customToast";
+import DeleteModal from "@/src/components/deleteModal";
 import { fetchContactsAPI } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
@@ -19,6 +20,15 @@ export default function ContactsHomeScreen({ navigation }: Props) {
   const [monthsWithData, setMonthsWithData] = useState<string[]>([]);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setMessage] = useState<string>("");
+  const [selectedContactId, setSelectedContactId] = useState<string | null>(
+    null
+  );
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+
+  function OnPressDelete(id: string) {
+    setSelectedContactId(id);
+    setModalVisible(true);
+  }
 
   const showToastFunction = (text: string) => {
     setMessage(text);
@@ -87,7 +97,12 @@ export default function ContactsHomeScreen({ navigation }: Props) {
           style={{ maxHeight: 250 }}
           data={contactsInMonth}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ContactCard contact={item} />}
+          renderItem={({ item }) => (
+            <ContactCard
+              contact={item}
+              onDelete={() => OnPressDelete(item.id)}
+            />
+          )}
         />
       </View>
     );
@@ -99,7 +114,7 @@ export default function ContactsHomeScreen({ navigation }: Props) {
         style={{
           width: "100%",
           alignItems: "flex-end",
-          marginTop: 50,
+          marginTop: 20,
         }}
       >
         <CustomButton
@@ -116,6 +131,11 @@ export default function ContactsHomeScreen({ navigation }: Props) {
         renderItem={({ item, index }) => renderMonthSection(item, index)}
       />
       {showToast && <CustomToast message={toastMessage} onClose={() => {}} />}
+      <DeleteModal
+        visible={isModalVisible}
+        contactId={selectedContactId!}
+        closeModal={() => setModalVisible(false)}
+      />
     </>
   );
 }

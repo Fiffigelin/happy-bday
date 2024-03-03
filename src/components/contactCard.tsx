@@ -5,14 +5,11 @@ import { Pressable, Text, View } from "react-native";
 
 interface ContactCardProps {
   contact: Contact;
+  onDelete: (contactId: string) => void;
 }
-export default function ContactCard({ contact }: ContactCardProps) {
+export default function ContactCard({ contact, onDelete }: ContactCardProps) {
   function onPressEdit(id: string) {
     console.log("Edit contact id ", id);
-  }
-
-  function OnPressDelete(id: string) {
-    console.log("Delete contact id ", id);
   }
 
   return (
@@ -30,7 +27,9 @@ export default function ContactCard({ contact }: ContactCardProps) {
       }}
     >
       <View style={{ minWidth: 180 }}>
-        <Text style={{ fontSize: 15, fontWeight: "600" }}>{contact.name}</Text>
+        <Text style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}>
+          {contact.name}
+        </Text>
       </View>
       <View style={{ flexDirection: "row" }}>
         <Text style={{ marginHorizontal: 10 }}>
@@ -47,7 +46,7 @@ export default function ContactCard({ contact }: ContactCardProps) {
         </Pressable>
         <Pressable
           style={{ marginHorizontal: 8 }}
-          onPress={() => OnPressDelete(contact.id)}
+          onPress={() => onDelete(contact.id)}
         >
           <MaterialIcons name="delete-forever" size={24} color="black" />
         </Pressable>
