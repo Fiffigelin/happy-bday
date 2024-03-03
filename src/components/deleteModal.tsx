@@ -7,24 +7,32 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  deleteContactsAPI,
+  fetchContactsAPI,
+} from "../features/contact/contact.slice";
+import { useAppDispatch } from "../features/store";
 
 interface CustomModalProps {
   visible: boolean;
   contactId: string;
+  userId: string;
   closeModal: () => void;
 }
 
 export default function DeleteModal({
   visible,
   contactId,
+  userId,
   closeModal,
 }: CustomModalProps) {
   const { width, height } = Dimensions.get("window");
+  const dispatch = useAppDispatch();
 
   const modalStyles = StyleSheet.create({
     modalView: {
       width: width * 0.8,
-      height: height * 0.4,
+      height: height * 0.2,
       margin: 20,
       backgroundColor: "white",
       borderRadius: 20,
@@ -41,8 +49,13 @@ export default function DeleteModal({
     },
   });
 
-  function deleteContact() {
+  async function deleteContact() {
     console.log("Contact deleted! ID: ", contactId);
+    const response = await dispatch(deleteContactsAPI(contactId));
+    if (response) {
+      dispatch(fetchContactsAPI(userId));
+    }
+    closeModal();
   }
 
   return (
@@ -57,24 +70,28 @@ export default function DeleteModal({
       <View style={styles.centeredView}>
         <View style={modalStyles.modalView}>
           <Text style={styles.modalText}>
-            This is a custom modal! And this is the contacts id: {contactId}
+            Would you like to delete the contact?
           </Text>
+          <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
+            <TouchableOpacity
+              style={{
+                ...styles.button,
+                backgroundColor: "#fff",
+              }}
+              onPress={() => {
+                closeModal();
+              }}
+            >
+              <Text style={styles.buttonText}>NO</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{ ...styles.button, backgroundColor: "#2196F3" }}
-            onPress={() => {
-              closeModal();
-            }}
-          >
-            <Text style={styles.buttonText}>Exit</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ ...styles.button, backgroundColor: "#4CAF50" }}
-            onPress={() => deleteContact()}
-          >
-            <Text style={styles.buttonText}>Confirm</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{ ...styles.button, backgroundColor: "red" }}
+              onPress={() => deleteContact()}
+            >
+              <Text style={styles.buttonTextDanger}>YES</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -92,15 +109,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     margin: 10,
-    elevation: 2,
   },
-  buttonText: {
+  buttonTextDanger: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
-  modalText: {
-    marginBottom: 15,
+  buttonText: {
+    color: "black",
+    fontWeight: "bold",
     textAlign: "center",
+  },
+  modalText: {
+    textAlign: "justify",
+    fontSize: 20,
   },
 });

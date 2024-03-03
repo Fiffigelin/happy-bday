@@ -130,8 +130,11 @@ export async function deleteContact(id: string) {
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
-    return jsonResponse;
+    if (jsonResponse.status === "Success") {
+      return true;
+    } else {
+      throw false;
+    }
   } catch (error) {
     console.log("ERROR deleting data: ", error);
     throw error;

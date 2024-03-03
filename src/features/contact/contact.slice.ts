@@ -1,5 +1,6 @@
 import {
   CreateContact,
+  deleteContact,
   fetchContactsFromUser,
 } from "@/src/api/contact/contact.api";
 import { Contact, ContactCredential } from "@/types";
@@ -10,7 +11,7 @@ interface ContactState {
   contacts: Contact[] | null;
   status: string;
   error: string | undefined;
-  addedContactSuccessful: boolean | undefined;
+  isContactCreated: boolean | undefined;
 }
 
 export const initialState: ContactState = {
@@ -18,7 +19,7 @@ export const initialState: ContactState = {
   contacts: [],
   status: "idle",
   error: undefined,
-  addedContactSuccessful: undefined,
+  isContactCreated: undefined,
 };
 
 export const createContactAPI = createAsyncThunk<
@@ -47,6 +48,20 @@ export const createContactAPI = createAsyncThunk<
   }
 });
 
+export const deleteContactsAPI = createAsyncThunk<
+  boolean,
+  string,
+  { rejectValue: string }
+>("contact/deleteContact", async (contactId, { dispatch, rejectWithValue }) => {
+  try {
+    const response = await deleteContact(contactId);
+
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 export const fetchContactsAPI = createAsyncThunk<Contact[], string>(
   "contact/fetchContacts",
   async (userId, { rejectWithValue }) => {
@@ -64,7 +79,7 @@ const contactSlice = createSlice({
   initialState,
   reducers: {
     addedContactSuccessful: (state, action) => {
-      state.addedContactSuccessful = action.payload;
+      state.isContactCreated = action.payload;
     },
   },
   extraReducers: (builder) => {

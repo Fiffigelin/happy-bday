@@ -12,8 +12,8 @@ type Props = ContactsScreenProps<"ContactsHomeStack">;
 
 export default function ContactsHomeScreen({ navigation }: Props) {
   const dispatch = useAppDispatch();
-  const contactState = useAppSelector(
-    (state) => state.contact.addedContactSuccessful
+  const isContactAddedState = useAppSelector(
+    (state) => state.contact.isContactCreated
   );
   const contacts = useAppSelector((state) => state.contact.contacts);
   const user = useAppSelector((state) => state.user.user);
@@ -42,12 +42,12 @@ export default function ContactsHomeScreen({ navigation }: Props) {
   }, [user]);
 
   useEffect(() => {
-    if (contactState === true) {
+    if (isContactAddedState === true) {
       showToastFunction("Contact added successfully");
-    } else if (contactState === false) {
+    } else if (isContactAddedState === false) {
       showToastFunction("Something wrong happened!");
     }
-  }, [contactState]);
+  }, [isContactAddedState]);
 
   useEffect(() => {
     const allMonthNames = Array.from({ length: 12 }, (_, index) => {
@@ -114,7 +114,7 @@ export default function ContactsHomeScreen({ navigation }: Props) {
         style={{
           width: "100%",
           alignItems: "flex-end",
-          marginTop: 20,
+          marginTop: 40,
         }}
       >
         <CustomButton
@@ -134,6 +134,7 @@ export default function ContactsHomeScreen({ navigation }: Props) {
       <DeleteModal
         visible={isModalVisible}
         contactId={selectedContactId!}
+        userId={user?.id!}
         closeModal={() => setModalVisible(false)}
       />
     </>
