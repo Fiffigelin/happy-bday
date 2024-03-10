@@ -1,10 +1,15 @@
+import { BirthdaysScreenProps } from "@/src/navigation/NavigationTypes";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function CreateMessage() {
+type Props = BirthdaysScreenProps<"CreateMessage">;
+
+export default function CreateMessage(route: Props) {
+  const id = route.route.params?.id;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>CreateMessage</Text>
+      <Text style={styles.text}>{id}</Text>
     </View>
   );
 }

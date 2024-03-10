@@ -17,7 +17,7 @@ export type ContactsStackParamList = {
 
 export type BirthdaysStackParamList = {
   BirthdayMessages: undefined;
-  CreateMessage: undefined;
+  CreateMessage: { id: string };
   HandleMessage: undefined;
 };
 
