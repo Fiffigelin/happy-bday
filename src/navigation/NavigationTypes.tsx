@@ -24,7 +24,6 @@ export type BirthdaysStackParamList = {
 export type TestStackParamList = {
   Main: undefined;
   Test: undefined;
-  Login: undefined;
   CredUser: undefined;
 };
 
