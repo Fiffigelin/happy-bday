@@ -49,19 +49,9 @@ export default function CredUser() {
       });
   }
 
-  // async function handleLogin() {
-  //   const loginUser: LoginUser = {
-  //     email: "bobo@mail.com",
-  //     password: "bobo123",
-  //   };
-
-  //   dispatch(loginRegisteredUserAPI(loginUser));
-  // }
-
   return (
     <View style={styles.container}>
       <Text style={styles.text}>CRED USER</Text>
-      {/* <Button title="Login user" onPress={handleLogin} /> */}
       <Button title="Logout" onPress={handleLogOut} />
     </View>
   );
