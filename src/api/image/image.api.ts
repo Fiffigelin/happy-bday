@@ -2,7 +2,7 @@ import { API_URL, headers } from "../api";
 
 export interface Image {
   id: string;
-  uri: string;
+  url: string;
   category: Category;
 }
 
