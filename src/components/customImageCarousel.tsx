@@ -11,7 +11,13 @@ import {
   View,
 } from "react-native";
 
-export default function CustomImageCarousel({ images }: { images?: Images[] }) {
+export default function CustomImageCarousel({
+  images,
+  onPressImage,
+}: {
+  images?: Images[];
+  onPressImage: (id: string) => void;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const { width: screenWidth } = Dimensions.get("window");
 
@@ -19,6 +25,10 @@ export default function CustomImageCarousel({ images }: { images?: Images[] }) {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const currentIndex = Math.round(contentOffsetX / 400);
     setActiveIndex(currentIndex);
+  };
+
+  const handleImagePress = (id: string) => {
+    onPressImage(id);
   };
 
   const renderPagination = () => {
@@ -61,6 +71,7 @@ export default function CustomImageCarousel({ images }: { images?: Images[] }) {
                 width: screenWidth,
               },
             ]}
+            onPress={() => handleImagePress(item.id)}
           >
             <Image
               source={{ uri: item.url }}
