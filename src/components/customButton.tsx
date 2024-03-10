@@ -24,10 +24,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       alignItems: "center",
       justifyContent: "center",
       borderRadius: 15,
-      marginHorizontal: 20,
+      marginHorizontal: 10,
       marginVertical: 10,
       borderWidth: 1,
       borderColor: borderColor,
+      padding: 10,
     },
     buttonContainerShadow: {
       backgroundColor: buttonColor,
