@@ -2,6 +2,7 @@ import CustomButton from "@/src/components/customButton";
 import CustomInput from "@/src/components/customInput";
 import { createContactAPI } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
+import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import styles from "@/style";
 import { ContactCredential } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -18,14 +19,15 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function Login() {
+type Props = ContactsScreenProps<"AddEditContactStack">;
+
+export default function HandleContact({ navigation }: Props) {
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const { height, width } = Dimensions.get("window");
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
-  const contacts = useAppSelector((state) => state.contact.contacts);
   const {
     control,
     handleSubmit,
@@ -53,26 +55,23 @@ export default function Login() {
   };
 
   const addContactHandler = async (data: any) => {
-    console.log("Name:", data.name);
-    console.log("Birthday:", new Date(dateOfBirth));
-    console.log("UserId: ", user?.id);
-
     const addContact: ContactCredential = {
       name: data.name,
       birthday: new Date(dateOfBirth),
       userId: user?.id as string,
     };
 
-    dispatch(createContactAPI(addContact));
+    const hasQuerySucceded = await dispatch(createContactAPI(addContact));
+    if (hasQuerySucceded) {
+      navigation.navigate("ContactsHomeStack");
+    }
   };
 
   useEffect(() => {
-    console.log("DATE: ", date.toISOString());
     if (Platform.OS === "android") {
       setDateOfBirth(date.toDateString());
-      console.log("SET BIRTHDAY: ", date.toDateString());
     }
-  }, [date, contacts]);
+  }, [date]);
 
   return (
     <View style={[contactStyles.container, { width: width }]}>
@@ -163,11 +162,6 @@ export default function Login() {
           ></View>
         </KeyboardAwareScrollView>
       </View>
-      {/* <FlatList
-        data={contacts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
-      /> */}
     </View>
   );
 }
