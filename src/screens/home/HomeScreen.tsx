@@ -1,6 +1,6 @@
+import { BdayImage, Category } from "@/types";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Category, Image } from "../../api/image/image.api";
 import CustomImageCarousel from "../../components/customImageCarousel";
 import { fetchImagesAPI } from "../../features/image/image.slice";
 import { useAppDispatch, useAppSelector } from "../../features/store";
@@ -10,7 +10,7 @@ import SortImagesService from "../../services/sortImages.service";
 type Props = HomeScreenProps<"Home">;
 
 export default function HomeScreen({ navigation }: Props) {
-  const [imageArray, setImageArray] = useState<(Image[] | undefined)[]>([]);
+  const [imageArray, setImageArray] = useState<(BdayImage[] | undefined)[]>([]);
   const dispatch = useAppDispatch();
   const images = useAppSelector((state) => state.image.images);
 

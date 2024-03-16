@@ -1,16 +1,5 @@
+import { BdayImage, Category } from "@/types";
 import { API_URL, headers } from "../api";
-
-export interface Image {
-  id: string;
-  url: string;
-  category: Category;
-}
-
-export enum Category {
-  People = 0,
-  Animals = 1,
-  Dinos = 2,
-}
 
 const IMAGE_URL = `${API_URL}:3000/api/image`;
 
@@ -19,7 +8,7 @@ export const IMAGE_API = {
   GET_IMAGE: (id: string) => `/${id}`,
 };
 
-export async function fetchImages(): Promise<Image[]> {
+export async function fetchImages(): Promise<BdayImage[]> {
   try {
     const requestInfo = {
       method: "GET",
@@ -34,7 +23,7 @@ export async function fetchImages(): Promise<Image[]> {
 
     const jsonResponse = await response.json();
     if (jsonResponse.data) {
-      return jsonResponse.data as Image[];
+      return jsonResponse.data as BdayImage[];
     }
 
     return [];
@@ -44,7 +33,7 @@ export async function fetchImages(): Promise<Image[]> {
   }
 }
 
-export async function fetchImageById(id: string): Promise<Image> {
+export async function fetchImageById(id: string): Promise<BdayImage> {
   try {
     const requestInfo = {
       method: "GET",
@@ -63,7 +52,7 @@ export async function fetchImageById(id: string): Promise<Image> {
     console.log("Received data:", jsonResponse);
 
     if (jsonResponse.data) {
-      return jsonResponse.data as Image;
+      return jsonResponse.data as BdayImage;
     }
 
     return jsonResponse;

@@ -1,4 +1,4 @@
-import { Image as Images } from "@/src/api/image/image.api";
+import { BdayImage } from "@/types";
 import React, { useState } from "react";
 import {
   Dimensions,
@@ -15,7 +15,7 @@ export default function CustomImageCarousel({
   images,
   onPressImage,
 }: {
-  images?: Images[];
+  images?: BdayImage[];
   onPressImage: (id: string) => void;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
