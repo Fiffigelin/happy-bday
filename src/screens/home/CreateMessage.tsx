@@ -1,8 +1,8 @@
-import { BirthdaysScreenProps } from "@/src/navigation/NavigationTypes";
+import { HomeScreenProps } from "@/src/navigation/NavigationTypes";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-type Props = BirthdaysScreenProps<"CreateMessage">;
+type Props = HomeScreenProps<"CreateMessage">;
 
 export default function CreateMessage(route: Props) {
   const id = route.route.params?.id;

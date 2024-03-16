@@ -1,7 +1,6 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeStack } from "./HomeNavigator";
 
 export type RootTabsParamList = {
   HomeTab: undefined;
@@ -47,7 +46,7 @@ export type ContactsScreenProps<T extends keyof ContactsStackParamList> =
 
 export type HomeScreenProps<T extends keyof HomeStackParamList> =
   CompositeScreenProps<
-    NativeStackScreenProps<HomeStack, T>,
+    NativeStackScreenProps<HomeStackParamList, T>,
     BottomTabScreenProps<RootTabsParamList>
   >;
 
