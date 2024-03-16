@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react-native";
 import React from "react";
 
-import HomeScreen from "../../src/screens/HomeScreen";
+import HomeScreen from "../../src/screens/home/HomeScreen";
 
 describe("App", () => {
   it("App-komponenten innehåller viss text", () => {
