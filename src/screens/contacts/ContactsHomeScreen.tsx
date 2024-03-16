@@ -85,7 +85,7 @@ export default function ContactsHomeScreen({ navigation }: Props) {
       >
         <Text
           style={{
-            fontSize: 30,
+            fontSize: 28,
             marginHorizontal: 10,
             fontWeight: "600",
             color: "gray",

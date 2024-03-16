@@ -36,10 +36,10 @@ export default function CustomImageCarousel({
     return (
       <View style={styles.paginationContainer}>
         {images?.map(
-          (_, index) =>
+          (image, index) =>
             number && (
               <View
-                key={index}
+                key={image.id}
                 style={[
                   styles.dot,
                   {
@@ -62,9 +62,9 @@ export default function CustomImageCarousel({
         onScroll={handleScroll}
         showsHorizontalScrollIndicator={false}
       >
-        {images?.map((item, index) => (
+        {images?.map((item) => (
           <TouchableOpacity
-            key={index}
+            key={item.id}
             style={[
               styles.carouselItem,
               {
