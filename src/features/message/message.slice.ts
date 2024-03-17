@@ -30,8 +30,8 @@ export const createMessageAPI = createAsyncThunk<
 >("message/addMessage", async (messageCred, { dispatch }) => {
   // create api-function that creates a message and make another api-funtion that stores the messageId to the choosen contacts ✅
   // when a message and a message-id to a contact has been added then show a toast that indicates successfull connection
-  // create functions for adding messages and getting messages from the database in the blue project ✔️
-  // create function for adding message-id to a exisiting contact in the blue project
+  // create functions for adding messages and getting messages from the database in the blue project ✅
+  // create function for adding message-id to a exisiting contact in the blue project ✅
 
   try {
     console.log("THUNK MESSAGE ADDED: ", messageCred);
