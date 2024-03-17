@@ -12,6 +12,11 @@ export default function ContactCard({ contact, onDelete }: ContactCardProps) {
     console.log("Edit contact id ", id);
   }
 
+  const birthDate = contact.birthday ? new Date(contact.birthday) : null;
+
+  const day = birthDate ? birthDate.getDate() : "";
+  const year = birthDate ? birthDate.getFullYear() : "";
+
   return (
     <View
       style={{
@@ -32,10 +37,8 @@ export default function ContactCard({ contact, onDelete }: ContactCardProps) {
         </Text>
       </View>
       <View style={{ flexDirection: "row" }}>
-        <Text style={{ marginHorizontal: 10 }}>
-          {new Date(contact.birthday).getDate()}
-        </Text>
-        <Text>{new Date(contact.birthday).getFullYear()}</Text>
+        <Text style={{ marginHorizontal: 10 }}>{day}</Text>
+        <Text>{year}</Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Pressable

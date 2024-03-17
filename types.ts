@@ -26,7 +26,7 @@ export interface AuthUser {
 // ---------------- CONTACT ----------------
 export interface ContactCredential {
   name: string;
-  birthday: Date;
+  birthday: string;
   userId: string;
 }
 
@@ -53,13 +53,14 @@ export enum Category {
 
 // ---------------- MESSAGE ----------------
 export interface MessageCredential {
-  contactId: string;
-  image: BdayImage;
+  userId: string;
+  contactId: string[];
+  imageId: string;
   message: string;
 }
 
 export interface Message {
   id: string;
-  imageURI: string;
+  imageId: string;
   message: string;
 }
