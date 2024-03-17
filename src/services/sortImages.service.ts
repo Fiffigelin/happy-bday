@@ -1,4 +1,4 @@
-import { BdayImage, Category } from "../api/image/image.api";
+import { BdayImage, Category } from "@/types";
 
 export default class SortImagesService {
   static sortImagesByCategory(images: BdayImage[]): {

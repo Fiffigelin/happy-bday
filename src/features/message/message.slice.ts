@@ -1,11 +1,14 @@
-import { CreateContact } from "@/src/api/contact/contact.api";
-import { BdayImage, MessageCredential } from "@/types";
+import {
+  createMessage,
+  fetchMessagesFromUser,
+} from "@/src/api/message/message.api";
+import { BdayImage, Message, MessageCredential } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchContactsAPI } from "../contact/contact.slice";
 
 interface MessageState {
   image: BdayImage | null;
-  message: string | null;
+  message: Message | null;
+  messages: Message[] | [];
   status: string;
   error: string | undefined;
   isMessageSaved: boolean | undefined;
@@ -13,48 +16,63 @@ interface MessageState {
 
 export const initialState: MessageState = {
   image: null,
-  message: "",
+  message: null,
+  messages: [],
   status: "idle",
   error: undefined,
   isMessageSaved: undefined,
 };
 
 export const createMessageAPI = createAsyncThunk<
-  boolean,
+  Message,
   MessageCredential,
   { rejectValue: string }
 >("message/addMessage", async (messageCred, { dispatch }) => {
-  // create api-function that creates a message and make another api-funtion that stores the messageId to the choosen contacts
+  // create api-function that creates a message and make another api-funtion that stores the messageId to the choosen contacts ✅
   // when a message and a message-id to a contact has been added then show a toast that indicates successfull connection
-  // create functions for adding messages and getting messages from the database in the blue project
+  // create functions for adding messages and getting messages from the database in the blue project ✔️
   // create function for adding message-id to a exisiting contact in the blue project
 
   try {
     console.log("THUNK MESSAGE ADDED: ", messageCred);
-    const addedContact = await CreateContact(messageCred);
+    const addedMessage = await createMessage(messageCred);
 
-    if (addedContact) {
-      dispatch(fetchContactsAPI(messageCred.userId));
-      dispatch(contactSlice.actions.addedContactSuccessful(addedContact));
+    console.log("MESSAGE THUNK: ", addedMessage);
 
-      console.log("Contact added");
-      return addedContact;
+    if (addedMessage) {
+      dispatch(fetchMessagesAPI(messageCred.userId));
+      dispatch(messageSlice.actions.addedMessageSuccessful(true));
+      console.log("Message added");
+      return addedMessage;
     } else {
-      console.log("Adding contact failed");
-      dispatch(contactSlice.actions.addedContactSuccessful(false));
-      return addedContact;
+      console.log("Adding message failed");
+      dispatch(messageSlice.actions.addedMessageSuccessful(false));
+      return addedMessage;
     }
   } catch (error: any) {
-    dispatch(contactSlice.actions.addedContactSuccessful(false));
+    dispatch(messageSlice.actions.addedMessageSuccessful(false));
     return error.message;
   }
 });
 
-const contactSlice = createSlice({
+export const fetchMessagesAPI = createAsyncThunk<Message[], string>(
+  "contact/fetchMessages",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const messages = await fetchMessagesFromUser(userId);
+      return messages;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+const messageSlice = createSlice({
   name: "contact",
   initialState,
   reducers: {
-    addedContactSuccessful: (state, action) => {
+    addedMessageSuccessful: (state, action) => {
+      console.log("isMessageSaved: ", action.payload);
       state.isMessageSaved = action.payload;
     },
   },
@@ -66,13 +84,26 @@ const contactSlice = createSlice({
       .addCase(createMessageAPI.fulfilled, (state, action) => {
         console.log("Action payload: ", action.payload);
         state.status = "succeeded";
+        state.message = action.payload;
       })
       .addCase(createMessageAPI.rejected, (state, action) => {
         console.error("ERROR ADDING CONTACT: ", action.payload);
         state.status = "failed";
         state.error = "Something went wrong!";
+      })
+      .addCase(fetchMessagesAPI.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchMessagesAPI.fulfilled, (state, action) => {
+        console.log("Action payload: ", action.payload);
+        state.status = "succeeded";
+        state.messages = action.payload || null;
+      })
+      .addCase(fetchMessagesAPI.rejected, (state) => {
+        state.status = "failed fetch";
+        state.error = "Something went wrong!";
       });
   },
 });
 
-export const contactReducer = contactSlice.reducer;
+export const messageReducer = messageSlice.reducer;

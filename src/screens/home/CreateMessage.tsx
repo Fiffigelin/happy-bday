@@ -1,8 +1,13 @@
 import PickContactCard from "@/src/components/pickContact";
 import RoundButton from "@/src/components/roundButton";
-import { fetchContactsAPI } from "@/src/features/contact/contact.slice";
+import {
+  fetchContactsAPI,
+  putMessageToContact,
+} from "@/src/features/contact/contact.slice";
+import { createMessageAPI } from "@/src/features/message/message.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { HomeScreenProps } from "@/src/navigation/NavigationTypes";
+import { MessageCredential, MessageToContact } from "@/types";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -26,8 +31,15 @@ export default function CreateMessage(route: Props) {
   );
   const user = useAppSelector((state) => state.user.user);
   const contacts = useAppSelector((state) => state.contact.contacts);
+  const message = useAppSelector((state) => state.message.message);
+  const savedMessageSuccessful = useAppSelector(
+    (state) => state.message.isMessageSaved
+  );
+  const addedMsgToContactSuccesful = useAppSelector(
+    (state) => state.contact.isMessageAdded
+  );
   const dispatch = useAppDispatch();
-  const [value, onChangeText] = useState<string>();
+  const [changeText, onChangeText] = useState<string>();
   const { width } = Dimensions.get("window");
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
 
@@ -50,8 +62,35 @@ export default function CreateMessage(route: Props) {
     console.log("CONTACTS: ", contacts);
   }, [user]);
 
-  function addMessageToContact() {
-    console.log("ContactID: ", selectedContacts);
+  async function addMessageToContact() {
+    const messageCred: MessageCredential = {
+      userId: user?.id!,
+      imageId: image?.id!,
+      message: changeText!,
+    };
+
+    await dispatch(createMessageAPI(messageCred));
+    if (!savedMessageSuccessful) {
+      console.log(savedMessageSuccessful);
+      console.log("failed savedMessage");
+      // toast
+    }
+
+    console.log("Message: ", message);
+    const messageToContact: MessageToContact = {
+      contacts: selectedContacts,
+      message_id: message?.id!,
+    };
+    console.log("MESSAGE_ID: ", messageToContact.message_id);
+    await dispatch(putMessageToContact(messageToContact));
+
+    if (!addedMsgToContactSuccesful) {
+      console.log("oh nooooo!");
+      // toast
+    } else {
+      console.log("Lyckades");
+      // nu ska användaren komma till hem-screeenen
+    }
   }
 
   const formStyle = StyleSheet.create({
@@ -91,7 +130,7 @@ export default function CreateMessage(route: Props) {
                 numberOfLines={4}
                 maxLength={50}
                 onChangeText={(text) => onChangeText(text)}
-                value={value}
+                value={changeText}
                 style={{ padding: 10 }}
                 placeholder="Congratulations on your birthday 🎉"
               />

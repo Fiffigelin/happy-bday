@@ -54,7 +54,6 @@ export enum Category {
 // ---------------- MESSAGE ----------------
 export interface MessageCredential {
   userId: string;
-  contactId: string[];
   imageId: string;
   message: string;
 }
@@ -63,4 +62,9 @@ export interface Message {
   id: string;
   imageId: string;
   message: string;
+}
+
+export interface MessageToContact {
+  contacts: string[];
+  message_id: string;
 }
