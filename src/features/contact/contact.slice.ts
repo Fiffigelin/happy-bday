@@ -2,8 +2,9 @@ import {
   CreateContact,
   deleteContact,
   fetchContactsFromUser,
+  updateMessageToContact,
 } from "@/src/api/contact/contact.api";
-import { Contact, ContactCredential } from "@/types";
+import { Contact, ContactCredential, MessageToContact } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface ContactState {
@@ -12,6 +13,7 @@ interface ContactState {
   status: string;
   error: string | undefined;
   isContactCreated: boolean | undefined;
+  isMessageAdded: boolean | undefined;
 }
 
 export const initialState: ContactState = {
@@ -20,6 +22,7 @@ export const initialState: ContactState = {
   status: "idle",
   error: undefined,
   isContactCreated: undefined,
+  isMessageAdded: undefined,
 };
 
 export const createContactAPI = createAsyncThunk<
@@ -74,12 +77,34 @@ export const fetchContactsAPI = createAsyncThunk<Contact[], string>(
   }
 );
 
+export const putMessageToContact = createAsyncThunk<boolean, MessageToContact>(
+  "contact/messageToContact",
+  async (updateContacts, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await updateMessageToContact(updateContacts);
+      if (response) {
+        dispatch(contactSlice.actions.addedMessageSuccessful(response));
+        return response;
+      } else {
+        dispatch(contactSlice.actions.addedMessageSuccessful(response));
+        return response;
+      }
+    } catch (error) {
+      dispatch(contactSlice.actions.addedMessageSuccessful(false));
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const contactSlice = createSlice({
   name: "contact",
   initialState,
   reducers: {
     addedContactSuccessful: (state, action) => {
       state.isContactCreated = action.payload;
+    },
+    addedMessageSuccessful: (state, action) => {
+      state.isMessageAdded = action.payload;
     },
   },
   extraReducers: (builder) => {

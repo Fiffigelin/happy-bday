@@ -1,49 +1,51 @@
-import { fetchImagesAPI } from "@/src/features/image/image.slice";
-import { useAppDispatch, useAppSelector } from "@/src/features/store";
-import SortImagesService from "@/src/services/sortImages.service";
-import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { Category, Image as Images } from "../../api/image/image.api";
+// import { Category, Image as Images } from "@/src/api/image/image.api";
+// import CustomImageCarousel from "@/src/components/customImageCarousel";
+// import { fetchImagesAPI } from "@/src/features/image/image.slice";
+// import { useAppDispatch, useAppSelector } from "@/src/features/store";
+// import SortImagesService from "@/src/services/sortImages.service";
+// import React, { useEffect, useState } from "react";
+// import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default function Test() {
-  const [categoryPeople, setCategoryPeople] = useState<Images[] | undefined>();
-  const [categoryAnimals, setCategoryAnimals] = useState<Images[]>();
-  const [categoryDinos, setCategoryDinos] = useState<Images[]>();
-  const dispatch = useAppDispatch();
-  const images = useAppSelector((state) => state.image.images);
+// export default function Test() {
+//   const [imageArray, setImageArray] = useState<(Images[] | undefined)[]>([]);
+//   const dispatch = useAppDispatch();
+//   const images = useAppSelector((state) => state.image.images);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(fetchImagesAPI());
-      const sortedImages = SortImagesService.sortImagesByCategory(images!);
-      setCategoryPeople(sortedImages[Category.People]);
-      setCategoryAnimals(sortedImages[Category.Animals]);
-      setCategoryDinos(sortedImages[Category.Dinos]);
-    };
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       await dispatch(fetchImagesAPI());
+//     };
 
-    fetchData();
-    console.log("IMAGES: ", images);
-    console.log("Category People: ", categoryPeople);
-    console.log("Category Animals: ", categoryAnimals);
-    console.log("Category Dinos: ", categoryDinos);
-  }, [dispatch]);
-  return (
-    <View style={styles.container}>
-      <Image
-        source={{ uri: "https://i.imgur.com/d6GTsjo.jpg" }}
-        style={styles.tinyLogo}
-      />
-      <Text>Lalalala</Text>
-    </View>
-  );
-}
+//     fetchData();
+//   }, [dispatch]);
 
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50,
-  },
-  tinyLogo: {
-    width: 200,
-    height: 200,
-  },
-});
+//   useEffect(() => {
+//     const sortedImages = SortImagesService.sortImagesByCategory(images!);
+
+//     setImageArray([
+//       sortedImages[Category.People],
+//       sortedImages[Category.Animals],
+//       sortedImages[Category.Dinos],
+//     ]);
+//   }, [images]);
+
+//   return (
+//     <View style={{ flex: 1 }}>
+//       <ScrollView>
+//         {imageArray?.map((category) => (
+//           <View>
+//             <Text></Text>
+//             <CustomImageCarousel images={category} />
+//           </View>
+//         ))}
+//       </ScrollView>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "white",
+//   },
+// });

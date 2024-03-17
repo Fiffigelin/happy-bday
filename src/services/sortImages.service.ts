@@ -1,8 +1,10 @@
-import { Category, Image } from "../api/image/image.api";
+import { BdayImage, Category } from "@/types";
 
 export default class SortImagesService {
-  static sortImagesByCategory(images: Image[]): { [key in Category]: Image[] } {
-    const sortedImages: { [key in Category]: Image[] } = {
+  static sortImagesByCategory(images: BdayImage[]): {
+    [key in Category]: BdayImage[];
+  } {
+    const sortedImages: { [key in Category]: BdayImage[] } = {
       [Category.People]: [],
       [Category.Animals]: [],
       [Category.Dinos]: [],

@@ -15,16 +15,15 @@ export type ContactsStackParamList = {
   AddEditContactStack: undefined;
 };
 
-export type BirthdaysStackParamList = {
-  BirthdayMessages: undefined;
-  CreateMessage: undefined;
+export type HomeStackParamList = {
+  Home: undefined;
+  CreateMessage: { id: string };
   HandleMessage: undefined;
 };
 
 export type TestStackParamList = {
   Main: undefined;
   Test: undefined;
-  Login: undefined;
   CredUser: undefined;
 };
 
@@ -39,9 +38,15 @@ export type ContactsScreenProps<T extends keyof ContactsStackParamList> =
     BottomTabScreenProps<RootTabsParamList>
   >;
 
-export type BirthdaysScreenProps<T extends keyof BirthdaysStackParamList> =
+// export type BirthdaysScreenProps<T extends keyof BirthdaysStackParamList> =
+//   CompositeScreenProps<
+//     NativeStackScreenProps<BirthdaysStackParamList, T>,
+//     BottomTabScreenProps<RootTabsParamList>
+//   >;
+
+export type HomeScreenProps<T extends keyof HomeStackParamList> =
   CompositeScreenProps<
-    NativeStackScreenProps<BirthdaysStackParamList, T>,
+    NativeStackScreenProps<HomeStackParamList, T>,
     BottomTabScreenProps<RootTabsParamList>
   >;
 
@@ -54,7 +59,7 @@ export type TestScreenProps<T extends keyof TestStackParamList> =
 export type RootScreenProps<T extends keyof RootTabsParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<RootTabsParamList, T>,
-    NativeStackScreenProps<BirthdaysStackParamList>
+    NativeStackScreenProps<HomeStackParamList>
   >;
 
 // // export type RootStackScreenProps<T extends keyof HomeTabScreenProps> =

@@ -1,4 +1,4 @@
-import { Contact, ContactCredential } from "@/types";
+import { Contact, ContactCredential, MessageToContact } from "@/types";
 import { API_URL, headers } from "../api";
 
 const CONTACT_URL = `${API_URL}:3000/api/contact`;
@@ -9,6 +9,7 @@ export const CONTACT_API = {
   GET_CONTACT: (id: string) => `/${id}`,
   GET_CONTACTS: (id: string) => `/get/${id}`,
   UPDATE_CONTACT: (id: string) => `/update/${id}`,
+  UPDATE_MESSAGE_TO_CONTACT: "/update-message",
   DELETE_CONTACT: (id: string) => `/delete/${id}`,
 };
 
@@ -109,6 +110,39 @@ export async function updateContact(
     }
 
     return jsonResponse;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
+
+export async function updateMessageToContact(
+  message: MessageToContact
+): Promise<boolean> {
+  try {
+    const requestInfo = {
+      method: "PUT",
+      headers: headers,
+      body: JSON.stringify(message),
+    };
+
+    const response = await fetch(
+      `${CONTACT_URL}${CONTACT_API.UPDATE_MESSAGE_TO_CONTACT}`,
+      requestInfo
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const jsonResponse = await response.json();
+    console.log("Received data:", jsonResponse);
+
+    if (jsonResponse.status === "Success") {
+      return true;
+    } else {
+      throw false;
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

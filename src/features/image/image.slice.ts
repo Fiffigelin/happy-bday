@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Image, fetchImageById, fetchImages } from "../../api/image/image.api";
+import { fetchImageById, fetchImages } from "../../api/image/image.api";
+import { BdayImage } from "@/types";
 
 interface ImageState {
-  selectedImage: Image | null;
-  images: Image[] | null;
-  imagesCategory0: Image[] | null;
-  imagesCategory1: Image[] | null;
-  imagesCategory2: Image[] | null;
+  selectedImage: BdayImage | null;
+  images: BdayImage[] | null;
+  imagesCategory0: BdayImage[] | null;
+  imagesCategory1: BdayImage[] | null;
+  imagesCategory2: BdayImage[] | null;
   status: string;
   error: string | undefined;
 }
@@ -21,7 +22,7 @@ export const initialState: ImageState = {
   error: undefined,
 };
 
-export const fetchImagesAPI = createAsyncThunk<Image[], void>(
+export const fetchImagesAPI = createAsyncThunk<BdayImage[], void>(
   "image/fetchImages",
   async (_, { rejectWithValue }) => {
     try {
@@ -33,11 +34,11 @@ export const fetchImagesAPI = createAsyncThunk<Image[], void>(
   }
 );
 
-export const fetchImageByIdAPI = createAsyncThunk<Image, string>(
+export const fetchImageByIdAPI = createAsyncThunk<BdayImage, string>(
   "image/fetchImageById",
   async (imageId: string, { rejectWithValue }) => {
     try {
-      const image: Image = await fetchImageById(imageId);
+      const image: BdayImage = await fetchImageById(imageId);
       return image;
     } catch (error) {
       return rejectWithValue(error);
@@ -79,4 +80,3 @@ const imageSlice = createSlice({
 });
 
 export const imageReducer = imageSlice.reducer;
-// export { fetchImagesAPI,  };

@@ -1,8 +1,7 @@
 import { auth } from "@/firebase.config";
-import BirthdaysMessagesStackNavigator from "@/src/navigation/BirthdayMessagesNavigator";
+// import BirthdaysMessagesStackNavigator from "@/src/navigation/BirthdayMessagesNavigator";
 import ContactsStackNavigator from "@/src/navigation/ContactsNavigator";
 import { RootTabsParamList } from "@/src/navigation/NavigationTypes";
-import HomeScreen from "@/src/screens/HomeScreen";
 import ProfileScreen from "@/src/screens/ProfileScreen";
 import { AuthUser } from "@/types";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -13,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../features/store";
 import { setActiveUser } from "../features/user/user.slice";
 import MainScreen from "../screens/UserAuth/MainScreen";
+import HomeStackNavigator from "./HomeNavigator";
 import TestStackNavigator from "./TestNavigator";
 
 const Tab = createBottomTabNavigator<RootTabsParamList>();
@@ -77,12 +77,12 @@ export default function TabNavigator() {
         <Tab.Navigator
           screenOptions={{ headerShown: false, tabBarShowLabel: false }}
         >
-          <Tab.Screen name="HomeTab" component={HomeScreen} />
+          <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
           <Tab.Screen name="ContactsTab" component={ContactsStackNavigator} />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="BirthdaysTab"
             component={BirthdaysMessagesStackNavigator}
-          />
+          /> */}
           <Tab.Screen name="ProfileTab" component={ProfileScreen} />
           <Tab.Screen name="TestTab" component={TestStackNavigator} />
         </Tab.Navigator>
