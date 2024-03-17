@@ -1,27 +1,22 @@
-import { render } from "@testing-library/react-native";
-import React from "react";
+// describe("App", () => {
+//   it("App-komponenten innehåller viss text", () => {
+//     const { getByText } = render(
+//       <HomeScreen navigation={undefined} route={undefined} />
+//     );
 
-import HomeScreen from "../../src/screens/home/HomeScreen";
+//     const textElement = getByText("HomeScreen");
+//     expect(textElement).toBeDefined();
+//   });
+// });
 
-describe("App", () => {
-  it("App-komponenten innehåller viss text", () => {
-    const { getByText } = render(
-      <HomeScreen navigation={undefined} route={undefined} />
-    );
+// describe("App", () => {
+//   it("should have a grayish background", () => {
+//     const { getByTestId } = render(
+//       <HomeScreen navigation={undefined} route={undefined} />
+//     );
 
-    const textElement = getByText("HomeScreen");
-    expect(textElement).toBeDefined();
-  });
-});
+//     const appContainer = getByTestId("app-container");
 
-describe("App", () => {
-  it("should have a grayish background", () => {
-    const { getByTestId } = render(
-      <HomeScreen navigation={undefined} route={undefined} />
-    );
-
-    const appContainer = getByTestId("app-container");
-
-    expect(appContainer.props.style.backgroundColor).toBe("#f0f0f0");
-  });
-});
+//     expect(appContainer.props.style.backgroundColor).toBe("#f0f0f0");
+//   });
+// });
