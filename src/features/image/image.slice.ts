@@ -1,6 +1,6 @@
+import { BdayImage } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchImageById, fetchImages } from "../../api/image/image.api";
-import { BdayImage } from "@/types";
 
 interface ImageState {
   selectedImage: BdayImage | null;
@@ -56,7 +56,6 @@ const imageSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchImagesAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
         state.images = action.payload || [];
       })
@@ -68,7 +67,6 @@ const imageSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchImageByIdAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
         state.selectedImage = action.payload || null;
       })

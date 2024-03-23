@@ -60,8 +60,6 @@ export const registerNewUserAPI = createAsyncThunk<
     const addedUser = await createCredentialUser(userCred);
 
     if (addedUser && addedUser.uid) {
-      console.log("UID in thunk: ", addedUser.uid);
-
       const result = await createUser(addedUser);
       return result;
     }
@@ -79,8 +77,6 @@ export const loginRegisteredUserAPI = createAsyncThunk<
     const addedUser = await signInCredentialUser(userCred);
 
     if (addedUser) {
-      console.log("UID in thunk: ", addedUser);
-
       const fetchedUser = await fetchUserByUid(addedUser);
       return fetchedUser;
     } else {
@@ -120,7 +116,6 @@ export const updateUserAPI = createAsyncThunk<
   { id: string; updatedUser: User }
 >("user/updateUser", async ({ id, updatedUser }, { rejectWithValue }) => {
   try {
-    console.log("UPDATE USER THUNK!");
     const user = await updateUser(id, updatedUser);
     return user;
   } catch (error) {
@@ -132,9 +127,7 @@ export const deleteUserAPI = createAsyncThunk<{ id: string }, string>(
   "user/delete",
   async (id, { rejectWithValue }) => {
     try {
-      console.log("DELETE USER THUNK!");
       await deleteUser(id);
-
       return { id };
     } catch (error) {
       return rejectWithValue(error || "Failed to delete user");
@@ -188,12 +181,10 @@ const userSlice = createSlice({
         state.status = "loading";
       })
       .addCase(updateUserAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
         state.user = action.payload || null;
       })
       .addCase(updateUserAPI.rejected, (state, action) => {
-        console.error("ERROR UPDATING USER: ", action.payload);
         state.status = "failed";
         state.error = "Something went wrong!";
       })
@@ -204,7 +195,6 @@ const userSlice = createSlice({
         state.error = "You already has a account on this application!";
       })
       .addCase(loginRegisteredUserAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
         state.user = action.payload;
       })

@@ -1,9 +1,6 @@
 import PickContactCard from "@/src/components/pickContact";
 import RoundButton from "@/src/components/roundButton";
-import {
-  fetchContactsAPI,
-  putMessageToContact,
-} from "@/src/features/contact/contact.slice";
+import { putMessageToContact } from "@/src/features/contact/contact.slice";
 import { createMessageAPI } from "@/src/features/message/message.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { HomeScreenProps } from "@/src/navigation/NavigationTypes";
@@ -24,8 +21,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 type Props = HomeScreenProps<"CreateMessage">;
 
-export default function CreateMessage(route: Props) {
-  const id = route.route.params?.id;
+export default function CreateMessage({ route, navigation }: Props) {
+  const id = route.params?.id;
   const image = useAppSelector((state) =>
     state.image.images?.find((image) => image.id === id)
   );
@@ -35,7 +32,7 @@ export default function CreateMessage(route: Props) {
   const savedMessageSuccessful = useAppSelector(
     (state) => state.message.isMessageSaved
   );
-  const addedMsgToContactSuccesful = useAppSelector(
+  const connectedMsgToContact = useAppSelector(
     (state) => state.contact.isMessageAdded
   );
   const dispatch = useAppDispatch();
@@ -57,40 +54,44 @@ export default function CreateMessage(route: Props) {
   };
 
   useEffect(() => {
-    dispatch(fetchContactsAPI(user?.id as string));
+    const connectMessageWithContacts = async () => {
+      const messageToContact: MessageToContact = {
+        contacts: selectedContacts,
+        message_id: message?.id!,
+      };
+      console.log("MESSAGE_ID: ", messageToContact.message_id);
+      await dispatch(putMessageToContact(messageToContact));
+      console.log("Boolean: ", connectedMsgToContact);
+    };
 
-    console.log("CONTACTS: ", contacts);
-  }, [user]);
+    if (savedMessageSuccessful && message) {
+      console.log("Message saved successfully:", message);
+      connectMessageWithContacts();
+      console.log("Boolean: ", connectedMsgToContact);
+    } else if (!savedMessageSuccessful && message) {
+      console.log("Failed to save message:", message);
+    }
+  }, [savedMessageSuccessful, message]);
 
-  async function addMessageToContact() {
+  useEffect(() => {
+    console.log("Här");
+    if (connectedMsgToContact) {
+      setSelectedContacts([]);
+      navigation.navigate("Home");
+    } else {
+      console.log("Nope!");
+    }
+  }, [connectedMsgToContact]);
+
+  async function createMessage() {
     const messageCred: MessageCredential = {
       userId: user?.id!,
       imageId: image?.id!,
       message: changeText!,
     };
+    console.log("MESSAGE: ", messageCred);
 
     await dispatch(createMessageAPI(messageCred));
-    if (!savedMessageSuccessful) {
-      console.log(savedMessageSuccessful);
-      console.log("failed savedMessage");
-      // toast
-    }
-
-    console.log("Message: ", message);
-    const messageToContact: MessageToContact = {
-      contacts: selectedContacts,
-      message_id: message?.id!,
-    };
-    console.log("MESSAGE_ID: ", messageToContact.message_id);
-    await dispatch(putMessageToContact(messageToContact));
-
-    if (!addedMsgToContactSuccesful) {
-      console.log("oh nooooo!");
-      // toast
-    } else {
-      console.log("Lyckades");
-      // nu ska användaren komma till hem-screeenen
-    }
   }
 
   const formStyle = StyleSheet.create({
@@ -145,7 +146,7 @@ export default function CreateMessage(route: Props) {
             }}
           >
             <RoundButton
-              onPress={addMessageToContact}
+              onPress={createMessage}
               buttonColor={"#f2a3bb"}
               disabledColor={"#f9d5e0"}
               textColor={"black"}

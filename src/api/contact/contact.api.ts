@@ -23,7 +23,6 @@ export async function CreateContact(
       user_Id: createContact.userId,
     };
 
-    console.log("API: ", data);
     const requestInfo = {
       method: "POST",
       headers: headers,
@@ -35,12 +34,10 @@ export async function CreateContact(
     );
 
     if (!response.ok) {
-      console.log("Inte ok!");
       throw new Error("Network response was not ok");
     }
 
     const jsonResponse = await response.json();
-    console.log("JSON RESPONSE USER: ", jsonResponse);
     if (jsonResponse.status === "Success") {
       return true;
     } else {
@@ -60,7 +57,6 @@ export async function fetchContactsFromUser(
       method: "GET",
       headers: headers,
     };
-    console.log("URI: ", CONTACT_URL);
     const response = await fetch(
       `${CONTACT_URL}${CONTACT_API.GET_CONTACTS(userId)}`,
       requestInfo
@@ -103,7 +99,6 @@ export async function updateContact(
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
 
     if (jsonResponse.data) {
       return jsonResponse.data as Contact;
@@ -136,7 +131,6 @@ export async function updateMessageToContact(
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
 
     if (jsonResponse.status === "Success") {
       return true;

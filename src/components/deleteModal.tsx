@@ -50,7 +50,6 @@ export default function DeleteModal({
   });
 
   async function deleteContact() {
-    console.log("Contact deleted! ID: ", contactId);
     const response = await dispatch(deleteContactsAPI(contactId));
     if (response) {
       dispatch(fetchContactsAPI(userId));

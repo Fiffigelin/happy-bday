@@ -52,8 +52,6 @@ export async function fetchUserByUid(uid: string): Promise<User> {
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
-
     if (jsonResponse.data) {
       return jsonResponse.data as User;
     }
@@ -83,8 +81,6 @@ export async function updateUser(id: string, updatedUser: User): Promise<User> {
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
-
     if (jsonResponse.data) {
       return jsonResponse.data as User;
     }
@@ -114,13 +110,11 @@ export async function createUser(createUser: UserCredential): Promise<boolean> {
     }
 
     const jsonResponse = await response.json();
-    console.log("JSON RESPONSE USER: ", jsonResponse);
     if (jsonResponse.status === "Success") {
       return true;
     } else {
       throw false;
     }
-    // return jsonResponse as UserCredential;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
@@ -142,7 +136,6 @@ export async function deleteUser(id: string) {
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
     return jsonResponse;
   } catch (error) {
     console.log("ERROR deleting data: ", error);

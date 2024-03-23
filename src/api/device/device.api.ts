@@ -1,5 +1,6 @@
-import { User, UserCredential } from "@/types";
+import { UserCredential } from "@/types";
 import { API_URL, headers } from "../api";
+import { USER_API } from "../user/user.api";
 
 const USER_URL = `${API_URL}:3000/api/device`;
 
@@ -24,10 +25,8 @@ export async function fetchDeviceToken(uid: string): Promise<boolean> {
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
 
     if (!jsonResponse.data) {
-
     }
 
     return jsonResponse;
@@ -37,36 +36,35 @@ export async function fetchDeviceToken(uid: string): Promise<boolean> {
   }
 }
 
-export async function createDeviceToken(uid: string, token: ): Promise<boolean> {
-  try {
-    const requestInfo = {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify(updatedUser),
-    };
+// export async function createDeviceToken(uid: string, token: ): Promise<boolean> {
+//   try {
+//     const requestInfo = {
+//       method: "PUT",
+//       headers: headers,
+//       body: JSON.stringify(updatedUser),
+//     };
 
-    const response = await fetch(
-      `${USER_URL}${USER_API.UPDATE_USER(uid)}`,
-      requestInfo
-    );
+//     const response = await fetch(
+//       `${USER_URL}${USER_API.UPDATE_USER(uid)}`,
+//       requestInfo
+//     );
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+//     if (!response.ok) {
+//       throw new Error("Network response was not ok");
+//     }
 
-    const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
+//     const jsonResponse = await response.json();
 
-    if (jsonResponse.data) {
-      return jsonResponse.data as User;
-    }
+//     if (jsonResponse.data) {
+//       return jsonResponse.data as User;
+//     }
 
-    return jsonResponse;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-}
+//     return jsonResponse;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     throw error;
+//   }
+// }
 
 export async function createUser(createUser: UserCredential): Promise<boolean> {
   try {
@@ -99,25 +97,25 @@ export async function createUser(createUser: UserCredential): Promise<boolean> {
   }
 }
 
-export async function deleteUser(id: string) {
-  try {
-    const requestInfo = {
-      method: "DELETE",
-      headers: headers,
-    };
-    const response = await fetch(
-      `${USER_URL}${USER_API.DELETE_USER(id)}`,
-      requestInfo
-    );
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+// export async function deleteUser(id: string) {
+//   try {
+//     const requestInfo = {
+//       method: "DELETE",
+//       headers: headers,
+//     };
+//     const response = await fetch(
+//       `${USER_URL}${USER_API.DELETE_USER(id)}`,
+//       requestInfo
+//     );
+//     if (!response.ok) {
+//       throw new Error("Network response was not ok");
+//     }
 
-    const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
-    return jsonResponse;
-  } catch (error) {
-    console.log("ERROR deleting data: ", error);
-    throw error;
-  }
-}
+//     const jsonResponse = await response.json();
+//     console.log("Received data:", jsonResponse);
+//     return jsonResponse;
+//   } catch (error) {
+//     console.log("ERROR deleting data: ", error);
+//     throw error;
+//   }
+// }

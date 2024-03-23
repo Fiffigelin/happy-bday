@@ -31,17 +31,14 @@ export const createContactAPI = createAsyncThunk<
   { rejectValue: string }
 >("contact/addContact", async (contactCred, { dispatch }) => {
   try {
-    console.log("THUNK CONTACT ADDED: ", contactCred);
     const addedContact = await CreateContact(contactCred);
 
     if (addedContact) {
       dispatch(fetchContactsAPI(contactCred.userId));
       dispatch(contactSlice.actions.addedContactSuccessful(addedContact));
 
-      console.log("Contact added");
       return addedContact;
     } else {
-      console.log("Adding contact failed");
       dispatch(contactSlice.actions.addedContactSuccessful(false));
       return addedContact;
     }
@@ -55,7 +52,7 @@ export const deleteContactsAPI = createAsyncThunk<
   boolean,
   string,
   { rejectValue: string }
->("contact/deleteContact", async (contactId, { dispatch, rejectWithValue }) => {
+>("contact/deleteContact", async (contactId, { rejectWithValue }) => {
   try {
     const response = await deleteContact(contactId);
 
@@ -82,15 +79,11 @@ export const putMessageToContact = createAsyncThunk<boolean, MessageToContact>(
   async (updateContacts, { dispatch, rejectWithValue }) => {
     try {
       const response = await updateMessageToContact(updateContacts);
-      if (response) {
-        dispatch(contactSlice.actions.addedMessageSuccessful(response));
-        return response;
-      } else {
-        dispatch(contactSlice.actions.addedMessageSuccessful(response));
-        return response;
-      }
+      console.log("Response: ", response);
+
+      dispatch(contactSlice.actions.connectedMessageSuccessful(response));
+      return response;
     } catch (error) {
-      dispatch(contactSlice.actions.addedMessageSuccessful(false));
       return rejectWithValue(error);
     }
   }
@@ -103,8 +96,13 @@ const contactSlice = createSlice({
     addedContactSuccessful: (state, action) => {
       state.isContactCreated = action.payload;
     },
-    addedMessageSuccessful: (state, action) => {
+    connectedMessageSuccessful: (state, action) => {
       state.isMessageAdded = action.payload;
+      console.log("ismessageAdded: ", state.isMessageAdded);
+    },
+    resetMessageSuccessful: (state, action) => {
+      state.isMessageAdded = action.payload;
+      console.log("ismessageAdded resetted: ", state.isMessageAdded);
     },
   },
   extraReducers: (builder) => {
@@ -113,7 +111,6 @@ const contactSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchContactsAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
         state.contacts = action.payload || null;
       })
@@ -125,11 +122,9 @@ const contactSlice = createSlice({
         state.status = "loading";
       })
       .addCase(createContactAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
       })
       .addCase(createContactAPI.rejected, (state, action) => {
-        console.error("ERROR ADDING CONTACT: ", action.payload);
         state.status = "failed";
         state.error = "Something went wrong!";
       });
@@ -137,3 +132,4 @@ const contactSlice = createSlice({
 });
 
 export const contactReducer = contactSlice.reducer;
+export const { resetMessageSuccessful } = contactSlice.actions;

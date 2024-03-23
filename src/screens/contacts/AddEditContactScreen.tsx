@@ -55,7 +55,6 @@ export default function HandleContact({ navigation }: Props) {
   };
 
   const addContactHandler = async (data: any) => {
-    console.log("Date of birth: ", dateOfBirth);
     const newDateOfBirth = new Date(dateOfBirth);
 
     const year = newDateOfBirth.getFullYear();
@@ -63,7 +62,6 @@ export default function HandleContact({ navigation }: Props) {
     const day = String(newDateOfBirth.getDate()).padStart(2, "0");
 
     const dateWithoutTime = `${year}-${month}-${day}`;
-    console.log(dateWithoutTime);
 
     const addContact: ContactCredential = {
       name: data.name,

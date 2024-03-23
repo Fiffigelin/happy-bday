@@ -14,7 +14,6 @@ export async function fetchImages(): Promise<BdayImage[]> {
       method: "GET",
       headers: headers,
     };
-    console.log("URI: ", IMAGE_URL);
     const response = await fetch(`${IMAGE_URL}${IMAGE_API.GET}`, requestInfo);
 
     if (!response.ok) {
@@ -49,8 +48,6 @@ export async function fetchImageById(id: string): Promise<BdayImage> {
     }
 
     const jsonResponse = await response.json();
-    console.log("Received data:", jsonResponse);
-
     if (jsonResponse.data) {
       return jsonResponse.data as BdayImage;
     }

@@ -62,7 +62,6 @@ export default function ContactsHomeScreen({ navigation }: Props) {
           new Date(contact.birthday).getMonth() === allMonthNames.indexOf(month)
       )
     );
-    console.log(monthNamesWithData);
 
     setMonthsWithData(monthNamesWithData);
   }, [contacts]);

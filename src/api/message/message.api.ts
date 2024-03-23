@@ -20,7 +20,8 @@ export async function createMessage(
       message: createMessage.message,
     };
 
-    console.log("API: ", data);
+    console.log("MESSAGE API: ", data);
+
     const requestInfo = {
       method: "POST",
       headers: headers,
@@ -32,12 +33,11 @@ export async function createMessage(
     );
 
     if (!response.ok) {
-      console.log("Inte ok!");
       throw new Error("Network response was not ok");
     }
 
     const jsonResponse = await response.json();
-    console.log("JSON RESPONSE USER: ", jsonResponse);
+    console.log("RESPONSE API: ", jsonResponse.data);
     return jsonResponse.data as Message;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -53,7 +53,6 @@ export async function fetchMessagesFromUser(
       method: "GET",
       headers: headers,
     };
-    console.log("URI: ", MESSAGE_URL);
     const response = await fetch(
       `${MESSAGE_URL}${MESSAGE_API.GET_MESSAGES(user_id)}`,
       requestInfo
