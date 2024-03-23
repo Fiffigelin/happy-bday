@@ -24,7 +24,6 @@ export async function createCredentialUser(
       userCred.email,
       userCred.password
     );
-    console.log("UID: ", userCredential.user.uid);
 
     userCred.uid = userCredential.user.uid;
     return userCred;
@@ -37,14 +36,12 @@ export const signInCredentialUser = async (
   loginUser: LoginUser
 ): Promise<string> => {
   try {
-    console.log("jag är här");
     const userCredential = await signInWithEmailAndPassword(
       auth,
       loginUser.email,
       loginUser.password
     );
     const uid = userCredential.user.uid;
-    console.log("UID: ", uid);
     sendExpoPushToken(uid);
 
     return uid;
@@ -55,7 +52,6 @@ export const signInCredentialUser = async (
 
 const sendExpoPushToken = async (uid: string) => {
   const expoPushToken = (await getExpoPushTokenAsync()).data;
-  console.log(expoPushToken);
 
   try {
     const requestBody = {

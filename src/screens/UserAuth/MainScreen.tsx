@@ -78,9 +78,6 @@ export default function MainPage() {
   };
 
   const loginHandler = async (data: any) => {
-    console.log("Email:", data.email);
-    console.log("Password:", data.password);
-
     const loginUser: LoginUser = {
       email: data.email,
       password: data.password,
@@ -102,14 +99,12 @@ export default function MainPage() {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        console.log("Tangentbordet visas!");
         imageScale.value = 1.35;
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
-        console.log("Tangentbordet göms!");
         imageScale.value = 2.7;
       }
     );
