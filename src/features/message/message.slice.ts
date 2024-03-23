@@ -28,26 +28,16 @@ export const createMessageAPI = createAsyncThunk<
   MessageCredential,
   { rejectValue: string }
 >("message/addMessage", async (messageCred, { dispatch }) => {
-  // create api-function that creates a message and make another api-funtion that stores the messageId to the choosen contacts ✅
-  // when a message and a message-id to a contact has been added then show a toast that indicates successfull connection
-  // create functions for adding messages and getting messages from the database in the blue project ✅
-  // create function for adding message-id to a exisiting contact in the blue project ✅
-
   try {
-    console.log("THUNK MESSAGE ADDED: ", messageCred);
+    console.log("THUNK MESSAGE: ", messageCred);
     const addedMessage = await createMessage(messageCred);
-
-    console.log("MESSAGE THUNK: ", addedMessage);
 
     if (addedMessage) {
       dispatch(fetchMessagesAPI(messageCred.userId));
       dispatch(messageSlice.actions.addedMessageSuccessful(true));
-      console.log("Message added");
       return addedMessage;
     } else {
-      console.log("Adding message failed");
       dispatch(messageSlice.actions.addedMessageSuccessful(false));
-      return addedMessage;
     }
   } catch (error: any) {
     dispatch(messageSlice.actions.addedMessageSuccessful(false));
@@ -72,8 +62,10 @@ const messageSlice = createSlice({
   initialState,
   reducers: {
     addedMessageSuccessful: (state, action) => {
-      console.log("isMessageSaved: ", action.payload);
       state.isMessageSaved = action.payload;
+    },
+    resetMessage: (state, action) => {
+      state.message = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -82,12 +74,10 @@ const messageSlice = createSlice({
         state.status = "loading";
       })
       .addCase(createMessageAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
         state.message = action.payload;
       })
       .addCase(createMessageAPI.rejected, (state, action) => {
-        console.error("ERROR ADDING CONTACT: ", action.payload);
         state.status = "failed";
         state.error = "Something went wrong!";
       })
@@ -95,7 +85,6 @@ const messageSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchMessagesAPI.fulfilled, (state, action) => {
-        console.log("Action payload: ", action.payload);
         state.status = "succeeded";
         state.messages = action.payload || null;
       })
@@ -107,3 +96,4 @@ const messageSlice = createSlice({
 });
 
 export const messageReducer = messageSlice.reducer;
+export const { addedMessageSuccessful, resetMessage } = messageSlice.actions;

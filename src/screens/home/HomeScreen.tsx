@@ -1,6 +1,13 @@
+import CustomToast from "@/src/components/customToast";
+import {
+  fetchContactsAPI,
+  resetMessageSuccessful,
+} from "@/src/features/contact/contact.slice";
+import { resetMessage } from "@/src/features/message/message.slice";
 import { BdayImage, Category } from "@/types";
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
+import { ScrollView, Text, View } from "react-native";
 import CustomImageCarousel from "../../components/customImageCarousel";
 import { fetchImagesAPI } from "../../features/image/image.slice";
 import { useAppDispatch, useAppSelector } from "../../features/store";
@@ -13,6 +20,13 @@ export default function HomeScreen({ navigation }: Props) {
   const [imageArray, setImageArray] = useState<(BdayImage[] | undefined)[]>([]);
   const dispatch = useAppDispatch();
   const images = useAppSelector((state) => state.image.images);
+  const user = useAppSelector((state) => state.user.user);
+  const message = useAppSelector((state) => state.message.message);
+  const connectedMsgToContact = useAppSelector(
+    (state) => state.contact.isMessageAdded
+  );
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setMessage] = useState<string>("");
 
   const handleImagePress = (id: string) => {
     navigation.navigate("CreateMessage", { id });
@@ -21,6 +35,7 @@ export default function HomeScreen({ navigation }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchImagesAPI());
+      await dispatch(fetchContactsAPI(user?.id as string));
     };
 
     fetchData();
@@ -36,11 +51,25 @@ export default function HomeScreen({ navigation }: Props) {
     ]);
   }, [images]);
 
+  useFocusEffect(
+    useCallback(() => {
+      if (message?.id) {
+        setMessage("Message added succesfully");
+        setShowToast(true);
+      } else if (message?.id) {
+        setMessage("Something went wrong");
+        setShowToast(true);
+      }
+      dispatch(resetMessage(null));
+      dispatch(resetMessageSuccessful(false));
+    }, [connectedMsgToContact])
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView>
-        {imageArray?.map((category) => (
-          <View>
+        {imageArray?.map((category, index) => (
+          <View key={index}>
             <Text></Text>
             <CustomImageCarousel
               images={category}
@@ -49,13 +78,7 @@ export default function HomeScreen({ navigation }: Props) {
           </View>
         ))}
       </ScrollView>
+      {showToast && <CustomToast message={toastMessage} onClose={() => {}} />}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-});
