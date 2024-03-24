@@ -9,6 +9,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
+import { fetchContactsAPI } from "../features/contact/contact.slice";
+import { fetchImagesAPI } from "../features/image/image.slice";
 import { useAppDispatch, useAppSelector } from "../features/store";
 import { setActiveUser } from "../features/user/user.slice";
 import MainScreen from "../screens/UserAuth/MainScreen";
@@ -62,6 +64,13 @@ export default function TabNavigator() {
         dispatch(setActiveUser(undefined));
       }
       setUserFetched(true);
+
+      const fetchData = async () => {
+        await dispatch(fetchImagesAPI());
+        await dispatch(fetchContactsAPI(user?.id as string));
+      };
+
+      fetchData();
     });
 
     return unsubscribe;
