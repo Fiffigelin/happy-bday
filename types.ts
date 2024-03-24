@@ -36,6 +36,7 @@ export interface Contact {
   id: string;
   userId: string;
   messageId: string;
+  short_birthday: string;
 }
 
 // --------------- BDAYIMAGE ---------------
