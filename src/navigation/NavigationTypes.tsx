@@ -25,6 +25,7 @@ export type TestStackParamList = {
   Main: undefined;
   Test: undefined;
   CredUser: undefined;
+  Send: undefined;
 };
 
 export type AuthStackParamList = {

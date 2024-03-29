@@ -124,6 +124,19 @@ export default function ContactsHomeScreen({ navigation }: Props) {
           buttonText="Add contact"
           onPress={() => navigation.navigate("AddEditContactStack")}
         />
+        {/* <GradientButton
+          text={"Add contact"}
+          colors={["purple", "pink"]}
+          start={{
+            x: 0.5,
+            y: 1,
+          }}
+          end={{
+            x: 0.5,
+            y: 0,
+          }}
+          style={{ width: 50, height: 50 }}
+        ></GradientButton> */}
       </View>
       <FlatList
         data={monthsWithData}
