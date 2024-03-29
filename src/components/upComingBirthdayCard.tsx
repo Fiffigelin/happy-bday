@@ -1,8 +1,8 @@
 import { Contact } from "@/types";
 import React from "react";
 import { Pressable, View } from "react-native";
-import GradientIcon from "./gradientIcon";
-import GradientText from "./gradientText";
+import GradientIcon from "./gradient-component/gradientIcon";
+import GradientText from "./gradient-component/gradientText";
 
 interface birtdayCardProps {
   contact: Contact;

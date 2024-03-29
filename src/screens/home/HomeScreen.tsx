@@ -1,6 +1,6 @@
 import CustomImageCarousel from "@/src/components/customImageCarousel";
 import CustomToast from "@/src/components/customToast";
-import GradientText from "@/src/components/gradientText";
+import GradientText from "@/src/components/gradient-component/gradientText";
 import UpComingBirthdayCard from "@/src/components/upComingBirthdayCard";
 import { resetMessageSuccessful } from "@/src/features/contact/contact.slice";
 import { resetMessage } from "@/src/features/message/message.slice";

@@ -2,7 +2,7 @@ import { Contact } from "@/types";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import GradientText from "./gradientText";
+import GradientText from "./gradient-component/gradientText";
 
 interface ContactCardProps {
   contact: Contact;
