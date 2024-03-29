@@ -1,6 +1,6 @@
-import ContactCard from "@/src/components/contactCard";
 import CustomImageCarousel from "@/src/components/customImageCarousel";
 import CustomToast from "@/src/components/customToast";
+import GradientText from "@/src/components/gradientText";
 import UpComingBirthdayCard from "@/src/components/upComingBirthdayCard";
 import { resetMessageSuccessful } from "@/src/features/contact/contact.slice";
 import { resetMessage } from "@/src/features/message/message.slice";
@@ -8,7 +8,7 @@ import { getUpcomingBirthdays } from "@/src/services/sortUpComingBirthdays";
 import { BdayImage, Category, Contact } from "@/types";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, ScrollView, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../features/store";
 import { HomeScreenProps } from "../../navigation/NavigationTypes";
 import SortImagesService from "../../services/sortImages.service";
@@ -56,37 +56,35 @@ export default function HomeScreen({ navigation }: Props) {
     }, [connectedMsgToContact])
   );
 
-  const renderUpComingCelebration = () => {
+  function renderUpComingCelebration() {
     return (
-      <View
-        style={{
-          marginHorizontal: 10,
-          marginBottom: 25,
-        }}
-      >
-        <FlatList
-          style={{ maxHeight: 250 }}
-          data={upComingBirthdays}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ContactCard contact={item} onDelete={() => {}} />
-          )}
-        />
-      </View>
-    );
-  };
-
-  return (
-    <View style={{ flex: 1 }}>
       <View style={{ height: 300, marginTop: 50, marginHorizontal: 25 }}>
-        <Text>Celebrate!</Text>
+        <Text style={{ fontSize: 20, fontWeight: "600", textAlign: "center" }}>
+          Celebrate!
+        </Text>
         {upComingBirthdays.map((contact) => (
           <View key={contact.id}>
             <UpComingBirthdayCard contact={contact} />
           </View>
         ))}
       </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ height: 300, margin: 50, marginHorizontal: 25 }}>
+        {renderUpComingCelebration()}
+      </View>
       <View style={{ marginBottom: 25, flex: 3 }}>
+        <GradientText
+          colors={["pink", "purple"]}
+          start={{ x: 0.5, y: 0.25 }}
+          end={{ x: 0.5, y: 1 }}
+          style={styles.textStyle}
+        >
+          Create a gratulationmessage!
+        </GradientText>
         <ScrollView>
           {imageArray?.map((category, index) => (
             <View key={index}>
@@ -103,3 +101,11 @@ export default function HomeScreen({ navigation }: Props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  textStyle: {
+    fontWeight: "700",
+    fontSize: 25,
+    textAlign: "center",
+  },
+});

@@ -3,14 +3,15 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const GradientIcon = (props: {
-  colors: any;
-  start: any;
-  end: any;
-  locations: any;
-  name: any;
-  size: any;
-}) => {
+interface gradientIconProps {
+  colors: string[];
+  start: { x: number; y: number };
+  end: { x: number; y: number };
+  locations: number[];
+  name: string;
+  size: number;
+}
+export default function GradientIcon(props: gradientIconProps) {
   return (
     <MaskedView maskElement={<MaterialCommunityIcons {...props} />}>
       <LinearGradient
@@ -25,10 +26,9 @@ const GradientIcon = (props: {
             opacity: 0,
           }}
           name={props.name}
+          size={props.size}
         />
       </LinearGradient>
     </MaskedView>
   );
-};
-
-export default GradientIcon;
+}

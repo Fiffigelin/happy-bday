@@ -1,7 +1,8 @@
 import { Contact } from "@/types";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import GradientIcon from "./gradientIcon";
+import GradientText from "./gradientText";
 
 interface birtdayCardProps {
   contact: Contact;
@@ -26,9 +27,14 @@ export default function UpComingBirthdayCard({ contact }: birtdayCardProps) {
       }}
     >
       <View style={{ minWidth: 180 }}>
-        <Text style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}>
+        <GradientText
+          colors={["pink", "purple"]}
+          start={{ x: 0.5, y: 0.25 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}
+        >
           {contact.name}
-        </Text>
+        </GradientText>
       </View>
       <View style={{ flexDirection: "row" }}></View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -38,7 +44,7 @@ export default function UpComingBirthdayCard({ contact }: birtdayCardProps) {
         >
           <GradientIcon
             name="party-popper"
-            colors={["purple", "pink"]}
+            colors={["#a310d8", "#d92697"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             locations={[0, 1]}
@@ -49,5 +55,3 @@ export default function UpComingBirthdayCard({ contact }: birtdayCardProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({});
