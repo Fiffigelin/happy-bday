@@ -70,7 +70,21 @@ const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
     >
       <View style={[styles.modalContent, { height: "100%" }]}>
         <View style={styles.modalHeader}>
-          <CustomCloseButton onPress={closeModal} />
+          <CustomCloseButton
+            onPress={closeModal}
+            colors={["#e9e9e9", "#d3d3d3"]}
+            start={{
+              x: 1,
+              y: 0,
+            }}
+            end={{
+              x: 0,
+              y: 1,
+            }}
+            locations={[0, 1]}
+            name={"close-circle"}
+            size={40}
+          />
         </View>
         <View
           style={{

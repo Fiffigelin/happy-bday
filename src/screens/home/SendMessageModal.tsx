@@ -100,7 +100,13 @@ export default function SendMessageModal({
     >
       <View style={[styles.modalContent, { height: "80%" }]}>
         <View style={styles.modalHeader}>
-          <CustomCloseButton onPress={closeModal} />
+          <CustomCloseButton onPress={closeModal} colors={["white"]} start={{
+                      x: 0.5,
+                      y: 0.5
+                  }} end={{
+                      x: 0.25,
+                      y: 1
+                  }} locations={[2]} name={"close-circle"} size={40} />
         </View>
         <View style={styles.container}>
           <View

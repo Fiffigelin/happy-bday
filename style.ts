@@ -5,12 +5,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#f5ccab",
+    backgroundColor: "#5C0C91",
   },
   containerTwo: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#fff",
+    backgroundColor: "#FD993E",
   },
   cover: {
     ...StyleSheet.absoluteFillObject,
@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     borderColor: "#fff",
+    elevation: 4,
+    shadowColor: "000",
   },
   buttonBlue: {
     backgroundColor: "#325ECF",
@@ -37,6 +39,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     borderColor: "#325ECF",
+    elevation: 4,
+    shadowColor: "000",
   },
   buttonTextBlack: {
     fontSize: 20,
@@ -65,7 +69,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   formButton: {
-    backgroundColor: "#d39e90",
+    backgroundColor: "#973EB5",
     height: 55,
     alignItems: "center",
     justifyContent: "center",
@@ -73,7 +77,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#f2e2de",
+    borderColor: "#5D0D90",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

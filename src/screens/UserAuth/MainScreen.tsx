@@ -6,7 +6,14 @@ import styles from "@/style";
 import { LoginUser } from "@/types";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Dimensions, Keyboard, Pressable, Text, View } from "react-native";
+import {
+  Dimensions,
+  Keyboard,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -126,25 +133,44 @@ export default function MainPage() {
               </ClipPath>
             )}
             <Image
-              href={require("../../../assets/login.png")}
+              href={require("../../../assets/login-no-background.png")}
               width={width}
               height={height}
               preserveAspectRatio="xMidYMid slice"
               clipPath="url(#clipPathId)"
             />
           </Svg>
-          {isCurtainOpen && <CloseCustomButton onPress={handleCloseBtn} />}
+          {isCurtainOpen && (
+            <CloseCustomButton
+              onPress={handleCloseBtn}
+              colors={["#973EB5", "#5D0D90"]}
+              start={{
+                x: 0.2,
+                y: 0.2,
+              }}
+              end={{
+                x: 0.25,
+                y: 1,
+              }}
+              locations={[0, 1]}
+              name={"close-circle"}
+              size={55}
+            />
+          )}
         </Animated.View>
         <View style={styles.buttonContainer}>
           <Animated.View style={buttonAnimatedStyle}>
-            <Pressable style={styles.buttonWhite} onPress={signinHandler}>
+            <TouchableOpacity
+              style={styles.buttonWhite}
+              onPress={signinHandler}
+            >
               <Text style={styles.buttonTextBlack}>Sign in</Text>
-            </Pressable>
+            </TouchableOpacity>
           </Animated.View>
           <Animated.View style={buttonAnimatedStyle}>
-            <Pressable style={styles.buttonBlue} onPress={registerHandler}>
+            <TouchableOpacity style={styles.buttonBlue} onPress={() => {}}>
               <Text style={styles.buttonTextWhite}>Sign in with Google</Text>
-            </Pressable>
+            </TouchableOpacity>
           </Animated.View>
           {isCurtainOpen && (
             <View>
@@ -181,12 +207,12 @@ export default function MainPage() {
                   secureTextEntry={true}
                   errorMessage="Error"
                 />
-                <Pressable
+                <TouchableOpacity
                   style={styles.formButton}
                   onPress={handleSubmit(loginHandler)}
                 >
                   <Text style={styles.buttonTextWhite}>Login</Text>
-                </Pressable>
+                </TouchableOpacity>
                 <View
                   style={{
                     flexDirection: "row",
@@ -208,8 +234,8 @@ export default function MainPage() {
                   <Pressable onPress={registerHandler}>
                     <Text
                       style={{
-                        color: "#207dbd",
-                        fontWeight: "400",
+                        color: "#0011ce",
+                        fontWeight: "900",
                         fontSize: 20,
                       }}
                     >

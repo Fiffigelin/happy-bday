@@ -11,14 +11,14 @@ interface CustomInputProps {
   errorMessage: string;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({
+export default function CustomInput({
   control,
   name,
   rules,
   placeholder,
   secureTextEntry,
   errorMessage,
-}) => {
+}: CustomInputProps) {
   return (
     <Controller
       control={control}
@@ -37,7 +37,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
               placeholder={placeholder}
               style={[
                 styles.textInput,
-                { borderColor: error ? "red" : "gray" },
+                {
+                  backgroundColor: "#fff",
+                  borderStartColor: "#3a3a3a",
+                  borderEndColor: error ? "purple" : "3a3a3a",
+                  borderWidth: 1.7,
+                },
               ]}
               secureTextEntry={secureTextEntry}
             />
@@ -45,7 +50,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
           {error && (
             <Text
               style={{
-                color: "red",
+                color: "purple",
                 alignSelf: "stretch",
                 justifyContent: "flex-start",
                 marginHorizontal: 25,
@@ -58,7 +63,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
       )}
     />
   );
-};
+}
 
 const styles = StyleSheet.create({
   textInput: {
@@ -70,5 +75,3 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 });
-
-export default CustomInput;
