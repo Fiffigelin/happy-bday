@@ -1,3 +1,4 @@
+import { Contact } from "@/types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -18,7 +19,7 @@ export type ContactsStackParamList = {
 export type HomeStackParamList = {
   Home: undefined;
   CreateMessage: { id: string };
-  HandleMessage: undefined;
+  HandleMessage: { contact: Contact };
 };
 
 export type TestStackParamList = {

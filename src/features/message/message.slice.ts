@@ -1,5 +1,6 @@
 import {
   createMessage,
+  fetchMessageFromContact,
   fetchMessagesFromUser,
 } from "@/src/api/message/message.api";
 import { BdayImage, Message, MessageCredential } from "@/types";
@@ -8,6 +9,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 interface MessageState {
   image: BdayImage | null;
   message: Message | null;
+  selectedMessage: Message | null;
   messages: Message[] | [];
   status: string;
   error: string | undefined;
@@ -17,6 +19,7 @@ interface MessageState {
 export const initialState: MessageState = {
   image: null,
   message: null,
+  selectedMessage: null,
   messages: [],
   status: "idle",
   error: undefined,
@@ -46,10 +49,12 @@ export const createMessageAPI = createAsyncThunk<
 });
 
 export const fetchMessagesAPI = createAsyncThunk<Message[], string>(
-  "contact/fetchMessages",
+  "message/fetchMessages",
   async (userId, { rejectWithValue }) => {
     try {
+      console.log("userid: ", userId);
       const messages = await fetchMessagesFromUser(userId);
+      console.log("thunk messages: ", messages);
       return messages;
     } catch (error) {
       return rejectWithValue(error);
@@ -57,8 +62,21 @@ export const fetchMessagesAPI = createAsyncThunk<Message[], string>(
   }
 );
 
+export const fetchMessageFromContactAPI = createAsyncThunk<Message, string>(
+  "message/fetchMessage",
+  async (contactMessageId, { rejectWithValue }) => {
+    try {
+      console.log("Kommer hit!");
+      const message: Message = await fetchMessageFromContact(contactMessageId);
+      return message;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const messageSlice = createSlice({
-  name: "contact",
+  name: "message",
   initialState,
   reducers: {
     addedMessageSuccessful: (state, action) => {
@@ -66,6 +84,16 @@ const messageSlice = createSlice({
     },
     resetMessage: (state, action) => {
       state.message = action.payload;
+    },
+    setSelectedMessage: (state, action) => {
+      console.log("messageId: ", action.payload);
+      const messageId = action.payload;
+      console.log("messages: ", state.messages);
+      const message = state.messages?.find((msg) => msg.id === messageId);
+      console.log("message: ", message);
+      if (message) {
+        state.selectedMessage = message;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -91,9 +119,21 @@ const messageSlice = createSlice({
       .addCase(fetchMessagesAPI.rejected, (state) => {
         state.status = "failed fetch";
         state.error = "Something went wrong!";
+      })
+      .addCase(fetchMessageFromContactAPI.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchMessageFromContactAPI.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.message = action.payload || null;
+      })
+      .addCase(fetchMessageFromContactAPI.rejected, (state) => {
+        state.status = "failed fetch";
+        state.error = "Something went wrong!";
       });
   },
 });
 
 export const messageReducer = messageSlice.reducer;
-export const { addedMessageSuccessful, resetMessage } = messageSlice.actions;
+export const { addedMessageSuccessful, resetMessage, setSelectedMessage } =
+  messageSlice.actions;

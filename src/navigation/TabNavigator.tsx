@@ -11,6 +11,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { fetchContactsAPI } from "../features/contact/contact.slice";
 import { fetchImagesAPI } from "../features/image/image.slice";
+import { fetchMessagesAPI } from "../features/message/message.slice";
 import { useAppDispatch, useAppSelector } from "../features/store";
 import { setActiveUser } from "../features/user/user.slice";
 import MainScreen from "../screens/UserAuth/MainScreen";
@@ -25,7 +26,7 @@ export type AuthStackParamList = {
 };
 
 export default function TabNavigator() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [hasLoaded, setLoaded] = useState(false);
 
   const [isUserFetched, setUserFetched] = useState(false);
   const dispatch = useAppDispatch();
@@ -65,20 +66,50 @@ export default function TabNavigator() {
       }
       setUserFetched(true);
 
-      const fetchData = async () => {
-        await dispatch(fetchImagesAPI());
-        await dispatch(fetchContactsAPI(user?.id as string));
+      // const fetchData = async () => {
+      //   if (isUserFetched) {
+      //     await dispatch(fetchImagesAPI());
+      //     await dispatch(fetchContactsAPI(user!.id as string));
+      //     await dispatch(fetchMessagesAPI(user!.id as string));
+      //   }
+      // };
+
+      // fetchData();
+
+      const checkStatusAndDoSomething = async () => {
+        const isActionFulfilled = (action: any) =>
+          action.meta.requestStatus === "fulfilled";
+        const imagesAction = await dispatch(fetchImagesAPI());
+        const contactsAction = await dispatch(
+          fetchContactsAPI(user!.id as string)
+        );
+        const messagesAction = await dispatch(
+          fetchMessagesAPI(user!.id as string)
+        );
+
+        if (
+          isActionFulfilled(imagesAction) &&
+          isActionFulfilled(contactsAction) &&
+          isActionFulfilled(messagesAction)
+        ) {
+          console.log("Alla action har slutförts utan problem");
+          setLoaded(true);
+        } else {
+          console.log("Något gick fel");
+        }
       };
 
-      fetchData();
+      if (user) {
+        checkStatusAndDoSomething();
+      }
     });
 
     return unsubscribe;
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   return (
     <NavigationContainer>
-      {!user ? (
+      {!user && !hasLoaded ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Main" component={MainScreen} />
         </Stack.Navigator>
