@@ -35,7 +35,8 @@ export interface Contact {
   birthday: Date;
   id: string;
   userId: string;
-  messageId: string;
+  message_id: string;
+  short_birthday: string;
 }
 
 // --------------- BDAYIMAGE ---------------
@@ -60,11 +61,17 @@ export interface MessageCredential {
 
 export interface Message {
   id: string;
-  imageId: string;
+  image_id: string;
   message: string;
+  user_id: string;
 }
 
 export interface MessageToContact {
   contacts: string[];
   message_id: string;
+}
+
+export interface SendMessage {
+  image: BdayImage | null;
+  message: Message | null;
 }

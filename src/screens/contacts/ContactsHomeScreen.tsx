@@ -2,7 +2,6 @@ import ContactCard from "@/src/components/contactCard";
 import CustomButton from "@/src/components/customButton";
 import CustomToast from "@/src/components/customToast";
 import DeleteModal from "@/src/components/deleteModal";
-import { fetchContactsAPI } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import React, { useEffect, useState } from "react";
@@ -37,9 +36,9 @@ export default function ContactsHomeScreen({ navigation }: Props) {
       setShowToast(false);
     }, 2000);
   };
-  useEffect(() => {
-    dispatch(fetchContactsAPI(user?.id as string));
-  }, [user]);
+  // useEffect(() => {
+  //   dispatch(fetchContactsAPI(user?.id as string));
+  // }, [user]);
 
   useEffect(() => {
     if (isContactAddedState === true) {
@@ -124,6 +123,19 @@ export default function ContactsHomeScreen({ navigation }: Props) {
           buttonText="Add contact"
           onPress={() => navigation.navigate("AddEditContactStack")}
         />
+        {/* <GradientButton
+          text={"Add contact"}
+          colors={["purple", "pink"]}
+          start={{
+            x: 0.5,
+            y: 1,
+          }}
+          end={{
+            x: 0.5,
+            y: 0,
+          }}
+          style={{ width: 50, height: 50 }}
+        ></GradientButton> */}
       </View>
       <FlatList
         data={monthsWithData}

@@ -77,6 +77,10 @@ export default function MainPage() {
     setModalOpen(true);
   };
 
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   const loginHandler = async (data: any) => {
     const loginUser: LoginUser = {
       email: data.email,
@@ -89,10 +93,6 @@ export default function MainPage() {
   const handleCloseBtn = () => {
     imagePosition.value = 1;
     setCurtain(false);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
   };
 
   useEffect(() => {

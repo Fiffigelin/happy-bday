@@ -1,3 +1,4 @@
+import BirthdayForm from "@/src/components/birthdayForm";
 import PickContactCard from "@/src/components/pickContact";
 import RoundButton from "@/src/components/roundButton";
 import { putMessageToContact } from "@/src/features/contact/contact.slice";
@@ -8,11 +9,9 @@ import { MessageCredential, MessageToContact } from "@/types";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
-  Image,
   Keyboard,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -94,24 +93,10 @@ export default function CreateMessage({ route, navigation }: Props) {
     await dispatch(createMessageAPI(messageCred));
   }
 
-  const formStyle = StyleSheet.create({
-    container: {
-      width: width * 0.8,
-      margin: 20,
-      borderRadius: 10,
-      borderColor: "gray",
-      backgroundColor: "white",
-      padding: 15,
-      shadowColor: "black",
-      shadowOffset: {
-        width: 0,
-        height: 5,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-    },
-  });
+  const handleTextChange = (text: string) => {
+    onChangeText(text);
+    console.log("Ny text:", text);
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -120,23 +105,7 @@ export default function CreateMessage({ route, navigation }: Props) {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <View style={{ alignItems: "center" }}>
-            <View style={formStyle.container}>
-              <View>
-                <Image source={{ uri: image?.url }} style={styles.image} />
-              </View>
-              <TextInput
-                editable
-                multiline
-                numberOfLines={4}
-                maxLength={50}
-                onChangeText={(text) => onChangeText(text)}
-                value={changeText}
-                style={{ padding: 10 }}
-                placeholder="Congratulations on your birthday 🎉"
-              />
-            </View>
-          </View>
+          <BirthdayForm image={image!} onTextChange={handleTextChange} />
           <View
             style={{
               marginTop: 20,
@@ -190,6 +159,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f0f0f0",
+    alignItems: "center",
   },
   text: {
     color: "gray",

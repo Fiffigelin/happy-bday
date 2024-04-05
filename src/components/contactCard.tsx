@@ -2,6 +2,7 @@ import { Contact } from "@/types";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+import GradientText from "./gradient-component/gradientText";
 
 interface ContactCardProps {
   contact: Contact;
@@ -32,9 +33,14 @@ export default function ContactCard({ contact, onDelete }: ContactCardProps) {
       }}
     >
       <View style={{ minWidth: 180 }}>
-        <Text style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}>
+        <GradientText
+          colors={["pink", "purple"]}
+          start={{ x: 0.5, y: 0.25 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}
+        >
           {contact.name}
-        </Text>
+        </GradientText>
       </View>
       <View style={{ flexDirection: "row" }}>
         <Text style={{ marginHorizontal: 10 }}>{day}</Text>

@@ -49,7 +49,18 @@ export const fetchImageByIdAPI = createAsyncThunk<BdayImage, string>(
 const imageSlice = createSlice({
   name: "image",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedImage: (state, action) => {
+      const savedImageId = action.payload;
+      const image = state.images?.find((img) => img.id === savedImageId);
+      if (image) {
+        state.selectedImage = image;
+      }
+    },
+    resetImage: (state, action) => {
+      state.selectedImage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchImagesAPI.pending, (state) => {
@@ -78,3 +89,4 @@ const imageSlice = createSlice({
 });
 
 export const imageReducer = imageSlice.reducer;
+export const { setSelectedImage, resetImage } = imageSlice.actions;
