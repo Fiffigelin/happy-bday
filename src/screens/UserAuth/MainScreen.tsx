@@ -33,9 +33,7 @@ export default function MainPage() {
   const {
     control,
     handleSubmit,
-    register,
     formState: { errors },
-    getValues,
   } = useForm();
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
@@ -143,13 +141,13 @@ export default function MainPage() {
           {isCurtainOpen && (
             <CloseCustomButton
               onPress={handleCloseBtn}
-              colors={["#973EB5", "#5D0D90"]}
+              colors={["#c791d9", "#5D0D90"]}
               start={{
                 x: 0.2,
                 y: 0.2,
               }}
               end={{
-                x: 0.25,
+                x: 0,
                 y: 1,
               }}
               locations={[0, 1]}

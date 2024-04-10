@@ -1,5 +1,6 @@
 import CustomButton from "@/src/components/customButton";
 import CustomInput from "@/src/components/customInput";
+import GradientText from "@/src/components/gradient-component/gradientText";
 import { createContactAPI } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
@@ -15,6 +16,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -83,7 +85,14 @@ export default function HandleContact({ navigation }: Props) {
 
   return (
     <View style={[contactStyles.container, { width: width }]}>
-      <Text style={contactStyles.text}>CREATE CONTACT</Text>
+      <GradientText
+        colors={["#c791d9", "#5D0D90"]}
+        start={{ x: 0.5, y: 0.25 }}
+        end={{ x: 0.5, y: 1 }}
+        style={contactStyles.textStyle}
+      >
+        Create a contact
+      </GradientText>
       <View style={[styles.buttonContainer, { width: width }]}>
         <KeyboardAwareScrollView
           contentContainerStyle={contactStyles.scrollContent}
@@ -136,8 +145,7 @@ export default function HandleContact({ navigation }: Props) {
               placeholder="Sat Aug 21 2004"
               value={dateOfBirth}
               onChangeText={setDateOfBirth}
-              placeholderTextColor="red"
-              editable={false}
+              placeholderTextColor="grey"
               onPressIn={toggleDatePicker}
             />
           </Pressable>
@@ -155,12 +163,12 @@ export default function HandleContact({ navigation }: Props) {
             secureTextEntry={false}
             errorMessage="Error"
           />
-          <Pressable
+          <TouchableOpacity
             style={styles.formButton}
             onPress={handleSubmit(addContactHandler)}
           >
             <Text style={styles.buttonTextWhite}>Add new contact</Text>
-          </Pressable>
+          </TouchableOpacity>
           <View
             style={{
               flexDirection: "row",
@@ -177,7 +185,7 @@ export default function HandleContact({ navigation }: Props) {
 const contactStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f9fafa",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -190,14 +198,16 @@ const contactStyles = StyleSheet.create({
     paddingLeft: 10,
     borderColor: "gray",
   },
-  text: {
-    color: "red",
-    fontSize: 24,
-    fontWeight: "bold",
+  textStyle: {
+    fontWeight: "700",
+    fontSize: 25,
+    textAlign: "center",
   },
   datePicker: {
     height: 120,
     marginTop: -10,
+    backgroundColor: "white",
+    borderColor: "black",
   },
   scrollContent: {
     flex: 1,

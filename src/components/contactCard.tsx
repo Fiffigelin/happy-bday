@@ -1,7 +1,7 @@
 import { Contact } from "@/types";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import GradientIcon from "./gradient-component/gradientIcon";
 import GradientText from "./gradient-component/gradientText";
 
 interface ContactCardProps {
@@ -16,6 +16,7 @@ export default function ContactCard({ contact, onDelete }: ContactCardProps) {
   const birthDate = contact.birthday ? new Date(contact.birthday) : null;
 
   const day = birthDate ? birthDate.getDate() : "";
+  const month = birthDate ? birthDate.getMonth() + 1 : "";
   const year = birthDate ? birthDate.getFullYear() : "";
 
   return (
@@ -30,11 +31,12 @@ export default function ContactCard({ contact, onDelete }: ContactCardProps) {
         height: 55,
         padding: 8,
         flexDirection: "row",
+        elevation: 3,
       }}
     >
       <View style={{ minWidth: 180 }}>
         <GradientText
-          colors={["pink", "purple"]}
+          colors={["purple", "black"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}
@@ -43,22 +45,38 @@ export default function ContactCard({ contact, onDelete }: ContactCardProps) {
         </GradientText>
       </View>
       <View style={{ flexDirection: "row" }}>
-        <Text style={{ marginHorizontal: 10 }}>{day}</Text>
-        <Text>{year}</Text>
+        <Text style={{ marginHorizontal: 10 }}>
+          {day} / {month}
+        </Text>
+        <Text style={{ fontWeight: "600" }}>{year}</Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Pressable
+        <TouchableOpacity
           style={{ marginHorizontal: 10 }}
           onPress={() => onPressEdit(contact.id)}
         >
-          <MaterialCommunityIcons name="account-edit" size={24} color="black" />
-        </Pressable>
-        <Pressable
-          style={{ marginHorizontal: 8 }}
+          <GradientIcon
+            colors={["#6bc8e4", "#1f20e0"]}
+            start={{ x: 0.2, y: 0.2 }}
+            end={{ x: 0, y: 1 }}
+            name={"account-edit"}
+            locations={[0, 1]}
+            size={28}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ marginHorizontal: 10 }}
           onPress={() => onDelete(contact.id)}
         >
-          <MaterialIcons name="delete-forever" size={24} color="black" />
-        </Pressable>
+          <GradientIcon
+            colors={["#ff8300", "#bb000e"]}
+            start={{ x: 0.2, y: 0.2 }}
+            end={{ x: 0, y: 1 }}
+            name={"delete"}
+            locations={[0, 1]}
+            size={28}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );

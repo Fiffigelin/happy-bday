@@ -87,7 +87,7 @@ export default function HomeScreen({ navigation }: Props) {
     return (
       <View style={{ height: 300, marginTop: 50, marginHorizontal: 25 }}>
         <GradientText
-          colors={["pink", "purple"]}
+          colors={["#c791d9", "#5D0D90"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={styles.textStyle}
@@ -107,13 +107,13 @@ export default function HomeScreen({ navigation }: Props) {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#f9fafa" }}>
       <View style={{ height: 300, margin: 50, marginHorizontal: 25 }}>
         {renderUpComingCelebration()}
       </View>
       <View style={{ marginBottom: 25, flex: 3 }}>
         <GradientText
-          colors={["pink", "purple"]}
+          colors={["#c791d9", "#5D0D90"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={styles.textStyle}

@@ -52,7 +52,7 @@ export const fetchMessagesAPI = createAsyncThunk<Message[], string>(
   "message/fetchMessages",
   async (userId, { rejectWithValue }) => {
     try {
-      console.log("userid: ", userId);
+      // console.log("userid: ", userId);
       const messages = await fetchMessagesFromUser(userId);
       console.log("thunk messages: ", messages);
       return messages;

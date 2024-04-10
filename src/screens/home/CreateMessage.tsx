@@ -6,6 +6,7 @@ import { createMessageAPI } from "@/src/features/message/message.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { HomeScreenProps } from "@/src/navigation/NavigationTypes";
 import { MessageCredential, MessageToContact } from "@/types";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -104,52 +105,57 @@ export default function CreateMessage({ route, navigation }: Props) {
       keyboardShouldPersistTaps="handled"
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <BirthdayForm image={image!} onTextChange={handleTextChange} />
-          <View
-            style={{
-              marginTop: 20,
-              width: "90%",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            <RoundButton
-              onPress={createMessage}
-              buttonColor={"#f2a3bb"}
-              disabledColor={"#f9d5e0"}
-              textColor={"black"}
-              buttonText={"+"}
-              buttonTextSize={25}
-              widht_hight={50}
-              disabled={selectedContacts.length === 0}
-            />
-          </View>
-          <View
-            style={{
-              width: width * 0.8,
-              alignSelf: "center",
-              marginBottom: 20,
-            }}
-          >
-            <Text style={styles.text}>Choose contacts</Text>
-            <View style={styles.container}>
-              {contacts?.map((contact) => (
-                <TouchableOpacity
-                  key={contact.id}
-                  style={styles.checkboxContainer}
-                  onPress={() => toggleContactSelection(contact.id)}
-                >
-                  <PickContactCard
-                    contact={contact}
-                    selected={selectedContacts.includes(contact.id)}
+        <LinearGradient
+          style={{ flex: 1 }}
+          colors={["#FFAAD9", "#C79BF2", "#680ea3", "#290641"]}
+        >
+          <View style={styles.container}>
+            <BirthdayForm image={image!} onTextChange={handleTextChange} />
+            <View
+              style={{
+                marginTop: 20,
+                width: "90%",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
+              <RoundButton
+                onPress={createMessage}
+                buttonColor={"#f2a3bb"}
+                disabledColor={"#f9d5e0"}
+                textColor={"black"}
+                buttonText={"+"}
+                buttonTextSize={25}
+                widht_hight={50}
+                disabled={selectedContacts.length === 0}
+              />
+            </View>
+            <View
+              style={{
+                width: width * 0.8,
+                alignSelf: "center",
+                marginBottom: 20,
+              }}
+            >
+              <Text style={styles.text}>Choose contacts</Text>
+              <View style={styles.container}>
+                {contacts?.map((contact) => (
+                  <TouchableOpacity
+                    key={contact.id}
+                    style={styles.checkboxContainer}
                     onPress={() => toggleContactSelection(contact.id)}
-                  />
-                </TouchableOpacity>
-              ))}
+                  >
+                    <PickContactCard
+                      contact={contact}
+                      selected={selectedContacts.includes(contact.id)}
+                      onPress={() => toggleContactSelection(contact.id)}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           </View>
-        </View>
+        </LinearGradient>
       </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>
   );
@@ -158,7 +164,7 @@ export default function CreateMessage({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    // backgroundColor: "#f0f0f0",
     alignItems: "center",
   },
   text: {

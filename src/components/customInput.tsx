@@ -38,10 +38,7 @@ export default function CustomInput({
               style={[
                 styles.textInput,
                 {
-                  backgroundColor: "#fff",
-                  borderStartColor: "#3a3a3a",
-                  borderEndColor: error ? "purple" : "3a3a3a",
-                  borderWidth: 1.7,
+                  borderColor: error ? "red" : "black",
                 },
               ]}
               secureTextEntry={secureTextEntry}
@@ -50,10 +47,11 @@ export default function CustomInput({
           {error && (
             <Text
               style={{
-                color: "purple",
+                color: "black",
                 alignSelf: "stretch",
                 justifyContent: "flex-start",
                 marginHorizontal: 25,
+                fontWeight: "600",
               }}
             >
               {error.message || errorMessage}
@@ -68,10 +66,12 @@ export default function CustomInput({
 const styles = StyleSheet.create({
   textInput: {
     height: 50,
+    backgroundColor: "#fff",
     borderWidth: 1,
     marginHorizontal: 20,
     marginVertical: 10,
     borderRadius: 15,
     paddingLeft: 10,
+    // borderColor: "red",
   },
 });

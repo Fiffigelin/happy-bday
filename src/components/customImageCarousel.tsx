@@ -44,7 +44,7 @@ export default function CustomImageCarousel({
                   styles.dot,
                   {
                     backgroundColor:
-                      activeIndex === index ? "white" : "lightgray",
+                      activeIndex === index ? "#c791d9" : "#7f12c5",
                   },
                 ]}
               />

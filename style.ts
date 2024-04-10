@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   containerTwo: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#FD993E",
+    backgroundColor: "white",
   },
   cover: {
     ...StyleSheet.absoluteFillObject,
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   textInput: {
     height: 50,
     borderWidth: 1,
-    // borderColor: "rgba(0, 0, 0, 0.2)",
     marginHorizontal: 20,
     marginVertical: 10,
     borderRadius: 15,
@@ -104,6 +103,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     top: -20,
+  },
+  btnContainer: {
+    height: 55,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 15,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: "transparent",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  gradientBtn: {
+    justifyContent: "center",
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
 });
 

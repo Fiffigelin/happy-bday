@@ -81,23 +81,23 @@ export default function UpComingBirthdayCard({
   }
 
   return (
-    <TouchableOpacity>
-      <View
-        style={{
-          backgroundColor: "white",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderRadius: 8,
-          margin: 6,
-          marginBottom: 25,
-          height: 55,
-          padding: 8,
-          flexDirection: "row",
-        }}
-      >
+    <TouchableOpacity
+      style={{
+        backgroundColor: "white",
+        justifyContent: "space-between",
+        borderRadius: 8,
+        margin: 6,
+        marginBottom: 25,
+        height: 55,
+        padding: 8,
+        flexDirection: "row",
+        elevation: 3,
+      }}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         <View style={{ minWidth: 180 }}>
           <GradientText
-            colors={["pink", "purple"]}
+            colors={["purple", "black"]}
             start={{ x: 0.5, y: 0.25 }}
             end={{ x: 0.5, y: 1 }}
             style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}

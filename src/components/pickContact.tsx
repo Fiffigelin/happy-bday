@@ -21,7 +21,7 @@ export default function PickContactCard({
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: selected ? "#f4c3d5" : "white",
+        backgroundColor: selected ? "#f1a0f6" : "white",
         alignItems: "center",
         justifyContent: "space-between",
         borderRadius: 8,
