@@ -63,7 +63,7 @@ export const updateContactAPI = createAsyncThunk<
     const updatedContact = await updateContact(contact.id, contact);
 
     if (updatedContact) {
-      // dispatch(fetchContactsAPI(contactCred.userId));
+      dispatch(fetchContactsAPI(contact.userId));
       // dispatch(contactSlice.actions.addedContactSuccessful(addedContact));
 
       return updatedContact;

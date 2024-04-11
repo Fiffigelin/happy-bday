@@ -3,7 +3,7 @@ import CustomToast from "@/src/components/customToast";
 import DeleteModal from "@/src/components/deleteModal";
 import GradientIcon from "@/src/components/gradient-component/gradientIcon";
 import GradientText from "@/src/components/gradient-component/gradientText";
-import { useAppDispatch, useAppSelector } from "@/src/features/store";
+import { useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -11,7 +11,6 @@ import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 type Props = ContactsScreenProps<"ContactsHomeStack">;
 
 export default function ContactsHomeScreen({ navigation }: Props) {
-  const dispatch = useAppDispatch();
   const isContactAddedState = useAppSelector(
     (state) => state.contact.isContactCreated
   );
@@ -62,10 +61,6 @@ export default function ContactsHomeScreen({ navigation }: Props) {
 
     setMonthsWithData(monthNamesWithData);
   }, [contacts]);
-
-  function editContact(): void {
-    navigation.navigate("HandleContactStack", { id: "" });
-  }
 
   const renderMonthSection = (month: string, index: number) => {
     const contactsInMonth = contacts?.filter(
@@ -127,7 +122,7 @@ export default function ContactsHomeScreen({ navigation }: Props) {
             end={{ x: 0, y: 1 }}
             name={"plus-circle"}
             locations={[0, 1]}
-            size={70}
+            size={60}
           />
         </TouchableOpacity>
       </View>

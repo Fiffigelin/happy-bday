@@ -45,12 +45,8 @@ export default function TabNavigator() {
         const isActionFulfilled = (action: any) =>
           action.meta.requestStatus === "fulfilled";
         const imagesAction = await dispatch(fetchImagesAPI());
-        const contactsAction = await dispatch(
-          fetchContactsAPI(user!.id as string)
-        );
-        const messagesAction = await dispatch(
-          fetchMessagesAPI(user!.id as string)
-        );
+        const contactsAction = await dispatch(fetchContactsAPI(user!.id));
+        const messagesAction = await dispatch(fetchMessagesAPI(user!.id));
 
         if (
           isActionFulfilled(imagesAction) &&

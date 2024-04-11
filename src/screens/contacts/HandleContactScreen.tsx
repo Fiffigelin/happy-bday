@@ -1,13 +1,15 @@
 import CustomButton from "@/src/components/customButton";
 import CustomInput from "@/src/components/customInput";
 import GradientText from "@/src/components/gradient-component/gradientText";
-import { createContactAPI } from "@/src/features/contact/contact.slice";
+import {
+  createContactAPI,
+  updateContactAPI,
+} from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import styles from "@/style";
 import { Contact, ContactCredential, UpdateContact } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { UpdateData } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -69,18 +71,18 @@ export default function HandleContact({ route, navigation }: Props) {
         name: data.name,
         birthday: convertPickedDate(),
         id: contactId!,
+        userId: user?.id!,
       };
-      const hasEditingSucceded = await dispatch();
+      await dispatch(updateContactAPI(contact));
     } else {
       const contact: ContactCredential = {
         name: data.name,
         birthday: convertPickedDate(),
         userId: user?.id as string,
       };
-      const hasQuerySucceded = await dispatch(createContactAPI(contact));
-      if (hasQuerySucceded) {
-        navigation.navigate("ContactsHomeStack");
-      }
+      await dispatch(createContactAPI(contact));
+
+      navigation.navigate("ContactsHomeStack");
     }
   };
 

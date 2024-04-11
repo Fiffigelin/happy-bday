@@ -42,6 +42,7 @@ export interface UpdateContact {
   name: string;
   birthday: string;
   id: string;
+  userId: string;
 }
 
 // --------------- BDAYIMAGE ---------------
