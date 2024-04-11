@@ -1,4 +1,4 @@
-import CustomCloseButton from "@/src/components/customCloseButton";
+import CloseCustomButton from "@/src/components/customCloseButton";
 import CustomInput from "@/src/components/customInput";
 import CustomToast from "@/src/components/customToast";
 import { useAppDispatch } from "@/src/features/store";
@@ -9,9 +9,9 @@ import { useForm } from "react-hook-form";
 import {
   Dimensions,
   Modal,
-  Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -70,7 +70,21 @@ const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
     >
       <View style={[styles.modalContent, { height: "100%" }]}>
         <View style={styles.modalHeader}>
-          <CustomCloseButton onPress={closeModal} />
+          <CloseCustomButton
+            onPress={closeModal}
+            colors={["#c791d9", "#5D0D90"]}
+            start={{
+              x: 0.2,
+              y: 0.2,
+            }}
+            end={{
+              x: 0,
+              y: 1,
+            }}
+            locations={[0, 1]}
+            name={"close-circle"}
+            size={55}
+          />
         </View>
         <View
           style={{
@@ -143,12 +157,12 @@ const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
             )}
           </View>
           <View>
-            <Pressable
+            <TouchableOpacity
               style={styles.formButton}
               onPress={handleSubmit(signinHandler)}
             >
               <Text style={styles.buttonTextWhite}>Register</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -172,7 +186,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   formButton: {
-    backgroundColor: "#d39e90",
+    backgroundColor: "#973EB5",
     height: 55,
     alignItems: "center",
     justifyContent: "center",
@@ -180,7 +194,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#f2e2de",
+    borderColor: "#5D0D90",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

@@ -38,6 +38,12 @@ export interface Contact {
   message_id: string;
   short_birthday: string;
 }
+export interface UpdateContact {
+  name: string;
+  birthday: string;
+  id: string;
+  userId: string;
+}
 
 // --------------- BDAYIMAGE ---------------
 export interface BdayImage {

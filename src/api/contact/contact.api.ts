@@ -1,4 +1,9 @@
-import { Contact, ContactCredential, MessageToContact } from "@/types";
+import {
+  Contact,
+  ContactCredential,
+  MessageToContact,
+  UpdateContact,
+} from "@/types";
 import { API_URL, headers } from "../api";
 
 const CONTACT_URL = `${API_URL}:3000/api/contact`;
@@ -80,7 +85,7 @@ export async function fetchContactsFromUser(
 
 export async function updateContact(
   id: string,
-  updatedContact: Contact
+  updatedContact: UpdateContact
 ): Promise<Contact> {
   try {
     const requestInfo = {

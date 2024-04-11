@@ -2,9 +2,15 @@ import {
   CreateContact,
   deleteContact,
   fetchContactsFromUser,
+  updateContact,
   updateMessageToContact,
 } from "@/src/api/contact/contact.api";
-import { Contact, ContactCredential, MessageToContact } from "@/types";
+import {
+  Contact,
+  ContactCredential,
+  MessageToContact,
+  UpdateContact,
+} from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface ContactState {
@@ -41,6 +47,29 @@ export const createContactAPI = createAsyncThunk<
     } else {
       dispatch(contactSlice.actions.addedContactSuccessful(false));
       return addedContact;
+    }
+  } catch (error: any) {
+    dispatch(contactSlice.actions.addedContactSuccessful(false));
+    return error.message;
+  }
+});
+
+export const updateContactAPI = createAsyncThunk<
+  boolean,
+  UpdateContact,
+  { rejectValue: string }
+>("contact/putContact", async (contact, { dispatch }) => {
+  try {
+    const updatedContact = await updateContact(contact.id, contact);
+
+    if (updatedContact) {
+      dispatch(fetchContactsAPI(contact.userId));
+      // dispatch(contactSlice.actions.addedContactSuccessful(addedContact));
+
+      return updatedContact;
+    } else {
+      dispatch(contactSlice.actions.addedContactSuccessful(false));
+      return updatedContact;
     }
   } catch (error: any) {
     dispatch(contactSlice.actions.addedContactSuccessful(false));

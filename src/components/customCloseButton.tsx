@@ -1,36 +1,51 @@
+import MaskedView from "@react-native-masked-view/masked-view";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface CustomButtonProps {
   onPress: () => void;
+  colors: string[];
+  start: { x: number; y: number };
+  end: { x: number; y: number };
+  locations: number[];
+  name: string;
+  size: number;
 }
-const CloseCustomButton: React.FC<CustomButtonProps> = ({ onPress }) => {
+
+export default function CloseCustomButton(props: CustomButtonProps) {
   const buttonStyle = StyleSheet.create({
     closeButtonContainer: {
-      height: 40,
-      width: 40,
+      height: props.size,
+      width: props.size,
       justifyContent: "center",
       alignSelf: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 5,
-      },
-      shadowOpacity: 0.34,
-      shadowRadius: 6.27,
-      elevation: 1,
-      backgroundColor: "white",
       alignItems: "center",
       borderRadius: 20,
-      top: -20,
+      top: -18,
     },
   });
 
   return (
-    <Pressable onPress={onPress} style={buttonStyle.closeButtonContainer}>
-      <Text>X</Text>
-    </Pressable>
+    <TouchableOpacity style={buttonStyle.closeButtonContainer}>
+      <MaskedView maskElement={<MaterialCommunityIcons {...props} />}>
+        <LinearGradient
+          colors={props.colors}
+          start={props.start}
+          end={props.end}
+          locations={props.locations}
+        >
+          <MaterialCommunityIcons
+            {...props}
+            style={{
+              opacity: 0,
+            }}
+            name={props.name}
+            size={props.size}
+          />
+        </LinearGradient>
+      </MaskedView>
+    </TouchableOpacity>
   );
-};
-
-export default CloseCustomButton;
+}

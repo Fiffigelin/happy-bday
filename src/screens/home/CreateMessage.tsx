@@ -1,7 +1,11 @@
 import BirthdayForm from "@/src/components/birthdayForm";
+import GradientIcon from "@/src/components/gradient-component/gradientIcon";
+import GradientText from "@/src/components/gradient-component/gradientText";
 import PickContactCard from "@/src/components/pickContact";
-import RoundButton from "@/src/components/roundButton";
-import { putMessageToContact } from "@/src/features/contact/contact.slice";
+import {
+  fetchContactsAPI,
+  putMessageToContact,
+} from "@/src/features/contact/contact.slice";
 import { createMessageAPI } from "@/src/features/message/message.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { HomeScreenProps } from "@/src/navigation/NavigationTypes";
@@ -11,7 +15,6 @@ import {
   Dimensions,
   Keyboard,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -76,6 +79,7 @@ export default function CreateMessage({ route, navigation }: Props) {
     console.log("Här");
     if (connectedMsgToContact) {
       setSelectedContacts([]);
+      dispatch(fetchContactsAPI(user?.id!));
       navigation.navigate("Home");
     } else {
       console.log("Nope!");
@@ -114,16 +118,16 @@ export default function CreateMessage({ route, navigation }: Props) {
               justifyContent: "flex-end",
             }}
           >
-            <RoundButton
-              onPress={createMessage}
-              buttonColor={"#f2a3bb"}
-              disabledColor={"#f9d5e0"}
-              textColor={"black"}
-              buttonText={"+"}
-              buttonTextSize={25}
-              widht_hight={50}
-              disabled={selectedContacts.length === 0}
-            />
+            <TouchableOpacity onPress={createMessage}>
+              <GradientIcon
+                colors={["#c791d9", "#5D0D90"]}
+                start={{ x: 0.2, y: 0.2 }}
+                end={{ x: 0, y: 1 }}
+                name={"plus-circle"}
+                locations={[0, 1]}
+                size={60}
+              />
+            </TouchableOpacity>
           </View>
           <View
             style={{
@@ -132,7 +136,14 @@ export default function CreateMessage({ route, navigation }: Props) {
               marginBottom: 20,
             }}
           >
-            <Text style={styles.text}>Choose contacts</Text>
+            <GradientText
+              colors={["#c791d9", "#5D0D90"]}
+              start={{ x: 0.5, y: 0.25 }}
+              end={{ x: 0.5, y: 1 }}
+              style={styles.textStyle}
+            >
+              Choose contacts
+            </GradientText>
             <View style={styles.container}>
               {contacts?.map((contact) => (
                 <TouchableOpacity
@@ -158,14 +169,13 @@ export default function CreateMessage({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f9fafa",
     alignItems: "center",
   },
-  text: {
-    color: "gray",
-    fontSize: 28,
-    fontWeight: "bold",
+  textStyle: {
     marginLeft: 8,
+    fontWeight: "bold",
+    fontSize: 32,
   },
   image: {
     width: "100%",

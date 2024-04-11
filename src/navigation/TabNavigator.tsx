@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { fetchContactsAPI } from "../features/contact/contact.slice";
 import { fetchImagesAPI } from "../features/image/image.slice";
 import { fetchMessagesAPI } from "../features/message/message.slice";
@@ -26,32 +26,8 @@ export type AuthStackParamList = {
 };
 
 export default function TabNavigator() {
-  const [hasLoaded, setLoaded] = useState(false);
-
-  const [isUserFetched, setUserFetched] = useState(false);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
-  // // Hårdkoda testanvändarens UID
-  // const firebaseapp = app;
-  // const testUserId = "SLEqB0RUaFNzw9BtNsG3MOU2M2f2";
-
-  // // Logga in testanvändaren med hårdkodat UID
-  // const signInTestUser = async () => {
-  //   try {
-  //     await auth().signInWithEmailAndPassword(
-  //       testUserId + "test@gmail.com",
-  //       "password123"
-  //     );
-  //     // Användaren är nu inloggad med det hårdkodade UID
-  //   } catch (error) {
-  //     console.error("Inloggningsfel:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   signInTestUser();
-  //   console.log();
-  // });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (response) => {
@@ -64,28 +40,13 @@ export default function TabNavigator() {
       } else {
         dispatch(setActiveUser(undefined));
       }
-      setUserFetched(true);
-
-      // const fetchData = async () => {
-      //   if (isUserFetched) {
-      //     await dispatch(fetchImagesAPI());
-      //     await dispatch(fetchContactsAPI(user!.id as string));
-      //     await dispatch(fetchMessagesAPI(user!.id as string));
-      //   }
-      // };
-
-      // fetchData();
 
       const checkStatusAndDoSomething = async () => {
         const isActionFulfilled = (action: any) =>
           action.meta.requestStatus === "fulfilled";
         const imagesAction = await dispatch(fetchImagesAPI());
-        const contactsAction = await dispatch(
-          fetchContactsAPI(user!.id as string)
-        );
-        const messagesAction = await dispatch(
-          fetchMessagesAPI(user!.id as string)
-        );
+        const contactsAction = await dispatch(fetchContactsAPI(user!.id));
+        const messagesAction = await dispatch(fetchMessagesAPI(user!.id));
 
         if (
           isActionFulfilled(imagesAction) &&
@@ -93,23 +54,22 @@ export default function TabNavigator() {
           isActionFulfilled(messagesAction)
         ) {
           console.log("Alla action har slutförts utan problem");
-          setLoaded(true);
         } else {
           console.log("Något gick fel");
         }
       };
 
-      if (user) {
+      if (user !== null) {
         checkStatusAndDoSomething();
       }
     });
 
     return unsubscribe;
-  }, [dispatch, user]);
+  }, [user]);
 
   return (
     <NavigationContainer>
-      {!user && !hasLoaded ? (
+      {user === null ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Main" component={MainScreen} />
         </Stack.Navigator>

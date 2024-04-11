@@ -1,16 +1,16 @@
 import ContactCard from "@/src/components/contactCard";
-import CustomButton from "@/src/components/customButton";
 import CustomToast from "@/src/components/customToast";
 import DeleteModal from "@/src/components/deleteModal";
-import { useAppDispatch, useAppSelector } from "@/src/features/store";
+import GradientIcon from "@/src/components/gradient-component/gradientIcon";
+import GradientText from "@/src/components/gradient-component/gradientText";
+import { useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 
 type Props = ContactsScreenProps<"ContactsHomeStack">;
 
 export default function ContactsHomeScreen({ navigation }: Props) {
-  const dispatch = useAppDispatch();
   const isContactAddedState = useAppSelector(
     (state) => state.contact.isContactCreated
   );
@@ -36,9 +36,6 @@ export default function ContactsHomeScreen({ navigation }: Props) {
       setShowToast(false);
     }, 2000);
   };
-  // useEffect(() => {
-  //   dispatch(fetchContactsAPI(user?.id as string));
-  // }, [user]);
 
   useEffect(() => {
     if (isContactAddedState === true) {
@@ -81,16 +78,14 @@ export default function ContactsHomeScreen({ navigation }: Props) {
           marginBottom: index === monthsWithData.length - 1 ? 0 : 25,
         }}
       >
-        <Text
-          style={{
-            fontSize: 28,
-            marginHorizontal: 10,
-            fontWeight: "600",
-            color: "gray",
-          }}
+        <GradientText
+          colors={["#c791d9", "#5D0D90"]}
+          start={{ x: 0.5, y: 0.5 }}
+          end={{ x: 0.5, y: 1 }}
+          style={styles.textStyle}
         >
           {month.toString()}
-        </Text>
+        </GradientText>
         <FlatList
           style={{ maxHeight: 250 }}
           data={contactsInMonth}
@@ -107,35 +102,29 @@ export default function ContactsHomeScreen({ navigation }: Props) {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <View
         style={{
           width: "100%",
           alignItems: "flex-end",
-          marginTop: 40,
+          marginTop: 60,
+          paddingRight: 20,
         }}
       >
-        <CustomButton
-          buttonColor="#d39e90"
-          borderColor="#d39e90"
-          textColor="white"
-          shadow={false}
-          buttonText="Add contact"
-          onPress={() => navigation.navigate("AddEditContactStack")}
-        />
-        {/* <GradientButton
-          text={"Add contact"}
-          colors={["purple", "pink"]}
-          start={{
-            x: 0.5,
-            y: 1,
-          }}
-          end={{
-            x: 0.5,
-            y: 0,
-          }}
-          style={{ width: 50, height: 50 }}
-        ></GradientButton> */}
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("HandleContactStack", { id: undefined })
+          }
+        >
+          <GradientIcon
+            colors={["#c791d9", "#5D0D90"]}
+            start={{ x: 0.2, y: 0.2 }}
+            end={{ x: 0, y: 1 }}
+            name={"plus-circle"}
+            locations={[0, 1]}
+            size={60}
+          />
+        </TouchableOpacity>
       </View>
       <FlatList
         data={monthsWithData}
@@ -148,26 +137,20 @@ export default function ContactsHomeScreen({ navigation }: Props) {
         userId={user?.id!}
         closeModal={() => setModalVisible(false)}
       />
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f9fafa",
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
-    color: "orange",
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  sectionHeader: {
+  textStyle: {
+    fontWeight: "600",
     fontSize: 30,
     marginHorizontal: 10,
-    fontWeight: "600",
-    color: "gray",
   },
 });

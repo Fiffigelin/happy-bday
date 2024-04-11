@@ -7,7 +7,7 @@ interface gradientIconProps {
   colors: string[];
   start: { x: number; y: number };
   end: { x: number; y: number };
-  locations: number[];
+  locations?: number[];
   name: string;
   size: number;
 }

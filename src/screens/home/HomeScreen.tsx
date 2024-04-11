@@ -2,7 +2,10 @@ import CustomImageCarousel from "@/src/components/customImageCarousel";
 import CustomToast from "@/src/components/customToast";
 import GradientText from "@/src/components/gradient-component/gradientText";
 import UpComingBirthdayCard from "@/src/components/upComingBirthdayCard";
-import { resetMessageSuccessful } from "@/src/features/contact/contact.slice";
+import {
+  fetchContactsAPI,
+  resetMessageSuccessful,
+} from "@/src/features/contact/contact.slice";
 import { setSelectedImage } from "@/src/features/image/image.slice";
 import {
   resetMessage,
@@ -26,6 +29,7 @@ export default function HomeScreen({ navigation }: Props) {
   const [imageArray, setImageArray] = useState<(BdayImage[] | undefined)[]>([]);
   const dispatch = useAppDispatch();
   const images = useAppSelector((state) => state.image.images);
+  const user = useAppSelector((state) => state.user.user);
   const messages = useAppSelector((state) => state.message.messages);
   const message = useAppSelector((state) => state.message.message);
   const selectedMessage = useAppSelector(
@@ -69,6 +73,10 @@ export default function HomeScreen({ navigation }: Props) {
     ]);
   }, [images]);
 
+  useEffect(() => {
+    dispatch(fetchContactsAPI(user?.id!));
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
       if (message?.id) {
@@ -87,7 +95,7 @@ export default function HomeScreen({ navigation }: Props) {
     return (
       <View style={{ height: 300, marginTop: 50, marginHorizontal: 25 }}>
         <GradientText
-          colors={["pink", "purple"]}
+          colors={["#c791d9", "#5D0D90"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={styles.textStyle}
@@ -107,13 +115,13 @@ export default function HomeScreen({ navigation }: Props) {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#f9fafa" }}>
       <View style={{ height: 300, margin: 50, marginHorizontal: 25 }}>
         {renderUpComingCelebration()}
       </View>
       <View style={{ marginBottom: 25, flex: 3 }}>
         <GradientText
-          colors={["pink", "purple"]}
+          colors={["#c791d9", "#5D0D90"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={styles.textStyle}
@@ -149,10 +157,5 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 25,
     textAlign: "center",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-    alignItems: "center",
   },
 });

@@ -1,6 +1,7 @@
 import { Contact } from "@/types";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import GradientText from "./gradient-component/gradientText";
 
 interface PickContactProps {
   contact: Contact;
@@ -21,7 +22,7 @@ export default function PickContactCard({
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: selected ? "#f4c3d5" : "white",
+        backgroundColor: selected ? "#f1a0f6" : "white",
         alignItems: "center",
         justifyContent: "space-between",
         borderRadius: 8,
@@ -35,25 +36,31 @@ export default function PickContactCard({
       onPress={onPress}
     >
       <View style={{ minWidth: 180, flex: 1 }}>
-        <Text style={{ fontSize: 15, fontWeight: "600", marginLeft: 10 }}>
+        <GradientText
+          colors={["purple", "black"]}
+          start={{ x: 0.5, y: 0.25 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ fontSize: 15, fontWeight: "600", marginLeft: 5 }}
+        >
           {contact.name}
-        </Text>
+        </GradientText>
       </View>
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           flex: 2,
+          marginRight: 5,
         }}
       >
         <View>
-          <Text>{addLeadingZero(birthday.getDate())}</Text>
+          <Text>
+            {addLeadingZero(birthday.getDate())} /{" "}
+            {addLeadingZero(birthday.getMonth() + 1)}
+          </Text>
         </View>
         <View>
-          <Text>{addLeadingZero(birthday.getMonth() + 1)}</Text>
-        </View>
-        <View>
-          <Text>{birthday.getFullYear()}</Text>
+          <Text style={{ fontWeight: "bold" }}>{birthday.getFullYear()}</Text>
         </View>
       </View>
     </TouchableOpacity>
