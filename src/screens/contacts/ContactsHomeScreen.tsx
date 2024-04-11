@@ -63,6 +63,10 @@ export default function ContactsHomeScreen({ navigation }: Props) {
     setMonthsWithData(monthNamesWithData);
   }, [contacts]);
 
+  function editContact(): void {
+    navigation.navigate("HandleContactStack", { id: "" });
+  }
+
   const renderMonthSection = (month: string, index: number) => {
     const contactsInMonth = contacts?.filter(
       (contact) =>
@@ -113,7 +117,9 @@ export default function ContactsHomeScreen({ navigation }: Props) {
         }}
       >
         <TouchableOpacity
-          onPress={() => navigation.navigate("AddEditContactStack")}
+          onPress={() =>
+            navigation.navigate("HandleContactStack", { id: undefined })
+          }
         >
           <GradientIcon
             colors={["#c791d9", "#5D0D90"]}

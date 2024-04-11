@@ -5,8 +5,9 @@ import { createContactAPI } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import styles from "@/style";
-import { ContactCredential } from "@/types";
+import { Contact, ContactCredential, UpdateContact } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { UpdateData } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -21,15 +22,21 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-type Props = ContactsScreenProps<"AddEditContactStack">;
+type Props = ContactsScreenProps<"HandleContactStack">;
 
-export default function HandleContact({ navigation }: Props) {
+export default function HandleContact({ route, navigation }: Props) {
+  const contactId = route.params?.id;
+  const contacts = useAppSelector((state) => state.contact.contacts);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
+
+  const [isEditing, setEditing] = useState<boolean>();
+  const [editContact, setEditContact] = useState<Contact>();
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const { height, width } = Dimensions.get("window");
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
+
   const {
     control,
     handleSubmit,
@@ -57,25 +64,45 @@ export default function HandleContact({ navigation }: Props) {
   };
 
   const addContactHandler = async (data: any) => {
+    if (isEditing) {
+      const contact: UpdateContact = {
+        name: data.name,
+        birthday: convertPickedDate(),
+        id: contactId!,
+      };
+      const hasEditingSucceded = await dispatch();
+    } else {
+      const contact: ContactCredential = {
+        name: data.name,
+        birthday: convertPickedDate(),
+        userId: user?.id as string,
+      };
+      const hasQuerySucceded = await dispatch(createContactAPI(contact));
+      if (hasQuerySucceded) {
+        navigation.navigate("ContactsHomeStack");
+      }
+    }
+  };
+
+  function convertPickedDate(): string {
     const newDateOfBirth = new Date(dateOfBirth);
 
     const year = newDateOfBirth.getFullYear();
     const month = String(newDateOfBirth.getMonth() + 1).padStart(2, "0");
     const day = String(newDateOfBirth.getDate()).padStart(2, "0");
 
-    const dateWithoutTime = `${year}-${month}-${day}`;
+    return `${year}-${month}-${day}`;
+  }
 
-    const addContact: ContactCredential = {
-      name: data.name,
-      birthday: dateWithoutTime,
-      userId: user?.id as string,
-    };
-
-    const hasQuerySucceded = await dispatch(createContactAPI(addContact));
-    if (hasQuerySucceded) {
-      navigation.navigate("ContactsHomeStack");
+  useEffect(() => {
+    if (contactId) {
+      setEditContact(contacts?.find((contact) => contact.id === contactId));
+      if (editContact) {
+        setDateOfBirth(editContact?.birthday.toString());
+        setEditing(true);
+      }
     }
-  };
+  }, [contactId, editContact]);
 
   useEffect(() => {
     if (Platform.OS === "android") {
@@ -84,20 +111,20 @@ export default function HandleContact({ navigation }: Props) {
   }, [date]);
 
   return (
-    <View style={[contactStyles.container, { width: width }]}>
-      <GradientText
-        colors={["#c791d9", "#5D0D90"]}
-        start={{ x: 0.5, y: 0.25 }}
-        end={{ x: 0.5, y: 1 }}
-        style={contactStyles.textStyle}
-      >
-        Create a contact
-      </GradientText>
-      <View style={[styles.buttonContainer, { width: width }]}>
-        <KeyboardAwareScrollView
-          contentContainerStyle={contactStyles.scrollContent}
-          keyboardShouldPersistTaps="handled"
+    <KeyboardAwareScrollView
+      contentContainerStyle={contactStyles.scrollContent}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={[contactStyles.container, { width: width }]}>
+        <GradientText
+          colors={["#c791d9", "#5D0D90"]}
+          start={{ x: 0.5, y: 0.25 }}
+          end={{ x: 0.5, y: 1 }}
+          style={contactStyles.textStyle}
         >
+          {isEditing ? "Edit contact" : "Create a contact"}
+        </GradientText>
+        <View style={[styles.buttonContainer, { width: width }]}>
           {showPicker && (
             <DateTimePicker
               mode="date"
@@ -142,7 +169,7 @@ export default function HandleContact({ navigation }: Props) {
           <Pressable onPress={toggleDatePicker}>
             <TextInput
               style={contactStyles.dateInput}
-              placeholder="Sat Aug 21 2004"
+              placeholder={isEditing ? dateOfBirth : ""}
               value={dateOfBirth}
               onChangeText={setDateOfBirth}
               placeholderTextColor="grey"
@@ -159,15 +186,18 @@ export default function HandleContact({ navigation }: Props) {
                 message: "Name needs to be a minimum of 2 characters",
               },
             }}
-            placeholder="Name"
+            placeholder={isEditing ? editContact?.name! : "Name"}
             secureTextEntry={false}
             errorMessage="Error"
           />
+
           <TouchableOpacity
             style={styles.formButton}
             onPress={handleSubmit(addContactHandler)}
           >
-            <Text style={styles.buttonTextWhite}>Add new contact</Text>
+            <Text style={styles.buttonTextWhite}>
+              {isEditing ? "Edit contact" : "Add new contact"}
+            </Text>
           </TouchableOpacity>
           <View
             style={{
@@ -176,9 +206,9 @@ export default function HandleContact({ navigation }: Props) {
               margin: 20,
             }}
           ></View>
-        </KeyboardAwareScrollView>
+        </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -188,6 +218,9 @@ const contactStyles = StyleSheet.create({
     backgroundColor: "#f9fafa",
     alignItems: "center",
     justifyContent: "center",
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   dateInput: {
     height: 50,
@@ -208,8 +241,5 @@ const contactStyles = StyleSheet.create({
     marginTop: -10,
     backgroundColor: "white",
     borderColor: "black",
-  },
-  scrollContent: {
-    flex: 1,
   },
 });

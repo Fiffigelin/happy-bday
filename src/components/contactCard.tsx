@@ -1,4 +1,5 @@
 import { Contact } from "@/types";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import GradientIcon from "./gradient-component/gradientIcon";
@@ -8,8 +9,12 @@ interface ContactCardProps {
   contact: Contact;
   onDelete: (contactId: string) => void;
 }
+
 export default function ContactCard({ contact, onDelete }: ContactCardProps) {
+  const navigation = useNavigation().getParent();
+
   function onPressEdit(id: string) {
+    navigation?.navigate("HandleContactStack", { id: contact.id });
     console.log("Edit contact id ", id);
   }
 

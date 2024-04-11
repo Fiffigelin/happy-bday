@@ -13,7 +13,7 @@ export type RootTabsParamList = {
 
 export type ContactsStackParamList = {
   ContactsHomeStack: undefined;
-  AddEditContactStack: undefined;
+  HandleContactStack: { id?: string };
 };
 
 export type HomeStackParamList = {
