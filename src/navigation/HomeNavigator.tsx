@@ -12,7 +12,7 @@ export default function HomeStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        header: (props) => <CustomStackHeader />,
+        header: () => <CustomStackHeader />,
       }}
     >
       <Stack.Screen
