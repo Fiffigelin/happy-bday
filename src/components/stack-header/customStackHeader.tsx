@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
@@ -8,13 +7,14 @@ import {
   useWindowDimensions,
 } from "react-native";
 import Svg, { ClipPath, Ellipse, Rect } from "react-native-svg";
+import GradientIcon from "../gradient-component/gradientIcon";
 
 export default function CustomStackHeader() {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
 
-  function WavyHeader() {
-    return (
+  return (
+    <View style={styles.container}>
       <View style={styles.container}>
         <Svg height={height / 7} width={width}>
           <ClipPath id="clipPathId">
@@ -25,7 +25,7 @@ export default function CustomStackHeader() {
             y="0"
             width={width}
             height={height / 3}
-            fill="#a316e9"
+            fill="#7110ae"
             clipPath="url(#clipPathId)"
           />
         </Svg>
@@ -38,12 +38,12 @@ export default function CustomStackHeader() {
           }}
         >
           <TouchableOpacity
+            onPress={() => navigation.goBack()}
             style={{
               justifyContent: "center",
               marginLeft: 12,
               marginBottom: 20,
             }}
-            onPress={() => navigation.goBack()}
           >
             <View
               style={{
@@ -51,17 +51,18 @@ export default function CustomStackHeader() {
                 borderRadius: 10,
               }}
             >
-              <Ionicons name="caret-back-circle" size={60} color="white" />
+              <GradientIcon
+                colors={["white", "#b3b3b3"]}
+                start={{ x: 0.2, y: 0.2 }}
+                end={{ x: 0, y: 1 }}
+                name={"arrow-left-drop-circle"}
+                locations={[0, 1]}
+                size={60}
+              />
             </View>
           </TouchableOpacity>
         </View>
       </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <WavyHeader />
       <View style={styles.headerContainer}></View>
     </View>
   );
