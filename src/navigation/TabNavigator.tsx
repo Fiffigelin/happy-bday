@@ -17,7 +17,6 @@ import { useAppDispatch, useAppSelector } from "../features/store";
 import { setActiveUser } from "../features/user/user.slice";
 import MainScreen from "../screens/UserAuth/MainScreen";
 import HomeStackNavigator from "./HomeNavigator";
-import TestStackNavigator from "./TestNavigator";
 
 const Tab = createBottomTabNavigator<RootTabsParamList>();
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -66,7 +65,7 @@ export default function TabNavigator() {
     });
 
     return unsubscribe;
-  }, [user]);
+  }, [user?.id]);
 
   return (
     <NavigationContainer>
@@ -128,7 +127,6 @@ export default function TabNavigator() {
               ),
             }}
           />
-          <Tab.Screen name="TestTab" component={TestStackNavigator} />
         </Tab.Navigator>
       )}
     </NavigationContainer>
