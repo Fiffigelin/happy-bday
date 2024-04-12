@@ -136,7 +136,7 @@ export default function CreateMessage({ route, navigation }: Props) {
             }}
           >
             <GradientText
-              colors={["#c791d9", "#5D0D90"]}
+              colors={["#b975d0", "#441c51"]}
               start={{ x: 0.5, y: 0.25 }}
               end={{ x: 0.5, y: 1 }}
               style={styles.textStyle}

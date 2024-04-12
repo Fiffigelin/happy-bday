@@ -39,7 +39,7 @@ export default function ProfileScreen() {
           style={{ borderRadius: 100, width: 150, height: 150 }}
         />
         <GradientText
-          colors={["#973EB5", "#441c51"]}
+          colors={["#b975d0", "#441c51"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={profileStyle.text}
