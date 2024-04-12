@@ -9,6 +9,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect } from "react";
+import CustomTabBarIcon from "../components/tab-icon/tabIcon";
 import { fetchContactsAPI } from "../features/contact/contact.slice";
 import { fetchImagesAPI } from "../features/image/image.slice";
 import { fetchMessagesAPI } from "../features/message/message.slice";
@@ -75,15 +76,58 @@ export default function TabNavigator() {
         </Stack.Navigator>
       ) : (
         <Tab.Navigator
-          screenOptions={{ headerShown: false, tabBarShowLabel: false }}
+          screenOptions={{
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              backgroundColor: "#7110ae",
+              borderColor: "transparent",
+            },
+          }}
         >
-          <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
-          <Tab.Screen name="ContactsTab" component={ContactsStackNavigator} />
+          <Tab.Screen
+            name="HomeTab"
+            component={HomeStackNavigator}
+            options={{
+              tabBarIcon: (props) => (
+                <CustomTabBarIcon
+                  focused={props.focused}
+                  iconName={"home"}
+                  iconSize={24}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="ContactsTab"
+            component={ContactsStackNavigator}
+            options={{
+              tabBarIcon: (props) => (
+                <CustomTabBarIcon
+                  focused={props.focused}
+                  iconName={"people"}
+                  iconSize={26}
+                />
+              ),
+            }}
+          />
           {/* <Tab.Screen
             name="BirthdaysTab"
             component={BirthdaysMessagesStackNavigator}
           /> */}
-          <Tab.Screen name="ProfileTab" component={ProfileScreen} />
+          <Tab.Screen
+            name="ProfileTab"
+            component={ProfileScreen}
+            options={{
+              tabBarIcon: (props) => (
+                <CustomTabBarIcon
+                  focused={props.focused}
+                  iconName={"happy"}
+                  iconSize={26}
+                />
+              ),
+            }}
+          />
           <Tab.Screen name="TestTab" component={TestStackNavigator} />
         </Tab.Navigator>
       )}
