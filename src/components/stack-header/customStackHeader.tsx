@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
   container: {
     height: 60,
     flex: 1,
-    backgroundColor: "#fff",
   },
   headerContainer: {
     marginTop: 50,

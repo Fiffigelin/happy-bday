@@ -133,7 +133,6 @@ export default function CreateMessage({ route, navigation }: Props) {
             style={{
               width: width * 0.8,
               alignSelf: "center",
-              marginBottom: 20,
             }}
           >
             <GradientText
@@ -144,7 +143,7 @@ export default function CreateMessage({ route, navigation }: Props) {
             >
               Choose contacts
             </GradientText>
-            <View style={styles.container}>
+            <View style={styles.contactsContainer}>
               {contacts?.map((contact) => (
                 <TouchableOpacity
                   key={contact.id}
@@ -168,12 +167,18 @@ export default function CreateMessage({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 120,
     flex: 1,
     backgroundColor: "#f9fafa",
     alignItems: "center",
   },
+  contactsContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
   textStyle: {
     marginLeft: 8,
+    marginBottom: 10,
     fontWeight: "bold",
     fontSize: 32,
   },
