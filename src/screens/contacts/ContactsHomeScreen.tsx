@@ -3,19 +3,33 @@ import CustomToast from "@/src/components/customToast";
 import DeleteModal from "@/src/components/deleteModal";
 import GradientIcon from "@/src/components/gradient-component/gradientIcon";
 import GradientText from "@/src/components/gradient-component/gradientText";
-import { useAppSelector } from "@/src/features/store";
+import { resetStatusForContact } from "@/src/features/contact/contact.slice";
+import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
 
 type Props = ContactsScreenProps<"ContactsHomeStack">;
 
 export default function ContactsHomeScreen({ navigation }: Props) {
+  const { width } = useWindowDimensions();
+  /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
+  const dispatch = useAppDispatch();
   const isContactAddedState = useAppSelector(
     (state) => state.contact.isContactCreated
   );
+  const isContactUpdatedState = useAppSelector(
+    (state) => state.contact.isContactUpdated
+  );
   const contacts = useAppSelector((state) => state.contact.contacts);
   const user = useAppSelector((state) => state.user.user);
+  /* <<<<<<<<<<<<<<<<<<<<<<< useState data >>>>>>>>>>>>>>>>>>>>>>> */
   const [monthsWithData, setMonthsWithData] = useState<string[]>([]);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setMessage] = useState<string>("");
@@ -24,26 +38,42 @@ export default function ContactsHomeScreen({ navigation }: Props) {
   );
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
-  function OnPressDelete(id: string) {
+  function OnPressDelete(id: string): void {
     setSelectedContactId(id);
     setModalVisible(true);
   }
 
-  const showToastFunction = (text: string) => {
+  function showToastFunction(text: string): void {
     setMessage(text);
     setShowToast(true);
     setTimeout(() => {
       setShowToast(false);
     }, 2000);
-  };
+  }
+
+  const screen = StyleSheet.create({
+    container: {
+      width: width,
+      backgroundColor: "#f9fafa",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingBottom: 100,
+    },
+  });
 
   useEffect(() => {
     if (isContactAddedState === true) {
       showToastFunction("Contact added successfully");
-    } else if (isContactAddedState === false) {
+    } else if (isContactUpdatedState === true) {
+      showToastFunction("Contact updated successfully");
+    } else if (
+      isContactAddedState === false ||
+      isContactUpdatedState === false
+    ) {
       showToastFunction("Something wrong happened!");
     }
-  }, [isContactAddedState]);
+    dispatch(resetStatusForContact());
+  }, [isContactAddedState, isContactUpdatedState]);
 
   useEffect(() => {
     const allMonthNames = Array.from({ length: 12 }, (_, index) => {
@@ -87,14 +117,16 @@ export default function ContactsHomeScreen({ navigation }: Props) {
           {month.toString()}
         </GradientText>
         <FlatList
-          style={{ maxHeight: 250 }}
+          style={{ maxHeight: 250, width: width * 0.9 }}
           data={contactsInMonth}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <ContactCard
-              contact={item}
-              onDelete={() => OnPressDelete(item.id)}
-            />
+            <View>
+              <ContactCard
+                contact={item}
+                onDelete={() => OnPressDelete(item.id)}
+              />
+            </View>
           )}
         />
       </View>
@@ -102,7 +134,7 @@ export default function ContactsHomeScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={screen.container}>
       <View
         style={{
           width: "100%",
@@ -142,12 +174,6 @@ export default function ContactsHomeScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f9fafa",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   textStyle: {
     fontWeight: "600",
     fontSize: 30,

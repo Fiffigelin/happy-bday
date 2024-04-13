@@ -85,7 +85,7 @@ export default function DeleteModal({
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{ ...styles.button, backgroundColor: "red" }}
+              style={{ ...styles.button, backgroundColor: "#7110ae" }}
               onPress={() => deleteContact()}
             >
               <Text style={styles.buttonTextDanger}>YES</Text>

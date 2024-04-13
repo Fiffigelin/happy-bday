@@ -9,6 +9,7 @@ interface CustomInputProps {
   placeholder: string;
   secureTextEntry: boolean;
   errorMessage: string;
+  value?: string;
 }
 
 export default function CustomInput({
@@ -18,12 +19,14 @@ export default function CustomInput({
   placeholder,
   secureTextEntry,
   errorMessage,
+  value,
 }: CustomInputProps) {
   return (
     <Controller
       control={control}
       name={name}
       rules={rules}
+      defaultValue={value || ""}
       render={({
         field: { value, onChange, onBlur },
         fieldState: { error },
@@ -72,6 +75,5 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 15,
     paddingLeft: 10,
-    // borderColor: "red",
   },
 });

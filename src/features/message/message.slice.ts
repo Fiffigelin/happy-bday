@@ -3,11 +3,10 @@ import {
   fetchMessageFromContact,
   fetchMessagesFromUser,
 } from "@/src/api/message/message.api";
-import { BdayImage, Message, MessageCredential } from "@/types";
+import { Message, MessageCredential } from "@/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface MessageState {
-  image: BdayImage | null;
   message: Message | null;
   selectedMessage: Message | null;
   messages: Message[] | [];
@@ -17,7 +16,6 @@ interface MessageState {
 }
 
 export const initialState: MessageState = {
-  image: null,
   message: null,
   selectedMessage: null,
   messages: [],
@@ -32,7 +30,6 @@ export const createMessageAPI = createAsyncThunk<
   { rejectValue: string }
 >("message/addMessage", async (messageCred, { dispatch }) => {
   try {
-    console.log("THUNK MESSAGE: ", messageCred);
     const addedMessage = await createMessage(messageCred);
 
     if (addedMessage) {
@@ -52,9 +49,7 @@ export const fetchMessagesAPI = createAsyncThunk<Message[], string>(
   "message/fetchMessages",
   async (userId, { rejectWithValue }) => {
     try {
-      // console.log("userid: ", userId);
       const messages = await fetchMessagesFromUser(userId);
-      console.log("thunk messages: ", messages);
       return messages;
     } catch (error) {
       return rejectWithValue(error);
@@ -66,7 +61,6 @@ export const fetchMessageFromContactAPI = createAsyncThunk<Message, string>(
   "message/fetchMessage",
   async (contactMessageId, { rejectWithValue }) => {
     try {
-      console.log("Kommer hit!");
       const message: Message = await fetchMessageFromContact(contactMessageId);
       return message;
     } catch (error) {
@@ -86,11 +80,8 @@ const messageSlice = createSlice({
       state.message = action.payload;
     },
     setSelectedMessage: (state, action) => {
-      console.log("messageId: ", action.payload);
       const messageId = action.payload;
-      console.log("messages: ", state.messages);
       const message = state.messages?.find((msg) => msg.id === messageId);
-      console.log("message: ", message);
       if (message) {
         state.selectedMessage = message;
       }

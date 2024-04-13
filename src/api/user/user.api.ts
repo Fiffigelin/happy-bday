@@ -11,31 +11,6 @@ export const USER_API = {
   DELETE_USER: (id: string) => `/delete/${id}`,
 };
 
-// export async function fetchUsers(): Promise<User[]> {
-//   try {
-//     const requestInfo = {
-//       method: "GET",
-//       headers: headers,
-//     };
-//     console.log("URI: ", USER_URL);
-//     const response = await fetch(`${USER_URL}${USER_API.GET}`, requestInfo);
-
-//     if (!response.ok) {
-//       throw new Error("Network response was not ok");
-//     }
-
-//     const jsonResponse = await response.json();
-//     if (jsonResponse.data) {
-//       return jsonResponse.data as User[];
-//     }
-
-//     return [];
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//     throw error;
-//   }
-// }
-
 export async function fetchUserByUid(uid: string): Promise<User> {
   try {
     const requestInfo = {
@@ -138,7 +113,6 @@ export async function deleteUser(id: string) {
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
-    console.log("ERROR deleting data: ", error);
     throw error;
   }
 }

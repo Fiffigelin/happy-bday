@@ -1,6 +1,6 @@
 import { Contact } from "@/types";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import GradientText from "./gradient-component/gradientText";
 
 interface PickContactProps {
@@ -16,23 +16,16 @@ export default function PickContactCard({
 }: PickContactProps) {
   const birthday = new Date(contact.birthday);
 
-  const addLeadingZero = (number: number): string => {
+  function addLeadingZero(number: number): string {
     return number < 10 ? "0" + number : "" + number;
-  };
+  }
+
   return (
     <TouchableOpacity
-      style={{
-        backgroundColor: selected ? "#f1a0f6" : "white",
-        alignItems: "center",
-        justifyContent: "space-between",
-        borderRadius: 8,
-        margin: 6,
-        marginBottom: 5,
-        height: 55,
-        padding: 8,
-        flexDirection: "row",
-        width: "100%",
-      }}
+      style={[
+        styles.container,
+        { backgroundColor: selected ? "#f1a0f6" : "white" },
+      ]}
       onPress={onPress}
     >
       <View style={{ minWidth: 180, flex: 1 }}>
@@ -45,24 +38,38 @@ export default function PickContactCard({
           {contact.name}
         </GradientText>
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          flex: 2,
-          marginRight: 5,
-        }}
-      >
+      <View style={styles.bdayContainer}>
         <View>
           <Text>
             {addLeadingZero(birthday.getDate())} /{" "}
             {addLeadingZero(birthday.getMonth() + 1)}
           </Text>
         </View>
-        <View>
+        <View style={{ marginLeft: 8 }}>
           <Text style={{ fontWeight: "bold" }}>{birthday.getFullYear()}</Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 8,
+    margin: 6,
+    marginBottom: 5,
+    height: 55,
+    padding: 8,
+    flexDirection: "row",
+    width: "100%",
+    elevation: 3,
+  },
+  bdayContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flex: 2,
+    marginRight: 25,
+  },
+});

@@ -1,34 +1,23 @@
 import { auth } from "@/firebase.config";
 import styles from "@/style";
 import { signOut } from "firebase/auth";
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import GradientText from "../components/gradient-component/gradientText";
 import { useAppDispatch, useAppSelector } from "../features/store";
 import { logOutUser } from "../features/user/user.slice";
 
 export default function ProfileScreen() {
-  const user = useAppSelector((state) => state.user.user);
+  /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
 
   function handleLogOut() {
     signOut(auth)
       .then(() => {
         dispatch(logOutUser());
-        console.log("Logged out!");
       })
       .catch((error) => {
-        console.error("Fel vid utloggning:", error.message);
-        Alert.alert(
-          "Fel vid utloggning",
-          "Det uppstod ett fel vid utloggningen."
-        );
+        throw error;
       });
   }
   return (

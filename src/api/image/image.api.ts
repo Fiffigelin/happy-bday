@@ -1,4 +1,4 @@
-import { BdayImage, Category } from "@/types";
+import { BdayImage } from "@/types";
 import { API_URL, headers } from "../api";
 
 const IMAGE_URL = `${API_URL}:3000/api/image`;
@@ -56,25 +56,5 @@ export async function fetchImageById(id: string): Promise<BdayImage> {
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
-  }
-}
-
-// function setCategoryToString(images: Image[]): Image[] {
-//   return images.map((image) => ({
-//     ...image,
-//     cateogryString: getCategoryString(image.category),
-//   }));
-// }
-
-function getCategoryString(category: Category): string {
-  switch (category) {
-    case Category.People:
-      return "People";
-    case Category.Animals:
-      return "Animals";
-    case Category.Dinos:
-      return "Dinos";
-    default:
-      return "Unknown Category";
   }
 }

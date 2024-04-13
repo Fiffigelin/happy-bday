@@ -14,7 +14,7 @@ export default function CustomTabBarIcon({
   return (
     <Ionicons
       name={iconName}
-      size={focused ? iconSize * 1.2 : iconSize} // Öka storleken om ikonen är aktiv
+      size={focused ? iconSize * 1.2 : iconSize}
       color={focused ? "#fbf8f8" : "#c781f3"}
     />
   );

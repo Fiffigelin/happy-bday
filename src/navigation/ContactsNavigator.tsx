@@ -11,7 +11,7 @@ export default function ContactsStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        header: (props) => <CustomStackHeader />,
+        header: () => <CustomStackHeader />,
       }}
     >
       <Stack.Screen

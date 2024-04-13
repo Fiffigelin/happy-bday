@@ -10,7 +10,7 @@ import { createMessageAPI } from "@/src/features/message/message.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { HomeScreenProps } from "@/src/navigation/NavigationTypes";
 import { MessageCredential, MessageToContact } from "@/types";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Dimensions,
   Keyboard,
@@ -25,6 +25,8 @@ type Props = HomeScreenProps<"CreateMessage">;
 
 export default function CreateMessage({ route, navigation }: Props) {
   const id = route.params?.id;
+  /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
+  const dispatch = useAppDispatch();
   const image = useAppSelector((state) =>
     state.image.images?.find((image) => image.id === id)
   );
@@ -37,12 +39,12 @@ export default function CreateMessage({ route, navigation }: Props) {
   const connectedMsgToContact = useAppSelector(
     (state) => state.contact.isMessageAdded
   );
-  const dispatch = useAppDispatch();
+  /* <<<<<<<<<<<<<<<<<<<<<<< useState data >>>>>>>>>>>>>>>>>>>>>>> */
   const [changeText, onChangeText] = useState<string>();
   const { width } = Dimensions.get("window");
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
 
-  const toggleContactSelection = (contactId: string) => {
+  function toggleContactSelection(contactId: string): void {
     const newSelectedContacts = [...selectedContacts];
 
     if (selectedContacts.includes(contactId)) {
@@ -53,7 +55,20 @@ export default function CreateMessage({ route, navigation }: Props) {
     }
 
     setSelectedContacts(newSelectedContacts);
-  };
+  }
+
+  function AddButton(disable: boolean): ReactNode {
+    return (
+      <GradientIcon
+        colors={disable ? ["gray", "gray"] : ["#c791d9", "#5D0D90"]}
+        start={{ x: 0.2, y: 0.2 }}
+        end={{ x: 0, y: 1 }}
+        name={"plus-circle"}
+        locations={[0, 1]}
+        size={60}
+      />
+    );
+  }
 
   useEffect(() => {
     const connectMessageWithContacts = async () => {
@@ -61,28 +76,20 @@ export default function CreateMessage({ route, navigation }: Props) {
         contacts: selectedContacts,
         message_id: message?.id!,
       };
-      console.log("MESSAGE_ID: ", messageToContact.message_id);
       await dispatch(putMessageToContact(messageToContact));
-      console.log("Boolean: ", connectedMsgToContact);
     };
 
     if (savedMessageSuccessful && message) {
-      console.log("Message saved successfully:", message);
       connectMessageWithContacts();
-      console.log("Boolean: ", connectedMsgToContact);
     } else if (!savedMessageSuccessful && message) {
-      console.log("Failed to save message:", message);
     }
   }, [savedMessageSuccessful, message]);
 
   useEffect(() => {
-    console.log("Här");
     if (connectedMsgToContact) {
       setSelectedContacts([]);
       dispatch(fetchContactsAPI(user?.id!));
       navigation.navigate("Home");
-    } else {
-      console.log("Nope!");
     }
   }, [connectedMsgToContact]);
 
@@ -90,17 +97,15 @@ export default function CreateMessage({ route, navigation }: Props) {
     const messageCred: MessageCredential = {
       userId: user?.id!,
       imageId: image?.id!,
-      message: changeText!,
+      message: changeText ? changeText! : "Congratulations on your birthday 🎉",
     };
-    console.log("MESSAGE: ", messageCred);
 
     await dispatch(createMessageAPI(messageCred));
   }
 
-  const handleTextChange = (text: string) => {
+  function handleTextChange(text: string): void {
     onChangeText(text);
-    console.log("Ny text:", text);
-  };
+  }
 
   return (
     <KeyboardAwareScrollView
@@ -110,24 +115,14 @@ export default function CreateMessage({ route, navigation }: Props) {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <BirthdayForm image={image!} onTextChange={handleTextChange} />
-          <View
-            style={{
-              marginTop: 20,
-              width: "90%",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            <TouchableOpacity onPress={createMessage}>
-              <GradientIcon
-                colors={["#c791d9", "#5D0D90"]}
-                start={{ x: 0.2, y: 0.2 }}
-                end={{ x: 0, y: 1 }}
-                name={"plus-circle"}
-                locations={[0, 1]}
-                size={60}
-              />
-            </TouchableOpacity>
+          <View style={styles.formContainer}>
+            {selectedContacts.length > 0 ? (
+              <TouchableOpacity onPress={createMessage}>
+                {AddButton(false)}
+              </TouchableOpacity>
+            ) : (
+              <View>{AddButton(true)}</View>
+            )}
           </View>
           <View
             style={{
@@ -175,6 +170,12 @@ const styles = StyleSheet.create({
   contactsContainer: {
     flex: 1,
     alignItems: "center",
+  },
+  formContainer: {
+    marginTop: 20,
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   textStyle: {
     marginLeft: 8,

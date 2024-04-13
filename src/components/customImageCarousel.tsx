@@ -1,5 +1,5 @@
 import { BdayImage } from "@/types";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -31,7 +31,7 @@ export default function CustomImageCarousel({
     onPressImage(id);
   };
 
-  const renderPagination = () => {
+  function renderPagination(): ReactNode {
     const number = images?.length;
     return (
       <View style={styles.paginationContainer}>
@@ -52,7 +52,7 @@ export default function CustomImageCarousel({
         )}
       </View>
     );
-  };
+  }
 
   return (
     <View style={styles.carouselContainer}>

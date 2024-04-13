@@ -28,11 +28,11 @@ export default function RoundButton(Props: RoundButtonProps) {
     },
   });
 
-  const handlePress = () => {
+  function handlePress() {
     if (!Props.disabled) {
       Props.onPress();
     }
-  };
+  }
 
   return (
     <TouchableOpacity

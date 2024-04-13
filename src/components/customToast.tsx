@@ -6,7 +6,7 @@ interface CustomToastProps {
   onClose: () => void;
 }
 
-const CustomToast: React.FC<CustomToastProps> = ({ message, onClose }) => {
+export default function CustomToast({ message, onClose }: CustomToastProps) {
   const fadeAnim = new Animated.Value(0);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const CustomToast: React.FC<CustomToastProps> = ({ message, onClose }) => {
       <Text style={styles.message}>{message}</Text>
     </Animated.View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -53,5 +53,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
-export default CustomToast;

@@ -169,7 +169,6 @@ export async function deleteContact(id: string) {
       throw false;
     }
   } catch (error) {
-    console.log("ERROR deleting data: ", error);
     throw error;
   }
 }
