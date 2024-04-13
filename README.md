@@ -1,6 +1,6 @@
 ## CLIENTSIDE
 
-This is the clientside of my graduationproject Happy Bday!
+This is the clientside of my graduationproject Happy Bday! For androids
 
 ## Run application
 
