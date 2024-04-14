@@ -62,7 +62,6 @@ export default function HomeScreen({ navigation }: Props) {
 
   useEffect(() => {
     const sortedImages = SortImagesService.sortImagesByCategory(images!);
-    console.log(images);
     setImageArray([
       sortedImages[Category.People],
       sortedImages[Category.Animals],
@@ -72,8 +71,6 @@ export default function HomeScreen({ navigation }: Props) {
 
   useEffect(() => {
     dispatch(fetchContactsAPI(user?.id!));
-    console.log("contacts: ", contacts);
-    console.log("image: ", images);
   }, []);
 
   useFocusEffect(

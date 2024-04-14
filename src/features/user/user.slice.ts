@@ -105,6 +105,9 @@ const userSlice = createSlice({
       state.user = null;
       state.inloggedUser = null;
     },
+    resetError: (state) => {
+      state.error = undefined;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -137,4 +140,4 @@ const userSlice = createSlice({
 });
 
 export const userReducer = userSlice.reducer;
-export const { logOutUser, setActiveUser, resetSliceUser } = userSlice.actions;
+export const { logOutUser, setActiveUser, resetSliceUser, resetError } = userSlice.actions;

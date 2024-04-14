@@ -21,7 +21,6 @@ export const fetchImagesAPI = createAsyncThunk<BdayImage[], void>(
   async (_, { rejectWithValue }) => {
     try {
       const images = await fetchImages();
-      console.log("thunk img: ", images);
       return images;
     } catch (error) {
       return rejectWithValue(error);

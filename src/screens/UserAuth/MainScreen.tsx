@@ -1,7 +1,11 @@
 import CloseCustomButton from "@/src/components/customCloseButton";
 import CustomInput from "@/src/components/customInput";
-import { useAppDispatch } from "@/src/features/store";
-import { loginRegisteredUserAPI } from "@/src/features/user/user.slice";
+import LoginErrorModal from "@/src/components/modal/loginErrorModal";
+import { useAppDispatch, useAppSelector } from "@/src/features/store";
+import {
+  loginRegisteredUserAPI,
+  resetError,
+} from "@/src/features/user/user.slice";
 import styles from "@/style";
 import { LoginUser } from "@/types";
 import React, { useEffect, useState } from "react";
@@ -35,9 +39,11 @@ export default function MainPage() {
   const imagePosition = useSharedValue(1);
   /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
   const dispatch = useAppDispatch();
+  const loginError = useAppSelector((state) => state.user.error);
   /* <<<<<<<<<<<<<<<<<<<<<<< useState data >>>>>>>>>>>>>>>>>>>>>>> */
-  const [isCurtainOpen, setCurtain] = useState(false);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isCurtainOpen, setCurtain] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [showErrorModal, setErrorModal] = useState<boolean>(false);
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
@@ -81,14 +87,6 @@ export default function MainPage() {
     setCurtain(true);
   };
 
-  const registerHandler = () => {
-    setModalOpen(!isModalOpen);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
   const loginHandler = async (data: any) => {
     const loginUser: LoginUser = {
       email: data.email,
@@ -96,12 +94,21 @@ export default function MainPage() {
     };
 
     dispatch(loginRegisteredUserAPI(loginUser));
+
+    if (loginError) {
+      setErrorModal(true);
+    }
   };
 
   const handleCloseBtn = () => {
     imagePosition.value = 1;
     setCurtain(false);
   };
+
+  function closeErrorModal(): void {
+    setErrorModal(false);
+    dispatch(resetError());
+  }
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -177,7 +184,7 @@ export default function MainPage() {
           <View>
             <Animated.View style={textInputAnimatedStyle}>
               <CustomInput
-                control={control}
+                control={control!}
                 name="email"
                 rules={{
                   required: "Email required",
@@ -195,7 +202,7 @@ export default function MainPage() {
                 errorMessage={errors.email?.message as string}
               />
               <CustomInput
-                control={control}
+                control={control!}
                 name="password"
                 rules={{
                   required: "Password required",
@@ -232,7 +239,7 @@ export default function MainPage() {
                     New user?
                   </Text>
                 </View>
-                <Pressable onPress={registerHandler}>
+                <Pressable onPress={() => setModalOpen(true)}>
                   <Text
                     style={{
                       color: "#0011ce",
@@ -248,7 +255,15 @@ export default function MainPage() {
           </View>
         )}
       </View>
-      <RegisterModal visible={isModalOpen} closeModal={registerHandler} />
+      <LoginErrorModal
+        visible={showErrorModal}
+        errorText={loginError!}
+        onPress={closeErrorModal}
+      />
+      <RegisterModal
+        visible={isModalOpen}
+        closeModal={() => setModalOpen(false)}
+      />
     </View>
   );
 }

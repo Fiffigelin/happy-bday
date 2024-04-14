@@ -1,8 +1,8 @@
 import ContactCard from "@/src/components/contactCard";
 import CustomToast from "@/src/components/customToast";
-import DeleteModal from "@/src/components/deleteModal";
 import GradientIcon from "@/src/components/gradient-component/gradientIcon";
 import GradientText from "@/src/components/gradient-component/gradientText";
+import DeleteModal from "@/src/components/modal/deleteModal";
 import { resetStatusForContact } from "@/src/features/contact/contact.slice";
 import { useAppDispatch, useAppSelector } from "@/src/features/store";
 import { ContactsScreenProps } from "@/src/navigation/NavigationTypes";

@@ -96,7 +96,6 @@ export const deleteContactsAPI = createAsyncThunk<
 export const fetchContactsAPI = createAsyncThunk<Contact[], string>(
   "contact/fetchContacts",
   async (userId, { rejectWithValue }) => {
-    console.log("userid: ", userId);
     try {
       const contacts = await fetchContactsFromUser(userId);
       return contacts;

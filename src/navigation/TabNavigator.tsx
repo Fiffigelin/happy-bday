@@ -36,7 +36,6 @@ export default function TabNavigator() {
           uid: response.uid,
           email: response.email!,
         };
-        console.log("inlog: ", fetchedUser);
         dispatch(setActiveUser(fetchedUser));
       } else {
         dispatch(setActiveUser(undefined));
@@ -48,7 +47,6 @@ export default function TabNavigator() {
           action.meta.requestStatus === "fulfilled";
 
         if (user!.id) {
-          console.log("kommer hit");
           const imagesAction = await dispatch(fetchImagesAPI());
           const contactsAction = await dispatch(fetchContactsAPI(user!.id));
           const messagesAction = await dispatch(fetchMessagesAPI(user!.id));
