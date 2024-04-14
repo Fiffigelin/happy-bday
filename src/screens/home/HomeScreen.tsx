@@ -14,7 +14,7 @@ import {
 import { getUpcomingBirthdays } from "@/src/services/sortUpComingBirthdays";
 import { BdayImage, Category, Contact } from "@/types";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../features/store";
 import { HomeScreenProps } from "../../navigation/NavigationTypes";
@@ -24,31 +24,30 @@ import SendMessageModal from "./SendMessageModal";
 type Props = HomeScreenProps<"Home">;
 
 export default function HomeScreen({ navigation }: Props) {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
-  const [imageArray, setImageArray] = useState<(BdayImage[] | undefined)[]>([]);
+  /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
   const dispatch = useAppDispatch();
   const images = useAppSelector((state) => state.image.images);
   const user = useAppSelector((state) => state.user.user);
-  const messages = useAppSelector((state) => state.message.messages);
-  const message = useAppSelector((state) => state.message.message);
   const selectedMessage = useAppSelector(
     (state) => state.message.selectedMessage
   );
-  const selectedImage = useAppSelector((state) => state.image.selectedImage);
   const contacts = useAppSelector((state) => state.contact.contacts);
   const connectedMsgToContact = useAppSelector(
     (state) => state.contact.isMessageAdded
   );
+  /* <<<<<<<<<<<<<<<<<<<<<<< useState data >>>>>>>>>>>>>>>>>>>>>>> */
+  const [showModal, setShowModal] = useState(false);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [imageArray, setImageArray] = useState<(BdayImage[] | undefined)[]>([]);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setMessage] = useState<string>("");
   let upComingBirthdays: Contact[] = getUpcomingBirthdays(contacts!);
 
-  const handleImagePress = (id: string) => {
+  function handleImagePress(id: string): void {
     navigation.navigate("CreateMessage", { id });
-  };
+  }
 
-  function handleBirthdayCardPress(contact: Contact) {
+  function handleBirthdayCardPress(contact: Contact): void {
     dispatch(setSelectedMessage(contact?.message_id));
     dispatch(setSelectedImage(selectedMessage?.image_id));
     setSelectedContact(contact);
@@ -57,15 +56,12 @@ export default function HomeScreen({ navigation }: Props) {
 
   useEffect(() => {
     if (selectedMessage) {
-      console.log("message: ", selectedMessage);
       dispatch(setSelectedImage(selectedMessage?.image_id));
     }
   }, [selectedMessage]);
 
   useEffect(() => {
     const sortedImages = SortImagesService.sortImagesByCategory(images!);
-    console.log("messages homescreen: ", messages);
-
     setImageArray([
       sortedImages[Category.People],
       sortedImages[Category.Animals],
@@ -79,23 +75,23 @@ export default function HomeScreen({ navigation }: Props) {
 
   useFocusEffect(
     useCallback(() => {
-      if (message?.id) {
+      if (connectedMsgToContact === true) {
         setMessage("Message added succesfully");
         setShowToast(true);
-      } else if (message?.id) {
+      } else if (connectedMsgToContact === false) {
         setMessage("Something went wrong");
         setShowToast(true);
       }
       dispatch(resetMessage(null));
-      dispatch(resetMessageSuccessful(false));
+      dispatch(resetMessageSuccessful());
     }, [connectedMsgToContact])
   );
 
-  function renderUpComingCelebration() {
+  function renderUpComingCelebration(): ReactNode {
     return (
       <View style={{ height: 300, marginTop: 50, marginHorizontal: 25 }}>
         <GradientText
-          colors={["#c791d9", "#5D0D90"]}
+          colors={["#b975d0", "#441c51"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={styles.textStyle}
@@ -121,7 +117,7 @@ export default function HomeScreen({ navigation }: Props) {
       </View>
       <View style={{ marginBottom: 25, flex: 3 }}>
         <GradientText
-          colors={["#c791d9", "#5D0D90"]}
+          colors={["#b975d0", "#441c51"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={styles.textStyle}

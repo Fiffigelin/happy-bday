@@ -19,13 +19,15 @@ interface RegisterModal {
   visible: boolean;
   closeModal: () => void;
 }
-const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
+export default function RegisterModal({ visible, closeModal }: RegisterModal) {
   const { height, width } = Dimensions.get("window");
   const { control, handleSubmit, watch } = useForm();
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const pwd = watch("password");
+  /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
   const dispatch = useAppDispatch();
+  /* <<<<<<<<<<<<<<<<<<<<<<< useState data >>>>>>>>>>>>>>>>>>>>>>> */
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setMessage] = useState<string>("");
 
@@ -168,7 +170,7 @@ const RegisterModal: React.FC<RegisterModal> = ({ visible, closeModal }) => {
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -211,5 +213,3 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
-
-export default RegisterModal;

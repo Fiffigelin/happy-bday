@@ -32,7 +32,6 @@ export function getUpcomingBirthdays(contacts: Contact[]): Contact[] {
   });
 
   const upcomingBirthdays = sortedContacts.slice(0, 3);
-  console.log(upcomingBirthdays);
   return upcomingBirthdays;
 }
 
@@ -43,7 +42,6 @@ export function parseDateToShortBirthDay(): string {
 
   const short_date =
     (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day;
-  console.log("MonthDay", short_date);
   return short_date;
 }
 

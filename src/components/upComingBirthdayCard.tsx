@@ -1,6 +1,6 @@
 import { Contact } from "@/types";
 import React, { useEffect, useState } from "react";
-import { Pressable, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import { parseDateToShortBirthDay } from "../services/sortUpComingBirthdays";
 import GradientIcon from "./gradient-component/gradientIcon";
 import GradientText from "./gradient-component/gradientText";
@@ -23,7 +23,6 @@ export default function UpComingBirthdayCard({
   useEffect(() => {
     const todaysDate = parseDateToShortBirthDay();
     if (todaysDate === contact.short_birthday) {
-      console.log("Contact short: ", contact.short_birthday + " | true");
       setBirthday(true);
     }
   }, []);
@@ -81,19 +80,7 @@ export default function UpComingBirthdayCard({
   }
 
   return (
-    <TouchableOpacity
-      style={{
-        backgroundColor: "white",
-        justifyContent: "space-between",
-        borderRadius: 8,
-        margin: 6,
-        marginBottom: 25,
-        height: 55,
-        padding: 8,
-        flexDirection: "row",
-        elevation: 3,
-      }}
-    >
+    <TouchableOpacity style={style.container}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <View style={{ minWidth: 180 }}>
           <GradientText
@@ -113,3 +100,17 @@ export default function UpComingBirthdayCard({
     </TouchableOpacity>
   );
 }
+
+const style = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    justifyContent: "space-between",
+    borderRadius: 8,
+    margin: 6,
+    marginBottom: 25,
+    height: 55,
+    padding: 8,
+    flexDirection: "row",
+    elevation: 3,
+  },
+});

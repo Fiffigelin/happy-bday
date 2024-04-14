@@ -21,8 +21,6 @@ export async function createMessage(
       message: createMessage.message,
     };
 
-    console.log("MESSAGE API: ", data);
-
     const requestInfo = {
       method: "POST",
       headers: headers,
@@ -38,7 +36,7 @@ export async function createMessage(
     }
 
     const jsonResponse = await response.json();
-    console.log("RESPONSE API: ", jsonResponse.data);
+
     return jsonResponse.data as Message;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -55,7 +53,6 @@ export async function fetchMessagesFromUser(
       headers: headers,
     };
 
-    console.log("userid: ", user_id);
     const response = await fetch(
       `${MESSAGE_URL}${MESSAGE_API.GET_MESSAGES(user_id)}`,
       requestInfo
@@ -66,15 +63,13 @@ export async function fetchMessagesFromUser(
     }
 
     const jsonResponse = await response.json();
-    console.log("jsonresponse: ", jsonResponse.data);
+
     if (jsonResponse.data) {
-      console.log("kommer till if");
       return jsonResponse.data as Message[];
     }
 
     return [];
   } catch (error) {
-    console.error("Error fetching data:", error);
     throw error;
   }
 }
@@ -83,7 +78,6 @@ export async function fetchMessageFromContact(
   contact_message: string
 ): Promise<Message> {
   try {
-    console.log("Kommer till api");
     const requestInfo = {
       method: "GET",
       headers: headers,
@@ -98,14 +92,12 @@ export async function fetchMessageFromContact(
     }
 
     const jsonResponse = await response.json();
-    console.log("JSON respons: ", jsonResponse.data);
     if (jsonResponse.data) {
       return jsonResponse.data as Message;
     }
 
     return jsonResponse.data as Message;
   } catch (error) {
-    console.error("Error fetching data:", error);
     throw error;
   }
 }

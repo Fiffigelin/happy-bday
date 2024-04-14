@@ -9,14 +9,14 @@ interface CustomButtonProps {
   shadow: boolean;
   buttonText: string;
 }
-const CustomButton: React.FC<CustomButtonProps> = ({
+export default function CustomButton({
   onPress,
   buttonColor,
   borderColor,
   textColor,
   shadow,
   buttonText,
-}) => {
+}: CustomButtonProps) {
   const buttonStyle = StyleSheet.create({
     buttonContainer: {
       backgroundColor: buttonColor,
@@ -67,6 +67,4 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       <Text style={buttonStyle.buttonText}>{buttonText}</Text>
     </Pressable>
   );
-};
-
-export default CustomButton;
+}

@@ -1,5 +1,4 @@
 import { auth } from "@/firebase.config";
-// import BirthdaysMessagesStackNavigator from "@/src/navigation/BirthdayMessagesNavigator";
 import ContactsStackNavigator from "@/src/navigation/ContactsNavigator";
 import { RootTabsParamList } from "@/src/navigation/NavigationTypes";
 import ProfileScreen from "@/src/screens/ProfileScreen";
@@ -8,7 +7,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import CustomTabBarIcon from "../components/tab-icon/tabIcon";
 import { fetchContactsAPI } from "../features/contact/contact.slice";
 import { fetchImagesAPI } from "../features/image/image.slice";
 import { fetchMessagesAPI } from "../features/message/message.slice";
@@ -16,7 +16,6 @@ import { useAppDispatch, useAppSelector } from "../features/store";
 import { setActiveUser } from "../features/user/user.slice";
 import MainScreen from "../screens/UserAuth/MainScreen";
 import HomeStackNavigator from "./HomeNavigator";
-import TestStackNavigator from "./TestNavigator";
 
 const Tab = createBottomTabNavigator<RootTabsParamList>();
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -28,44 +27,49 @@ export type AuthStackParamList = {
 export default function TabNavigator() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
+  const [hasStatus, setStatus] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (response) => {
       if (response) {
         const fetchedUser: AuthUser = {
           uid: response.uid,
-          email: response.email as string,
+          email: response.email!,
         };
         dispatch(setActiveUser(fetchedUser));
       } else {
         dispatch(setActiveUser(undefined));
+        setStatus(false);
       }
 
-      const checkStatusAndDoSomething = async () => {
+      async function checkStatus() {
         const isActionFulfilled = (action: any) =>
           action.meta.requestStatus === "fulfilled";
-        const imagesAction = await dispatch(fetchImagesAPI());
-        const contactsAction = await dispatch(fetchContactsAPI(user!.id));
-        const messagesAction = await dispatch(fetchMessagesAPI(user!.id));
 
-        if (
-          isActionFulfilled(imagesAction) &&
-          isActionFulfilled(contactsAction) &&
-          isActionFulfilled(messagesAction)
-        ) {
-          console.log("Alla action har slutförts utan problem");
-        } else {
-          console.log("Något gick fel");
+        if (user!.id) {
+          const imagesAction = await dispatch(fetchImagesAPI());
+          const contactsAction = await dispatch(fetchContactsAPI(user!.id));
+          const messagesAction = await dispatch(fetchMessagesAPI(user!.id));
+
+          if (
+            isActionFulfilled(imagesAction) &&
+            isActionFulfilled(contactsAction) &&
+            isActionFulfilled(messagesAction)
+          ) {
+            setStatus(true);
+          } else {
+            setStatus(false);
+          }
         }
-      };
+      }
 
-      if (user !== null) {
-        checkStatusAndDoSomething();
+      if (user !== null && !hasStatus) {
+        checkStatus();
       }
     });
 
     return unsubscribe;
-  }, [user]);
+  }, [user?.id]);
 
   return (
     <NavigationContainer>
@@ -75,16 +79,54 @@ export default function TabNavigator() {
         </Stack.Navigator>
       ) : (
         <Tab.Navigator
-          screenOptions={{ headerShown: false, tabBarShowLabel: false }}
+          screenOptions={{
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              backgroundColor: "#7110ae",
+              borderColor: "transparent",
+            },
+          }}
         >
-          <Tab.Screen name="HomeTab" component={HomeStackNavigator} />
-          <Tab.Screen name="ContactsTab" component={ContactsStackNavigator} />
-          {/* <Tab.Screen
-            name="BirthdaysTab"
-            component={BirthdaysMessagesStackNavigator}
-          /> */}
-          <Tab.Screen name="ProfileTab" component={ProfileScreen} />
-          <Tab.Screen name="TestTab" component={TestStackNavigator} />
+          <Tab.Screen
+            name="HomeTab"
+            component={HomeStackNavigator}
+            options={{
+              tabBarIcon: (props) => (
+                <CustomTabBarIcon
+                  focused={props.focused}
+                  iconName={"home"}
+                  iconSize={24}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="ContactsTab"
+            component={ContactsStackNavigator}
+            options={{
+              tabBarIcon: (props) => (
+                <CustomTabBarIcon
+                  focused={props.focused}
+                  iconName={"people"}
+                  iconSize={26}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="ProfileTab"
+            component={ProfileScreen}
+            options={{
+              tabBarIcon: (props) => (
+                <CustomTabBarIcon
+                  focused={props.focused}
+                  iconName={"happy"}
+                  iconSize={26}
+                />
+              ),
+            }}
+          />
         </Tab.Navigator>
       )}
     </NavigationContainer>

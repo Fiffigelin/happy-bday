@@ -19,6 +19,7 @@ interface ContactState {
   status: string;
   error: string | undefined;
   isContactCreated: boolean | undefined;
+  isContactUpdated: boolean | undefined;
   isMessageAdded: boolean | undefined;
 }
 
@@ -28,6 +29,7 @@ export const initialState: ContactState = {
   status: "idle",
   error: undefined,
   isContactCreated: undefined,
+  isContactUpdated: undefined,
   isMessageAdded: undefined,
 };
 
@@ -41,7 +43,7 @@ export const createContactAPI = createAsyncThunk<
 
     if (addedContact) {
       dispatch(fetchContactsAPI(contactCred.userId));
-      dispatch(contactSlice.actions.addedContactSuccessful(addedContact));
+      dispatch(contactSlice.actions.addedContactSuccessful(true));
 
       return addedContact;
     } else {
@@ -64,15 +66,15 @@ export const updateContactAPI = createAsyncThunk<
 
     if (updatedContact) {
       dispatch(fetchContactsAPI(contact.userId));
-      // dispatch(contactSlice.actions.addedContactSuccessful(addedContact));
+      dispatch(contactSlice.actions.updatedContactSuccessful(true));
 
       return updatedContact;
     } else {
-      dispatch(contactSlice.actions.addedContactSuccessful(false));
+      dispatch(contactSlice.actions.updatedContactSuccessful(false));
       return updatedContact;
     }
   } catch (error: any) {
-    dispatch(contactSlice.actions.addedContactSuccessful(false));
+    dispatch(contactSlice.actions.updatedContactSuccessful(false));
     return error.message;
   }
 });
@@ -108,7 +110,6 @@ export const putMessageToContact = createAsyncThunk<boolean, MessageToContact>(
   async (updateContacts, { dispatch, rejectWithValue }) => {
     try {
       const response = await updateMessageToContact(updateContacts);
-      console.log("Response: ", response);
 
       dispatch(contactSlice.actions.connectedMessageSuccessful(response));
       return response;
@@ -125,13 +126,25 @@ const contactSlice = createSlice({
     addedContactSuccessful: (state, action) => {
       state.isContactCreated = action.payload;
     },
+    updatedContactSuccessful: (state, action) => {
+      state.isContactUpdated = action.payload;
+    },
+    resetStatusForContact: (state) => {
+      state.isContactCreated = undefined;
+      state.isContactUpdated = undefined;
+    },
     connectedMessageSuccessful: (state, action) => {
       state.isMessageAdded = action.payload;
-      console.log("ismessageAdded: ", state.isMessageAdded);
     },
-    resetMessageSuccessful: (state, action) => {
-      state.isMessageAdded = action.payload;
-      console.log("ismessageAdded resetted: ", state.isMessageAdded);
+    resetMessageSuccessful: (state) => {
+      state.isMessageAdded = undefined;
+    },
+    resetSliceContact: (state) => {
+      state.contact = null;
+      state.contacts = [];
+      state.isContactCreated = undefined;
+      state.isContactUpdated = undefined;
+      state.isMessageAdded = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -161,4 +174,8 @@ const contactSlice = createSlice({
 });
 
 export const contactReducer = contactSlice.reducer;
-export const { resetMessageSuccessful } = contactSlice.actions;
+export const {
+  resetMessageSuccessful,
+  resetStatusForContact,
+  resetSliceContact,
+} = contactSlice.actions;

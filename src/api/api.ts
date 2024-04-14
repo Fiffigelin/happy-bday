@@ -20,8 +20,3 @@ function getLocalUri(): string {
   }
   return uri;
 }
-
-// const response = await fetch(uri, {
-//   method: "GET",
-//   headers,
-// });

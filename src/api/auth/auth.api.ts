@@ -67,7 +67,6 @@ const sendExpoPushToken = async (uid: string) => {
 
     await fetch(`${TOKEN_URL}${TOKEN_API.CREATE}`, requestInfo);
   } catch (error) {
-    console.error("Error fetching data:", error);
     throw error;
   }
 };

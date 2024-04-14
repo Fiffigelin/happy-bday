@@ -34,26 +34,26 @@ export default function SendMessageModal({
   onClose,
 }: SendMessageProps) {
   const { height, width } = Dimensions.get("window");
-  const [showNoMessage, setNoMessage] = useState<boolean>(false);
+  const viewRef = useRef();
+  /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
+  const dispatch = useAppDispatch();
   const message = useAppSelector((state) => state.message.selectedMessage);
   const image = useAppSelector((state) => state.image.selectedImage);
+  /* <<<<<<<<<<<<<<<<<<<<<<< useState data >>>>>>>>>>>>>>>>>>>>>>> */
+  const [showNoMessage, setNoMessage] = useState<boolean>(false);
 
-  const dispatch = useAppDispatch();
-
-  const viewRef = useRef();
-
-  async function shareDummyImage() {
+  async function shareBDAYmsg() {
     try {
       const uri = await captureRef(viewRef, {
         format: "png",
         quality: 0.7,
       });
-      const fileUri = FileSystem.cacheDirectory + "dummyImage.png";
+      const fileUri = FileSystem.cacheDirectory + "BDAYmsg.png";
       await FileSystem.copyAsync({ from: uri, to: fileUri });
 
       await Sharing.shareAsync(fileUri);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -64,41 +64,21 @@ export default function SendMessageModal({
   }
 
   useEffect(() => {
-    console.log("message: ", message);
-    async function fetchMessage() {
+    function fetchMessage() {
       try {
         if (contact.message_id) {
           dispatch(setSelectedMessage(message?.id));
-          console.log("message: ", message);
         } else {
           setNoMessage(true);
         }
       } catch (error) {
-        console.error("Error fetching message:", error);
+        throw error;
       }
     }
 
     fetchMessage();
   }, [contact.id]);
 
-  const formStyle = StyleSheet.create({
-    container: {
-      width: width * 0.8,
-      margin: 20,
-      borderRadius: 10,
-      borderColor: "gray",
-      backgroundColor: "white",
-      padding: 15,
-      shadowColor: "black",
-      shadowOffset: {
-        width: 0,
-        height: 5,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-    },
-  });
   return (
     <Modal
       style={[modalStyles.modalContainer, { height: height, width: width }]}
@@ -129,7 +109,7 @@ export default function SendMessageModal({
         </View>
         <View style={modalStyles.container}>
           <View
-            style={formStyle.container}
+            style={[modalStyles.formContainer, { width: width * 0.8 }]}
             ref={viewRef as any}
             collapsable={false}
           >
@@ -140,13 +120,6 @@ export default function SendMessageModal({
                     ? require("../../../assets/sad-balloon-with-copy-space-blue-monday.jpg")
                     : { uri: image?.url }
                 }
-                // source={
-                //   showNoMessage
-                //     ? {
-                //       href=(require("../../../../assets/sad-balloon-with-copy-space-blue-monday.jpg"")
-                //     }
-                //     : { uri: image?.url }
-                // }
                 style={modalStyles.image}
               />
             </View>
@@ -173,7 +146,7 @@ export default function SendMessageModal({
             ) : (
               <TouchableOpacity
                 style={[modalStyles.formButton, { backgroundColor: "#973EB5" }]}
-                onPress={showNoMessage ? () => {} : shareDummyImage}
+                onPress={showNoMessage ? () => {} : shareBDAYmsg}
               >
                 <Text style={styles.buttonTextWhite}>Send</Text>
               </TouchableOpacity>
@@ -205,25 +178,14 @@ const modalStyles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     alignItems: "center",
   },
-  text: {
-    color: "gray",
-    fontSize: 28,
-    fontWeight: "bold",
-    marginLeft: 8,
-  },
+
   image: {
     width: "100%",
     height: 300,
     objectFit: "scale-down",
     borderRadius: 10,
   },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
+
   formButton: {
     height: 55,
     alignItems: "center",
@@ -234,6 +196,21 @@ const modalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "transparent",
     shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  formContainer: {
+    margin: 20,
+    borderRadius: 10,
+    borderColor: "gray",
+    backgroundColor: "white",
+    padding: 15,
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 5,

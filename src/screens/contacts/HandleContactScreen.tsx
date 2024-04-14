@@ -28,11 +28,13 @@ type Props = ContactsScreenProps<"HandleContactStack">;
 
 export default function HandleContact({ route, navigation }: Props) {
   const contactId = route.params?.id;
+  /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
   const contacts = useAppSelector((state) => state.contact.contacts);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
-  const [isEditing, setEditing] = useState<boolean>();
+  /* <<<<<<<<<<<<<<<<<<<<<<< useState data >>>>>>>>>>>>>>>>>>>>>>> */
+  const [isEditing, setEditing] = useState<boolean>(contactId ? true : false);
   const [editContact, setEditContact] = useState<Contact>();
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
@@ -43,6 +45,7 @@ export default function HandleContact({ route, navigation }: Props) {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
   const toggleDatePicker = () => {
     setShowPicker(!showPicker);
@@ -73,15 +76,17 @@ export default function HandleContact({ route, navigation }: Props) {
         id: contactId!,
         userId: user?.id!,
       };
+
       await dispatch(updateContactAPI(contact));
+      navigation.navigate("ContactsHomeStack");
     } else {
       const contact: ContactCredential = {
         name: data.name,
         birthday: convertPickedDate(),
         userId: user?.id as string,
       };
-      await dispatch(createContactAPI(contact));
 
+      await dispatch(createContactAPI(contact));
       navigation.navigate("ContactsHomeStack");
     }
   };
@@ -107,6 +112,16 @@ export default function HandleContact({ route, navigation }: Props) {
   }, [contactId, editContact]);
 
   useEffect(() => {
+    if (isEditing && editContact) {
+      setValue("name", editContact.name);
+
+      const editDate = new Date(editContact.birthday);
+      setDate(editDate);
+      setDateOfBirth(editDate.toDateString());
+    }
+  }, [isEditing, editContact]);
+
+  useEffect(() => {
     if (Platform.OS === "android") {
       setDateOfBirth(date.toDateString());
     }
@@ -119,7 +134,7 @@ export default function HandleContact({ route, navigation }: Props) {
     >
       <View style={[contactStyles.container, { width: width }]}>
         <GradientText
-          colors={["#c791d9", "#5D0D90"]}
+          colors={["#b975d0", "#441c51"]}
           start={{ x: 0.5, y: 0.25 }}
           end={{ x: 0.5, y: 1 }}
           style={contactStyles.textStyle}
@@ -140,13 +155,12 @@ export default function HandleContact({ route, navigation }: Props) {
           )}
           {showPicker && Platform.OS === "ios" && (
             <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-                width: "80%",
-                height: height / 1.95,
-                marginBottom: 20,
-              }}
+              style={[
+                contactStyles.picker,
+                {
+                  height: height / 1.95,
+                },
+              ]}
             >
               <View style={{ width: "100%" }}>
                 <CustomButton
@@ -220,6 +234,12 @@ const contactStyles = StyleSheet.create({
     backgroundColor: "#f9fafa",
     alignItems: "center",
     justifyContent: "center",
+  },
+  picker: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "80%",
+    marginBottom: 20,
   },
   scrollContent: {
     flexGrow: 1,

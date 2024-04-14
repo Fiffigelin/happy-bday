@@ -5,9 +5,6 @@ import { fetchImageById, fetchImages } from "../../api/image/image.api";
 interface ImageState {
   selectedImage: BdayImage | null;
   images: BdayImage[] | null;
-  imagesCategory0: BdayImage[] | null;
-  imagesCategory1: BdayImage[] | null;
-  imagesCategory2: BdayImage[] | null;
   status: string;
   error: string | undefined;
 }
@@ -15,9 +12,6 @@ interface ImageState {
 export const initialState: ImageState = {
   selectedImage: null,
   images: [],
-  imagesCategory0: [],
-  imagesCategory1: [],
-  imagesCategory2: [],
   status: "idle",
   error: undefined,
 };
@@ -60,6 +54,10 @@ const imageSlice = createSlice({
     resetImage: (state, action) => {
       state.selectedImage = action.payload;
     },
+    resetSliceImg: (state) => {
+      state.images = [];
+      state.selectedImage = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -89,4 +87,5 @@ const imageSlice = createSlice({
 });
 
 export const imageReducer = imageSlice.reducer;
-export const { setSelectedImage, resetImage } = imageSlice.actions;
+export const { setSelectedImage, resetImage, resetSliceImg } =
+  imageSlice.actions;

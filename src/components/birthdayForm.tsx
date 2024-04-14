@@ -16,10 +16,10 @@ export default function BirthdayForm({
   const { width } = Dimensions.get("window");
   const [changeText, onChangeText] = useState<string>();
 
-  const handleTextChange = (text: string) => {
+  function handleTextChange(text: string) {
     onChangeText(text);
     onTextChange!(text);
-  };
+  }
 
   const formStyle = StyleSheet.create({
     container: {
@@ -71,28 +71,10 @@ export default function BirthdayForm({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-    alignItems: "center",
-  },
-  text: {
-    color: "gray",
-    fontSize: 28,
-    fontWeight: "bold",
-    marginLeft: 8,
-  },
   image: {
     width: "100%",
     height: 300,
     objectFit: "scale-down",
     borderRadius: 10,
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
   },
 });

@@ -12,7 +12,6 @@ const store = configureStore({
     image: imageReducer,
     contact: contactReducer,
     message: messageReducer,
-    // Add more reducers as needed
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
