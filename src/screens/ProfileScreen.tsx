@@ -3,6 +3,9 @@ import styles from "@/style";
 import { signOut } from "firebase/auth";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import GradientText from "../components/gradient-component/gradientText";
+import { resetSliceContact } from "../features/contact/contact.slice";
+import { resetSliceImg } from "../features/image/image.slice";
+import { resetSliceMsg } from "../features/message/message.slice";
 import { useAppDispatch, useAppSelector } from "../features/store";
 import { logOutUser } from "../features/user/user.slice";
 
@@ -14,6 +17,9 @@ export default function ProfileScreen() {
   function handleLogOut() {
     signOut(auth)
       .then(() => {
+        dispatch(resetSliceContact());
+        dispatch(resetSliceMsg());
+        dispatch(resetSliceImg());
         dispatch(logOutUser());
       })
       .catch((error) => {

@@ -36,6 +36,7 @@ export default function TabNavigator() {
           uid: response.uid,
           email: response.email!,
         };
+        console.log("inlog: ", fetchedUser);
         dispatch(setActiveUser(fetchedUser));
       } else {
         dispatch(setActiveUser(undefined));
@@ -45,18 +46,22 @@ export default function TabNavigator() {
       async function checkStatus() {
         const isActionFulfilled = (action: any) =>
           action.meta.requestStatus === "fulfilled";
-        const imagesAction = await dispatch(fetchImagesAPI());
-        const contactsAction = await dispatch(fetchContactsAPI(user!.id));
-        const messagesAction = await dispatch(fetchMessagesAPI(user!.id));
 
-        if (
-          isActionFulfilled(imagesAction) &&
-          isActionFulfilled(contactsAction) &&
-          isActionFulfilled(messagesAction)
-        ) {
-          setStatus(true);
-        } else {
-          setStatus(false);
+        if (user!.id) {
+          console.log("kommer hit");
+          const imagesAction = await dispatch(fetchImagesAPI());
+          const contactsAction = await dispatch(fetchContactsAPI(user!.id));
+          const messagesAction = await dispatch(fetchMessagesAPI(user!.id));
+
+          if (
+            isActionFulfilled(imagesAction) &&
+            isActionFulfilled(contactsAction) &&
+            isActionFulfilled(messagesAction)
+          ) {
+            setStatus(true);
+          } else {
+            setStatus(false);
+          }
         }
       }
 

@@ -86,6 +86,12 @@ const messageSlice = createSlice({
         state.selectedMessage = message;
       }
     },
+    resetSliceMsg: (state) => {
+      state.isMessageSaved = undefined;
+      state.message = null;
+      state.messages = [];
+      state.isMessageSaved = undefined;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -126,5 +132,9 @@ const messageSlice = createSlice({
 });
 
 export const messageReducer = messageSlice.reducer;
-export const { addedMessageSuccessful, resetMessage, setSelectedMessage } =
-  messageSlice.actions;
+export const {
+  addedMessageSuccessful,
+  resetMessage,
+  setSelectedMessage,
+  resetSliceMsg,
+} = messageSlice.actions;

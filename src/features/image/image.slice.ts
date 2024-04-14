@@ -21,6 +21,7 @@ export const fetchImagesAPI = createAsyncThunk<BdayImage[], void>(
   async (_, { rejectWithValue }) => {
     try {
       const images = await fetchImages();
+      console.log("thunk img: ", images);
       return images;
     } catch (error) {
       return rejectWithValue(error);
@@ -54,6 +55,10 @@ const imageSlice = createSlice({
     resetImage: (state, action) => {
       state.selectedImage = action.payload;
     },
+    resetSliceImg: (state) => {
+      state.images = [];
+      state.selectedImage = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -83,4 +88,5 @@ const imageSlice = createSlice({
 });
 
 export const imageReducer = imageSlice.reducer;
-export const { setSelectedImage, resetImage } = imageSlice.actions;
+export const { setSelectedImage, resetImage, resetSliceImg } =
+  imageSlice.actions;

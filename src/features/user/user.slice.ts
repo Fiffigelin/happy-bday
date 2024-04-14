@@ -91,6 +91,7 @@ const userSlice = createSlice({
   reducers: {
     logOutUser: (state) => {
       state.user = null;
+      state.inloggedUser = null;
     },
     setActiveUser: (state, action: PayloadAction<AuthUser | undefined>) => {
       if (action.payload) {
@@ -99,6 +100,10 @@ const userSlice = createSlice({
           email: action.payload.email,
         };
       }
+    },
+    resetSliceUser: (state) => {
+      state.user = null;
+      state.inloggedUser = null;
     },
   },
   extraReducers: (builder) => {
@@ -118,17 +123,18 @@ const userSlice = createSlice({
         state.error = "Something went wrong!";
       })
       .addCase(registerNewUserAPI.rejected, (state) => {
-        state.error = "You already has a account on this application!";
+        state.error = "You already have a account on this application!";
       })
       .addCase(loginRegisteredUserAPI.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload;
       })
       .addCase(loginRegisteredUserAPI.rejected, (state) => {
-        state.error = "You already has a account on this application!";
+        state.error =
+          "Oops! It seems there was an issue with your login. Please review your login details and try again.";
       });
   },
 });
 
 export const userReducer = userSlice.reducer;
-export const { logOutUser, setActiveUser } = userSlice.actions;
+export const { logOutUser, setActiveUser, resetSliceUser } = userSlice.actions;

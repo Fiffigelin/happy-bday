@@ -28,8 +28,6 @@ export default function HomeScreen({ navigation }: Props) {
   const dispatch = useAppDispatch();
   const images = useAppSelector((state) => state.image.images);
   const user = useAppSelector((state) => state.user.user);
-  const messages = useAppSelector((state) => state.message.messages);
-  const message = useAppSelector((state) => state.message.message);
   const selectedMessage = useAppSelector(
     (state) => state.message.selectedMessage
   );
@@ -64,7 +62,7 @@ export default function HomeScreen({ navigation }: Props) {
 
   useEffect(() => {
     const sortedImages = SortImagesService.sortImagesByCategory(images!);
-
+    console.log(images);
     setImageArray([
       sortedImages[Category.People],
       sortedImages[Category.Animals],
@@ -74,6 +72,8 @@ export default function HomeScreen({ navigation }: Props) {
 
   useEffect(() => {
     dispatch(fetchContactsAPI(user?.id!));
+    console.log("contacts: ", contacts);
+    console.log("image: ", images);
   }, []);
 
   useFocusEffect(

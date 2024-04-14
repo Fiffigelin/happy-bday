@@ -18,7 +18,7 @@ import {
 type Props = ContactsScreenProps<"ContactsHomeStack">;
 
 export default function ContactsHomeScreen({ navigation }: Props) {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   /* <<<<<<<<<<<<<<<<<<<< Redux related data >>>>>>>>>>>>>>>>>>>> */
   const dispatch = useAppDispatch();
   const isContactAddedState = useAppSelector(
@@ -54,7 +54,6 @@ export default function ContactsHomeScreen({ navigation }: Props) {
   const screen = StyleSheet.create({
     container: {
       width: width,
-      backgroundColor: "#f9fafa",
       alignItems: "center",
       justifyContent: "center",
       paddingBottom: 100,
@@ -134,41 +133,43 @@ export default function ContactsHomeScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={screen.container}>
-      <View
-        style={{
-          width: "100%",
-          alignItems: "flex-end",
-          marginTop: 60,
-          paddingRight: 20,
-        }}
-      >
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("HandleContactStack", { id: undefined })
-          }
+    <View style={{ backgroundColor: "#f9fafa", flex: 1 }}>
+      <View style={screen.container}>
+        <View
+          style={{
+            width: "100%",
+            alignItems: "flex-end",
+            marginTop: 60,
+            paddingRight: 20,
+          }}
         >
-          <GradientIcon
-            colors={["#c791d9", "#5D0D90"]}
-            start={{ x: 0.2, y: 0.2 }}
-            end={{ x: 0, y: 1 }}
-            name={"plus-circle"}
-            locations={[0, 1]}
-            size={60}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("HandleContactStack", { id: undefined })
+            }
+          >
+            <GradientIcon
+              colors={["#c791d9", "#5D0D90"]}
+              start={{ x: 0.2, y: 0.2 }}
+              end={{ x: 0, y: 1 }}
+              name={"plus-circle"}
+              locations={[0, 1]}
+              size={60}
+            />
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          data={monthsWithData}
+          renderItem={({ item, index }) => renderMonthSection(item, index)}
+        />
+        {showToast && <CustomToast message={toastMessage} onClose={() => {}} />}
+        <DeleteModal
+          visible={isModalVisible}
+          contactId={selectedContactId!}
+          userId={user?.id!}
+          closeModal={() => setModalVisible(false)}
+        />
       </View>
-      <FlatList
-        data={monthsWithData}
-        renderItem={({ item, index }) => renderMonthSection(item, index)}
-      />
-      {showToast && <CustomToast message={toastMessage} onClose={() => {}} />}
-      <DeleteModal
-        visible={isModalVisible}
-        contactId={selectedContactId!}
-        userId={user?.id!}
-        closeModal={() => setModalVisible(false)}
-      />
     </View>
   );
 }

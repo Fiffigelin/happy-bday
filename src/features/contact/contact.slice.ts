@@ -96,6 +96,7 @@ export const deleteContactsAPI = createAsyncThunk<
 export const fetchContactsAPI = createAsyncThunk<Contact[], string>(
   "contact/fetchContacts",
   async (userId, { rejectWithValue }) => {
+    console.log("userid: ", userId);
     try {
       const contacts = await fetchContactsFromUser(userId);
       return contacts;
@@ -139,6 +140,13 @@ const contactSlice = createSlice({
     resetMessageSuccessful: (state) => {
       state.isMessageAdded = undefined;
     },
+    resetSliceContact: (state) => {
+      state.contact = null;
+      state.contacts = [];
+      state.isContactCreated = undefined;
+      state.isContactUpdated = undefined;
+      state.isMessageAdded = undefined;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -167,5 +175,8 @@ const contactSlice = createSlice({
 });
 
 export const contactReducer = contactSlice.reducer;
-export const { resetMessageSuccessful, resetStatusForContact } =
-  contactSlice.actions;
+export const {
+  resetMessageSuccessful,
+  resetStatusForContact,
+  resetSliceContact,
+} = contactSlice.actions;
