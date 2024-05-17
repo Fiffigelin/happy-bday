@@ -112,7 +112,14 @@ export default function HomeScreen({ navigation }: Props) {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f9fafa" }}>
-      <View style={{ height: 300, margin: 50, marginHorizontal: 25 }}>
+      <View
+        style={{
+          height: 300,
+          margin: 50,
+          width: "100%",
+          alignSelf: "center",
+        }}
+      >
         {renderUpComingCelebration()}
       </View>
       <View style={{ marginBottom: 25, flex: 3 }}>
