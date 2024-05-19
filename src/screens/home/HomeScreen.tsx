@@ -129,7 +129,7 @@ export default function HomeScreen({ navigation }: Props) {
           end={{ x: 0.5, y: 1 }}
           style={styles.textStyle}
         >
-          Create a gratulationmessage!
+          Create a greeting card!
         </GradientText>
         <ScrollView>
           {imageArray?.map((category, index) => (

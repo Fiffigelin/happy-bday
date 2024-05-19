@@ -68,9 +68,7 @@ export default function DeleteModal({
     >
       <View style={styles.centeredView}>
         <View style={modalStyles.modalView}>
-          <Text style={styles.modalText}>
-            Would you like to delete the contact?
-          </Text>
+          <Text style={styles.modalText}>Confirm deletion of the contact?</Text>
           <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
             <TouchableOpacity
               style={{
