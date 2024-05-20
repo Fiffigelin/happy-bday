@@ -7,8 +7,8 @@ Many social apps have birthday reminders, but they also come with so much else t
 ## How to Install the App:
 
 Don't forget to also download the API, happy-bday-api, for all data fetching!
-Run the command npm install to install all dependencies.
-Start the app with the command npm start.
+Run the command ´npm install´ to install all dependencies.
+Start the app with the command ´npm start´.
 You can use it on the Android Simulator on your computer or a reliable Android phone with the Expo Go app!
 
 ![screenshot](assets/readme/collage_screens.png)
