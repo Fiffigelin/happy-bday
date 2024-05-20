@@ -11,4 +11,4 @@ Run the command npm install to install all dependencies.
 Start the app with the command npm start.
 You can use it on the Android Simulator on your computer or a reliable Android phone with the Expo Go app!
 
-![screenshot](assets/readme/Screenshot_collage_screens.png)
+![screenshot](assets/readme/collage_screens.png)
